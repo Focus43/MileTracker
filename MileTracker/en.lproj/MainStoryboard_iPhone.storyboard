@@ -198,7 +198,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <sections>
-                            <tableViewSection headerTitle="Choose the time period you would like to email a report for: " id="wBP-lF-KmM">
+                            <tableViewSection headerTitle="Choose the time period you would like to email a report for: " id="wBP-lF-KmM" userLabel="Table View Section - Choose the time period you would like to email a report for:">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="it5-4b-bTu">
                                         <rect key="frame" x="0.0" y="67" width="320" height="45"/>

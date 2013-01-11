@@ -35,6 +35,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setColor:[UIColor blackColor]];
+    [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setShadowOffset:CGSizeMake(0.0, 0.0)];
+    [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont systemFontOfSize:17.0]];
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -300,7 +304,6 @@
     }];
 
 }
-
 #pragma mark - Mail Compose View Controller delegate
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller
