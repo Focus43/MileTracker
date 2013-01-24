@@ -10,6 +10,8 @@
 #import "NSDate+TCUtils.h"
 #import "MTLoginViewController.h"
 #import "MTSignUpViewController.h"
+#import "UnsyncedTrip.h"
+#import "Reachability.h"
 
 @interface MTTripViewController ()
 
@@ -17,19 +19,24 @@
 - (void)dateOrTimeFieldTouched:(UITextField *)touchedField;
 - (void)registerForKeyboardNotifications;
 - (void)dismissKeyboard;
+- (void)saveLocalVersionTripData:(NSDictionary *)tripData withNewFlag:(BOOL)flag objectId:(NSString *)objectId;
 
 @property (strong, nonatomic) UITextField *activeTextField;
 @property CGPoint originalCenter;
+@property (nonatomic, strong) Reachability *networkReachability;
+@property (nonatomic, strong) MBProgressHUD *hud;
 
 @end
 
 @implementation MTTripViewController
 
+// Can't help myself. Still doing this...
 @synthesize dateField, titleField, startOdometerField, endOdometerField;
 @synthesize selectedDate;
 @synthesize originalCenter, activeTextField, scrollView;
-@synthesize trip, numberFormatter;
+@synthesize trip, numberFormatter, networkReachability;
 @synthesize actionSheetPicker = _actionSheetPicker;
+@synthesize hud=_hud;
 
 - (void)viewDidLoad
 {
@@ -47,13 +54,29 @@
                                action:@selector(dismissKeyboard)];
 
     [self.scrollView addGestureRecognizer:tap];
+    
+    self.networkReachability = [Reachability reachabilityForInternetConnection];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated
+{
     [super viewDidAppear:animated];
+    
     self.originalCenter = self.view.center;
     
     if (![PFUser currentUser]) { // No user logged in
+        NetworkStatus networkStatus = [self.networkReachability currentReachabilityStatus];
+        
+        if ( networkStatus == NotReachable ) {
+            UIAlertView *cannotLoginAlert = [[UIAlertView alloc] initWithTitle:@"Uh oh..."
+                                                                       message:@"To sign up or log in, you have to be online, and it looks like you're not right now."
+                                                                      delegate:nil
+                                                             cancelButtonTitle:@"I'll try again later!"
+                                                             otherButtonTitles:nil];
+            [cannotLoginAlert show];
+            
+        }
+    
         // Create the log in view controller
         MTLoginViewController *logInViewController = [[MTLoginViewController alloc] init];
         [logInViewController setDelegate:self]; // Set ourselves as the delegate
@@ -67,14 +90,15 @@
         
         // Present the log in view controller
         [self presentViewController:logInViewController animated:YES completion:NULL];
+        
     }
     
     // if editing
     if (self.trip) {
-        self.titleField.text = self.trip.title;
-        self.dateField.text = [self.trip dateToString];
-        self.startOdometerField.text = [self.trip startOdometerToString];
-        self.endOdometerField.text = [self.trip endOdometerToString];
+        self.titleField.text = [self.trip objectForKey:@"title"];
+        self.dateField.text = [self.trip tr_dateToString];
+        self.startOdometerField.text = [self.trip tr_startOdometerToString];
+        self.endOdometerField.text = [self.trip tr_endOdometerToString];
     }
 
 }
@@ -87,7 +111,7 @@
 
 - (void)showCannotSaveAlert
 {
-    UIAlertView *cannotSaveAlert = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"You must at least enter a date" delegate:nil cancelButtonTitle:@"Duh!" otherButtonTitles:nil];
+    UIAlertView *cannotSaveAlert = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"You must enter a date and destination" delegate:nil cancelButtonTitle:@"Duh!" otherButtonTitles:nil];
     [cannotSaveAlert show];
 }
 
@@ -99,7 +123,7 @@
     [self.startOdometerField resignFirstResponder];
     [self.endOdometerField resignFirstResponder];
     
-    if (![self.dateField.text isEqualToString:@""]) {
+    if ( !([self.dateField.text isEqualToString:@""] || [self.titleField.text isEqualToString:@""]) ) {
         
         NSNumber *start = [self.numberFormatter numberFromString:self.startOdometerField.text];
         if (!start) start = [NSNumber numberWithInt:0];
@@ -108,50 +132,103 @@
         if (!end) end = [NSNumber numberWithInt:0];
         
         PFUser *currentUser = [PFUser currentUser];
-        NSDate *tripDate = self.selectedDate ? self.selectedDate : [[[MTFormatting sharedUtility] dateFormatter] dateFromString:self.dateField.text];
+        NSDate *tripDate = self.selectedDate ? self.selectedDate : [self.trip objectForKey:@"date"];
+        NSString *objectId = (self.trip) ? self.trip.objectId : @"";
         
-        NSArray *data = [NSArray arrayWithObjects:self.titleField.text, tripDate, start, end, currentUser, nil];
-        NSArray *keys = [NSArray arrayWithObjects:@"title", @"date", @"startOdometer", @"endOdometer", @"user", nil];
+        NSArray *data = [NSArray arrayWithObjects:self.titleField.text, tripDate, start, end, currentUser, objectId, nil];
+        NSArray *keys = [NSArray arrayWithObjects:@"title", @"date", @"startOdometer", @"endOdometer", @"user", @"objectId", nil];
         NSDictionary *tripData = [NSDictionary dictionaryWithObjects:data forKeys:keys];
         
-        Trip *tripToSave = [Trip tripWithData:tripData];
-        // if editing, make sure we update the trip object AND trip
-        // this is a bit of a cluster, but I can't find other way to handle it....
-        // TODO: use trip to update the list view w/o reloading table when gong back
+        PFObject *tripToSave = [PFObject tr_objectWithData:tripData className:@"Trip"];
+        
+        BOOL isNewTrip = YES;
         if (self.trip) {
-            [self.trip updateWithData:tripData];
-            tripToSave = self.tripObj;
-            [tripToSave setObject:self.titleField.text forKey:@"title"];
-            [tripToSave setObject:tripDate forKey:@"date"];
-            [tripToSave setObject:start forKey:@"startOdometer"];
-            [tripToSave setObject:end forKey:@"endOdometer"];
-            [tripToSave setObject:currentUser forKey:@"user"];
+            isNewTrip = NO;
+        }
+                
+        NetworkStatus networkStatus = [self.networkReachability currentReachabilityStatus];
+        
+        if ( networkStatus == NotReachable ) {
+            
+            [self saveLocalVersionTripData:tripData withNewFlag:isNewTrip objectId:objectId];
+            
+        } else {
+            
+            if (!self.hud) {
+                _hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                self.hud.delegate = self;
+            }
+            
+            self.hud.mode		= MBProgressHUDModeIndeterminate;
+            self.hud.labelText	= @"Saving trip";
+            self.hud.margin		= 30;
+            self.hud.yOffset	= 30;
+            [self.hud show:YES];
+            
+            [tripToSave saveInBackgroundWithBlock: ^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    UIAlertView *successAlert = [[UIAlertView alloc] initWithTitle:@"Yessss!" message:@"Trip was saved" delegate:nil cancelButtonTitle:@"Sweet!" otherButtonTitles:nil];
+                    [successAlert show];
+                    
+                    if (self.hud) {
+                        [self.hud hide:YES afterDelay:0.5];
+                    }
+                    
+                } else {
+                    [self saveLocalVersionTripData:tripData withNewFlag:isNewTrip objectId:objectId];
+                }
+            }];
+            
         }
         
-        // set access limitation
-        tripToSave.ACL = [PFACL ACLWithUser:currentUser];
-        
-        [tripToSave saveInBackgroundWithBlock: ^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                UIAlertView *successAlert = [[UIAlertView alloc] initWithTitle:@"Yessss!" message:@"Trip was saved" delegate:nil cancelButtonTitle:@"Sweet!" otherButtonTitles:nil];
-                [successAlert show];
-                
-                if (!self.trip) {
-                    self.titleField.text = @"";
-                    self.dateField.text = @"";
-                    self.startOdometerField.text = @"";
-                    self.endOdometerField.text = @"";
-                }
-                
-            } else {
-                UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Network problem" message:@"The server cannot be contacted at this time, and the trip will be saved at a later time, when the connection is back up." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [problemAlert show];
-                [tripToSave saveEventually];
-            }
-        }];
+        if ( !self.trip ) {
+            self.titleField.text = @"";
+            self.dateField.text = @"";
+            self.startOdometerField.text = @"";
+            self.endOdometerField.text = @"";
+        }
         
     } else {
         [self showCannotSaveAlert];
+    }
+}
+
+- (void)saveLocalVersionTripData:(NSDictionary *)tripData withNewFlag:(BOOL)isNew objectId:(NSString*)objectId
+{
+    NSLog(@"saveLocalVersionTripData tripData = %@", tripData);
+    UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Network problem" message:@"You're offline, so the trip will be saved locally and backed up in the cloud when you're back online." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [problemAlert show];
+        
+    if ( isNew ) {
+        NSLog(@"it's a new trip");
+        [UnsyncedTrip createTripForEntityDecriptionAndLoadWithData:tripData objectId:nil];
+        
+    } else {
+        NSLog(@"not a new trip");
+        
+        NSDate *searchDate = [tripData objectForKey:@"date"];
+        NSError *error = nil;
+        NSArray *results = [UnsyncedTrip fetchTripsWithId:objectId error:error];
+        
+        if ( !error && results && [results count] > 0 ) {
+            NSLog(@"already in unsynced data : %@", [results objectAtIndex:0]);
+            // record already exists
+            [[results objectAtIndex:0] setValue:tripData forKey:@"unsyncedObjInfo"];
+            [[[MTCoreDataController sharedInstance] managedObjectContext] save:&error];
+            
+        } else {
+            NSLog(@"first time added to unsynced data");
+            [UnsyncedTrip createTripForEntityDecriptionAndLoadWithData:tripData objectId:objectId];
+            
+        }
+        
+    }
+    
+    // Save object right away, to have access to it in the log
+    [[MTCoreDataController sharedInstance] saveContext];
+    
+    if (self.hud) {
+        [self.hud hide:YES afterDelay:0.5];
     }
 }
 
@@ -161,7 +238,7 @@
     [self.startOdometerField resignFirstResponder];
     [self.endOdometerField resignFirstResponder];
     
-    NSDate *pickerDate = self.trip ? self.trip.date : [NSDate date];
+    NSDate *pickerDate = self.trip ? [self.trip objectForKey:@"date"] : [NSDate date];
     _actionSheetPicker = [[ActionSheetDatePicker alloc] initWithTitle:@""
                                                        datePickerMode:UIDatePickerModeDate
                                                          selectedDate:pickerDate

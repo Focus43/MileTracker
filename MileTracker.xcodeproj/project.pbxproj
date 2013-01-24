@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E326B6F31683F2360041B755 /* Trip.m in Sources */ = {isa = PBXBuildFile; fileRef = E326B6F21683F2360041B755 /* Trip.m */; };
-		E326B71B1684C8C30041B755 /* MTParseAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E326B71A1684C8C30041B755 /* MTParseAPIClient.m */; };
+		E31222D116A4EB7B00B3BE95 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E31222D016A4EB7B00B3BE95 /* MBProgressHUD.m */; };
+		E31222D416A6099300B3BE95 /* MTUnsyncedTripValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = E31222D316A6099300B3BE95 /* MTUnsyncedTripValueTransformer.m */; };
 		E326B72D168B71CF0041B755 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E326B71F168B6FBC0041B755 /* CoreData.framework */; };
 		E326B72F168B71FE0041B755 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E326B72E168B71FE0041B755 /* Parse.framework */; };
 		E326B732168C99300041B755 /* MTLogTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E326B731168C99300041B755 /* MTLogTableViewCell.m */; };
@@ -31,6 +31,11 @@
 		E336B9D3167B6E76009A03EF /* MTLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E336B9D2167B6E76009A03EF /* MTLogViewController.m */; };
 		E336B9D5167B6E76009A03EF /* second.png in Resources */ = {isa = PBXBuildFile; fileRef = E336B9D4167B6E76009A03EF /* second.png */; };
 		E336B9D7167B6E76009A03EF /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E336B9D6167B6E76009A03EF /* second@2x.png */; };
+		E34E458716A0C10100C51E67 /* UnsyncedTrip.m in Sources */ = {isa = PBXBuildFile; fileRef = E34E458616A0C10100C51E67 /* UnsyncedTrip.m */; };
+		E34E458A16A0C79F00C51E67 /* MTCoreDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = E34E458816A0C79F00C51E67 /* MTCoreDataController.m */; };
+		E34E459416A225E000C51E67 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E34E459316A225E000C51E67 /* CoreFoundation.framework */; };
+		E34E459D16A2278900C51E67 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = E34E459216A21F9000C51E67 /* Reachability.m */; };
+		E34E45A016A22DDA00C51E67 /* UnsyncedTrip.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E34E459E16A22DD900C51E67 /* UnsyncedTrip.xcdatamodeld */; };
 		E35E124B168CF31B0085EBA2 /* NSDate+TCUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E35E124A168CF31B0085EBA2 /* NSDate+TCUtils.m */; };
 		E35E125B16921B290085EBA2 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E35E125A16921B290085EBA2 /* Social.framework */; };
 		E35E125D16921B820085EBA2 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E35E125C16921B810085EBA2 /* libz.dylib */; };
@@ -53,13 +58,14 @@
 		E35E129616978BFF0085EBA2 /* next-item.png in Resources */ = {isa = PBXBuildFile; fileRef = E35E129416978BFF0085EBA2 /* next-item.png */; };
 		E35E129816978CAB0085EBA2 /* addressbook.png in Resources */ = {isa = PBXBuildFile; fileRef = E35E129716978CAB0085EBA2 /* addressbook.png */; };
 		E35E129B169E0A9B0085EBA2 /* MTFormatting.m in Sources */ = {isa = PBXBuildFile; fileRef = E35E129A169E0A9A0085EBA2 /* MTFormatting.m */; };
+		E3B10CEF16B1E24900FA6EF4 /* PFObject+Trip.m in Sources */ = {isa = PBXBuildFile; fileRef = E3B10CEE16B1E24900FA6EF4 /* PFObject+Trip.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E326B6F11683F2360041B755 /* Trip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trip.h; sourceTree = "<group>"; };
-		E326B6F21683F2360041B755 /* Trip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Trip.m; sourceTree = "<group>"; };
-		E326B7191684C8C30041B755 /* MTParseAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTParseAPIClient.h; sourceTree = "<group>"; };
-		E326B71A1684C8C30041B755 /* MTParseAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTParseAPIClient.m; sourceTree = "<group>"; };
+		E31222CF16A4EB7B00B3BE95 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		E31222D016A4EB7B00B3BE95 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		E31222D216A6099300B3BE95 /* MTUnsyncedTripValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTUnsyncedTripValueTransformer.h; sourceTree = "<group>"; };
+		E31222D316A6099300B3BE95 /* MTUnsyncedTripValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUnsyncedTripValueTransformer.m; sourceTree = "<group>"; };
 		E326B71F168B6FBC0041B755 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		E326B72E168B71FE0041B755 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		E326B730168C99300041B755 /* MTLogTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLogTableViewCell.h; sourceTree = "<group>"; };
@@ -92,6 +98,14 @@
 		E336B9D2167B6E76009A03EF /* MTLogViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTLogViewController.m; sourceTree = "<group>"; };
 		E336B9D4167B6E76009A03EF /* second.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = second.png; sourceTree = "<group>"; };
 		E336B9D6167B6E76009A03EF /* second@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "second@2x.png"; sourceTree = "<group>"; };
+		E34E458516A0C10100C51E67 /* UnsyncedTrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnsyncedTrip.h; sourceTree = "<group>"; };
+		E34E458616A0C10100C51E67 /* UnsyncedTrip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnsyncedTrip.m; sourceTree = "<group>"; };
+		E34E458816A0C79F00C51E67 /* MTCoreDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCoreDataController.m; sourceTree = "<group>"; };
+		E34E458916A0C79F00C51E67 /* MTCoreDataController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCoreDataController.h; sourceTree = "<group>"; };
+		E34E459116A21F9000C51E67 /* Reachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		E34E459216A21F9000C51E67 /* Reachability.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		E34E459316A225E000C51E67 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		E34E459F16A22DDA00C51E67 /* UnsyncedTrip.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UnsyncedTrip.xcdatamodel; sourceTree = "<group>"; };
 		E35E1249168CF31B0085EBA2 /* NSDate+TCUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+TCUtils.h"; sourceTree = "<group>"; };
 		E35E124A168CF31B0085EBA2 /* NSDate+TCUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+TCUtils.m"; sourceTree = "<group>"; };
 		E35E125A16921B290085EBA2 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
@@ -120,6 +134,8 @@
 		E35E129716978CAB0085EBA2 /* addressbook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addressbook.png; sourceTree = "<group>"; };
 		E35E1299169E0A990085EBA2 /* MTFormatting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTFormatting.h; sourceTree = "<group>"; };
 		E35E129A169E0A9A0085EBA2 /* MTFormatting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTFormatting.m; sourceTree = "<group>"; };
+		E3B10CED16B1E24900FA6EF4 /* PFObject+Trip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PFObject+Trip.h"; sourceTree = "<group>"; };
+		E3B10CEE16B1E24900FA6EF4 /* PFObject+Trip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PFObject+Trip.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,12 +143,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E34E459416A225E000C51E67 /* CoreFoundation.framework in Frameworks */,
+				E35E126916921C7D0085EBA2 /* SystemConfiguration.framework in Frameworks */,
 				E35E128916974B5C0085EBA2 /* MessageUI.framework in Frameworks */,
 				E35E12751694C50B0085EBA2 /* QuartzCore.framework in Frameworks */,
 				E35E126F16921CE00085EBA2 /* libsqlite3.dylib in Frameworks */,
 				E35E126D16921CBC0085EBA2 /* MobileCoreServices.framework in Frameworks */,
 				E35E126B16921C9E0085EBA2 /* Security.framework in Frameworks */,
-				E35E126916921C7D0085EBA2 /* SystemConfiguration.framework in Frameworks */,
 				E35E126716921C590085EBA2 /* CoreLocation.framework in Frameworks */,
 				E35E126516921C2F0085EBA2 /* AdSupport.framework in Frameworks */,
 				E35E126316921C010085EBA2 /* AudioToolbox.framework in Frameworks */,
@@ -151,13 +168,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E326B6F41683F2560041B755 /* Models */ = {
+		E326B6F41683F2560041B755 /* Models - Categories */ = {
 			isa = PBXGroup;
 			children = (
-				E326B6F11683F2360041B755 /* Trip.h */,
-				E326B6F21683F2360041B755 /* Trip.m */,
+				E34E458516A0C10100C51E67 /* UnsyncedTrip.h */,
+				E34E458616A0C10100C51E67 /* UnsyncedTrip.m */,
+				E3B10CED16B1E24900FA6EF4 /* PFObject+Trip.h */,
+				E3B10CEE16B1E24900FA6EF4 /* PFObject+Trip.m */,
 			);
-			name = Models;
+			name = "Models - Categories";
 			sourceTree = "<group>";
 		};
 		E326B738168CF00C0041B755 /* Pickers */ = {
@@ -184,7 +203,6 @@
 		E336B99D167B6E76009A03EF = {
 			isa = PBXGroup;
 			children = (
-				E35E128816974B5C0085EBA2 /* MessageUI.framework */,
 				E336B9B2167B6E76009A03EF /* MileTracker */,
 				E336B9AB167B6E76009A03EF /* Frameworks */,
 				E336B9A9167B6E76009A03EF /* Products */,
@@ -202,6 +220,8 @@
 		E336B9AB167B6E76009A03EF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E34E459316A225E000C51E67 /* CoreFoundation.framework */,
+				E35E128816974B5C0085EBA2 /* MessageUI.framework */,
 				E35E12741694C50B0085EBA2 /* QuartzCore.framework */,
 				E35E126E16921CE00085EBA2 /* libsqlite3.dylib */,
 				E35E126C16921CBC0085EBA2 /* MobileCoreServices.framework */,
@@ -226,9 +246,10 @@
 		E336B9B2167B6E76009A03EF /* MileTracker */ = {
 			isa = PBXGroup;
 			children = (
-				E326B749168CF0280041B755 /* ActionPicker */,
 				E336B9BB167B6E76009A03EF /* MTAppDelegate.h */,
 				E336B9BC167B6E76009A03EF /* MTAppDelegate.m */,
+				E34E458916A0C79F00C51E67 /* MTCoreDataController.h */,
+				E34E458816A0C79F00C51E67 /* MTCoreDataController.m */,
 				E336B9CA167B6E76009A03EF /* MTTripViewController.h */,
 				E336B9CB167B6E76009A03EF /* MTTripViewController.m */,
 				E336B9D1167B6E76009A03EF /* MTLogViewController.h */,
@@ -239,16 +260,17 @@
 				E35E127B169544EB0085EBA2 /* MTReportsViewController.m */,
 				E35E128A169768BB0085EBA2 /* MTMoreViewController.h */,
 				E35E128B169768BB0085EBA2 /* MTMoreViewController.m */,
-				E326B7191684C8C30041B755 /* MTParseAPIClient.h */,
-				E326B71A1684C8C30041B755 /* MTParseAPIClient.m */,
 				E35E128D16977F380085EBA2 /* MTLoginViewController.h */,
 				E35E128E16977F380085EBA2 /* MTLoginViewController.m */,
 				E35E129016977F5C0085EBA2 /* MTSignUpViewController.h */,
 				E35E129116977F5C0085EBA2 /* MTSignUpViewController.m */,
 				E336B9C4167B6E76009A03EF /* MainStoryboard_iPhone.storyboard */,
 				E336B9C7167B6E76009A03EF /* MainStoryboard_iPad.storyboard */,
+				E34E459E16A22DD900C51E67 /* UnsyncedTrip.xcdatamodeld */,
+				E31222D216A6099300B3BE95 /* MTUnsyncedTripValueTransformer.h */,
+				E31222D316A6099300B3BE95 /* MTUnsyncedTripValueTransformer.m */,
 				E35E129C169E0AAC0085EBA2 /* Utilities */,
-				E326B6F41683F2560041B755 /* Models */,
+				E326B6F41683F2560041B755 /* Models - Categories */,
 				E336B9DD167B6EF9009A03EF /* Resources */,
 				E336B9B3167B6E76009A03EF /* Supporting Files */,
 			);
@@ -295,8 +317,13 @@
 		E35E129C169E0AAC0085EBA2 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				E326B749168CF0280041B755 /* ActionPicker */,
+				E31222CF16A4EB7B00B3BE95 /* MBProgressHUD.h */,
+				E31222D016A4EB7B00B3BE95 /* MBProgressHUD.m */,
 				E35E1299169E0A990085EBA2 /* MTFormatting.h */,
 				E35E129A169E0A9A0085EBA2 /* MTFormatting.m */,
+				E34E459116A21F9000C51E67 /* Reachability.h */,
+				E34E459216A21F9000C51E67 /* Reachability.m */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -376,12 +403,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E34E459D16A2278900C51E67 /* Reachability.m in Sources */,
 				E336B9B9167B6E76009A03EF /* main.m in Sources */,
 				E336B9BD167B6E76009A03EF /* MTAppDelegate.m in Sources */,
 				E336B9CC167B6E76009A03EF /* MTTripViewController.m in Sources */,
 				E336B9D3167B6E76009A03EF /* MTLogViewController.m in Sources */,
-				E326B6F31683F2360041B755 /* Trip.m in Sources */,
-				E326B71B1684C8C30041B755 /* MTParseAPIClient.m in Sources */,
 				E326B732168C99300041B755 /* MTLogTableViewCell.m in Sources */,
 				E326B743168CF00C0041B755 /* AbstractActionSheetPicker.m in Sources */,
 				E326B744168CF00C0041B755 /* ActionSheetDatePicker.m in Sources */,
@@ -391,6 +417,12 @@
 				E35E128F16977F390085EBA2 /* MTLoginViewController.m in Sources */,
 				E35E129216977F5D0085EBA2 /* MTSignUpViewController.m in Sources */,
 				E35E129B169E0A9B0085EBA2 /* MTFormatting.m in Sources */,
+				E34E458716A0C10100C51E67 /* UnsyncedTrip.m in Sources */,
+				E34E458A16A0C79F00C51E67 /* MTCoreDataController.m in Sources */,
+				E34E45A016A22DDA00C51E67 /* UnsyncedTrip.xcdatamodeld in Sources */,
+				E31222D116A4EB7B00B3BE95 /* MBProgressHUD.m in Sources */,
+				E31222D416A6099300B3BE95 /* MTUnsyncedTripValueTransformer.m in Sources */,
+				E3B10CEF16B1E24900FA6EF4 /* PFObject+Trip.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -536,6 +568,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		E34E459E16A22DD900C51E67 /* UnsyncedTrip.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				E34E459F16A22DDA00C51E67 /* UnsyncedTrip.xcdatamodel */,
+			);
+			currentVersion = E34E459F16A22DDA00C51E67 /* UnsyncedTrip.xcdatamodel */;
+			path = UnsyncedTrip.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = E336B99F167B6E76009A03EF /* Project object */;
 }

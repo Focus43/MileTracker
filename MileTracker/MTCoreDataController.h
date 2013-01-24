@@ -11,14 +11,11 @@
 @interface MTCoreDataController : NSObject
 
 + (id)sharedInstance;
+- (void)saveContext;
 
 - (NSURL *)applicationDocumentsDirectory;
 
-- (NSManagedObjectContext *)masterManagedObjectContext;
-- (NSManagedObjectContext *)backgroundManagedObjectContext;
-- (NSManagedObjectContext *)newManagedObjectContext;
-- (void)saveMasterContext;
-- (void)saveBackgroundContext;
+- (NSManagedObjectContext *)managedObjectContext;
 - (NSManagedObjectModel *)managedObjectModel;
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator;
 

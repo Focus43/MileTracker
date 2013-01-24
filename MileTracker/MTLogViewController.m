@@ -9,17 +9,28 @@
 #import "MTLogViewController.h"
 #import "MTLogTableViewCell.h"
 #import "MTTripViewController.h"
-#import "Trip.h"
+#import "Reachability.h"
+#import "UnsyncedTrip.h"
 
 @interface MTLogViewController ()
 
-@property (nonatomic, assign)BOOL reloadObjectsOnBackAction;
+@property (nonatomic, assign) BOOL reloadObjectsOnBackAction;
+@property (nonatomic, strong) MBProgressHUD *hud;
+@property (nonatomic, strong) NSArray *trips;
+@property (nonatomic, strong) Reachability *networkReachability;
+
+- (void)loadTrips;
+- (PFQuery *)queryForTable;
+- (void)refreshTable;
+- (void)syncWithUnsavedData;
 
 @end
 
 @implementation MTLogViewController
 
-@synthesize dateFormatter, reloadObjectsOnBackAction;
+@synthesize dateFormatter, reloadObjectsOnBackAction, networkReachability;
+@synthesize trips = _trips;
+@synthesize hud=_hud;
 
 - (id)initWithCoder:(NSCoder *)aCoder
 {
@@ -29,52 +40,54 @@
         // The className to query on
         self.className = @"Trip";
         
-        // Whether the built-in pagination is enabled
-        self.paginationEnabled = YES;
-        
         // The number of objects to show per page
-        self.objectsPerPage = 9;
-
+//        self.objectsPerPage = 9;
+        
+        self.networkReachability = [Reachability reachabilityForInternetConnection];
+        
     }
     return self;
 }
 
 - (void)viewDidLoad
 {
+    NSLog(@"viewDidLoad");
     [super viewDidLoad];
+    
+    // Whether the built-in pagination is enabled
+    self.tableView.pagingEnabled = YES;
+    
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc]
+                                        init];
+    self.refreshControl = refreshControl;
+    [refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
+    
+//    [self loadTrips];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    NSLog(@"viewDidAppear");
     [super viewDidAppear:animated];
     
-    if (self.reloadObjectsOnBackAction) {
-        [self loadObjects];
-        self.reloadObjectsOnBackAction = false;
-    }
-    
+    [self loadTrips];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    NSLog(@"prepareForSegue : %@", segue.identifier);
     if ([segue.identifier isEqualToString:@"ShowTripDetailViewSegue"]) {
         MTTripViewController *tripDetailViewController = segue.destinationViewController;
         MTLogTableViewCell *cell = (MTLogTableViewCell *)sender;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-        tripDetailViewController.tripObj = [self.objects objectAtIndex:indexPath.row];
-        tripDetailViewController.trip = [Trip tripWithData:[self.objects objectAtIndex:indexPath.row]];
+        tripDetailViewController.trip = [self.trips objectAtIndex:indexPath.row];
         
         tripDetailViewController.navigationItem.title = @"Edit Trip Details";
         
         self.reloadObjectsOnBackAction = true;
         
-    }
-    //    else if ([segue.identifier isEqualToString:@"ShowAddTripViewSegue"]) {
-    //        MTTripViewController *addTripViewController = segue.destinationViewController;
-    //    }
+    } 
 }
-
-#pragma mark - Table view data source
 
 - (void)didReceiveMemoryWarning
 {
@@ -82,56 +95,152 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Parse
 
-- (void)objectsDidLoad:(NSError *)error
+- (void)loadTrips
 {
-    [super objectsDidLoad:error];
+    if (!self.hud) {
+        _hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        self.hud.delegate = self;
+    }
     
-    // This method is called every time objects are loaded from Parse via the PFQuery
+    self.hud.mode		= MBProgressHUDModeIndeterminate;
+    self.hud.labelText	= @"Loading Trips.";
+    self.hud.margin		= 30;
+    self.hud.yOffset	= 30;
+    [self.hud show:YES];
+
+    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+   
+    [self.queryForTable findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        NSLog(@"objects from Parse: %@", objects);
+        self.trips = objects;
+        if ( networkStatus == NotReachable ) {
+            [self syncWithUnsavedData];
+        }
+
+        if (!error) {
+            [self.tableView reloadData];
+        }
+        
+        if (self.hud) {
+            [self.hud hide:YES afterDelay:0.5];
+        }
+    }];
 }
 
-- (void)objectsWillLoad
+- (void)refreshTable
 {
-    [super objectsWillLoad];
+    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     
-    // This method is called before a PFQuery is fired to get more objects
+    if ( networkStatus == NotReachable ) {
+        UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Network problem" message:@"Seems like your device is offline, so only cached results can be displayed." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [problemAlert show];
+    } else {
+        [self loadTrips];
+    }
+    
+    [self.refreshControl endRefreshing];
 }
 
-- (void)loadObjects
-{
-    [super loadObjects];
-}
 
-
-// Override to customize what kind of query to perform on the class. The default is to query for
-// all objects ordered by createdAt descending.
 - (PFQuery *)queryForTable
 {
+    NSLog(@"queryForTable");
     PFQuery *query = [PFQuery queryWithClassName:self.className];
     
     [query whereKey:@"user" equalTo:[PFUser currentUser]];
     [query orderByDescending:@"date"];
-    
-//    query.cachePolicy = kPFCachePolicyNetworkElseCache;
-    
+        
     // Since Pull To Refresh is enabled, query against the network by default.
-    if (self.pullToRefreshEnabled) {
+    if (self.tableView.pagingEnabled) {
         query.cachePolicy = kPFCachePolicyNetworkOnly;
     }
     
     // If no objects are loaded in memory, we look to the cache first to fill the table
-    // and then subsequently do a query against the network.
-    if (self.objects.count == 0) {
-        query.cachePolicy = kPFCachePolicyCacheThenNetwork;
+    // and then subsequently do a query against the network. Unless we're offline.
+    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+
+    if (self.trips.count == 0) {
+        if ( networkStatus != NotReachable ) {
+            query.cachePolicy = kPFCachePolicyCacheThenNetwork;
+        } else {
+            query.cachePolicy = kPFCachePolicyCacheOnly;
+        }
+    } else {
+        if ( networkStatus == NotReachable ) {
+            query.cachePolicy = kPFCachePolicyCacheOnly;
+        }
     }
     
     return query;
 }
 
+- (void)syncWithUnsavedData
+{
+    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+    
+    if (networkStatus == NotReachable) {
+        // Compare w unsynced objects
+        // TODO: move fetch into the Model - getAll
+        NSManagedObjectContext *moc = [[MTCoreDataController sharedInstance] managedObjectContext];
+        NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"UnsyncedTrip" inManagedObjectContext:moc];
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        [request setEntity:entityDescription];
+        
+        NSError *error;
+        NSArray *unsyncedFetchArray = [moc executeFetchRequest:request error:&error];
+        NSMutableArray *unsyncedNewArray = [NSMutableArray arrayWithCapacity:0];
+        NSMutableArray *unsyncedExistingArray = [NSMutableArray arrayWithCapacity:0];
+        NSMutableArray *newObjectsArray = [NSMutableArray arrayWithCapacity:0];
+       
+        if ( [unsyncedFetchArray count] > 0 ) {
+            
+            for ( UnsyncedTrip *obj in unsyncedFetchArray ) {
+                PFObject *trip = [PFObject tr_objectWithData:obj.unsyncedObjInfo className:self.className];
+                if ( ![obj.isNew boolValue] ) {
+                    [unsyncedExistingArray addObject:trip];
+                } else {
+                    [unsyncedNewArray addObject:trip];
+                }
+            }
+            
+            // Set up the new object array
+            [newObjectsArray addObjectsFromArray:unsyncedNewArray];
+            [newObjectsArray addObjectsFromArray:self.trips];
+                        
+            if ( [unsyncedExistingArray count] > 0 ) {
+                // compare trips and update self.objects with the latest data
+                for ( PFObject *obj in unsyncedExistingArray ) {
+                    NSPredicate *shouldUpdatePred = [NSPredicate predicateWithFormat:@"(objectId == %@)",obj.objectId];
+                    
+                    NSUInteger index = [newObjectsArray indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                        return [shouldUpdatePred evaluateWithObject:obj];
+                    }];
+                    
+                    if ( index != NSNotFound ) {
+                        [newObjectsArray replaceObjectAtIndex:index withObject:obj];
+                    }
+                }
+                
+            }
+            
+            self.trips = newObjectsArray;
+        }
+        
+    }
+//    else {
+//        NSLog(@"There IS internet connection");
+//    }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object
-{    
+    if (self.hud) {
+        [self.hud hide:YES afterDelay:0.5];
+    }
+    NSLog(@"trips at END of syncWithUnsavedData = %@",self.trips);
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     MTLogTableViewCell *cell = nil;
     static NSString *CellIdentifier = @"TripCell";
     cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -140,15 +249,20 @@
         cell = [[MTLogTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
-    Trip *trip = [Trip tripWithData:object];
-    cell.titleLabel.text = trip.title;
-    cell.dateLabel.text = [trip dateToString];
-    cell.distanceLabel.text = [trip totalDistanceString];
-    
+    PFObject *trip = [self.trips objectAtIndex:indexPath.row];
+    cell.titleLabel.text = [trip objectForKey:@"title"];
+    cell.dateLabel.text = [trip tr_dateToString];
+    cell.distanceLabel.text = [trip tr_totalDistanceString];
     return cell;
 
 }
 
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
 
 /*
  // Override if you need to change the ordering of objects in the table.
@@ -177,7 +291,6 @@
  }
  */
 
-#pragma mark - Table view data source
 
 /*
  // Override to support conditional editing of the table view.
@@ -188,27 +301,31 @@
  }
  */
 
+#pragma mark - Table view delegate
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [self.trips count];
+}
 
  // Override to support editing the table view.
  - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
  {
      if (editingStyle == UITableViewCellEditingStyleDelete) {
          
-         [[self.objects objectAtIndex:indexPath.row] deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+         [[self.trips objectAtIndex:indexPath.row] deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+             
              if (!succeeded) {
                  if ([error code] == kPFErrorConnectionFailed ) {
                      UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"Can't connect to the cloud, so try this later, when we're back online." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                      [problemAlert show];
-                     
-//                      [[self.objects objectAtIndex:indexPath.row] deleteEventually];
-                     
                  } else {
                      NSLog(@"error when deleting: %@", error);
                  }
                  
              } else {
                  // Delete the row 
-                 [self loadObjects];
+                 [self loadTrips];
              }
          }];
          
@@ -237,7 +354,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [super tableView:tableView didSelectRowAtIndexPath:indexPath];
+    [self performSegueWithIdentifier:@"ShowTripDetailViewSegue" sender:self];
 }
 
 

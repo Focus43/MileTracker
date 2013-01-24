@@ -10,8 +10,7 @@
 
 @interface MTCoreDataController ()
 
-@property (strong, nonatomic) NSManagedObjectContext *masterManagedObjectContext;
-@property (strong, nonatomic) NSManagedObjectContext *backgroundManagedObjectContext;
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
@@ -19,9 +18,7 @@
 
 @implementation MTCoreDataController
 
-@synthesize masterManagedObjectContext = _masterManagedObjectContext;
-@synthesize backgroundManagedObjectContext = _backgroundManagedObjectContext;
-@synthesize managedObjectModel = _managedObjectModel;
+@synthesize managedObjectContext = _managedObjectContext;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
 + (id)sharedInstance
@@ -35,81 +32,36 @@
     return sharedInstance;
 }
 
+- (void)saveContext
+{
+    NSError *error = nil;
+    NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
+    if (managedObjectContext != nil) {
+        
+        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+    }
+}
+
 #pragma mark - Core Data stack
 
-// Used to propegate saves to the persistent store (disk) without blocking the UI
-- (NSManagedObjectContext *)masterManagedObjectContext
+- (NSManagedObjectContext *)managedObjectContext
 {
-    if (_masterManagedObjectContext != nil) {
-        return _masterManagedObjectContext;
+    if (_managedObjectContext != nil) {
+        return _managedObjectContext;
     }
     
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil) {
-        _masterManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [_masterManagedObjectContext performBlockAndWait:^{
-            [_masterManagedObjectContext setPersistentStoreCoordinator:coordinator];
+        _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [_managedObjectContext performBlockAndWait:^{
+            [_managedObjectContext setPersistentStoreCoordinator:coordinator];
         }];
         
     }
-    return _masterManagedObjectContext;
-}
-
-// Return the NSManagedObjectContext to be used in the background during sync
-- (NSManagedObjectContext *)backgroundManagedObjectContext
-{
-    if (_backgroundManagedObjectContext != nil) {
-        return _backgroundManagedObjectContext;
-    }
-    
-    NSManagedObjectContext *masterContext = [self masterManagedObjectContext];
-    if (masterContext != nil) {
-        _backgroundManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [_backgroundManagedObjectContext performBlockAndWait:^{
-            [_backgroundManagedObjectContext setParentContext:masterContext];
-        }];
-    }
-    
-    return _backgroundManagedObjectContext;
-}
-
-// Return the NSManagedObjectContext to be used in the background during sync
-- (NSManagedObjectContext *)newManagedObjectContext
-{
-    NSManagedObjectContext *newContext = nil;
-    NSManagedObjectContext *masterContext = [self masterManagedObjectContext];
-    if (masterContext != nil) {
-        newContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-        [newContext performBlockAndWait:^{
-            [newContext setParentContext:masterContext];
-        }];
-    }
-    
-    return newContext;
-}
-
-- (void)saveMasterContext
-{
-    [self.masterManagedObjectContext performBlockAndWait:^{
-        NSError *error = nil;
-        BOOL saved = [self.masterManagedObjectContext save:&error];
-        if (!saved) {
-            // do some real error handling
-            NSLog(@"Could not save master context due to %@", error);
-        }
-    }];
-}
-
-- (void)saveBackgroundContext
-{
-    [self.backgroundManagedObjectContext performBlockAndWait:^{
-        NSError *error = nil;
-        BOOL saved = [self.backgroundManagedObjectContext save:&error];
-        if (!saved) {
-            // do some real error handling
-            NSLog(@"Could not save background context due to %@", error);
-        }
-    }];
+    return _managedObjectContext;
 }
 
 // Returns the managed object model for the application.
@@ -119,7 +71,7 @@
     if (_managedObjectModel != nil) {
         return _managedObjectModel;
     }
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Trip" withExtension:@"momd"];
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"UnsyncedTrip" withExtension:@"momd"];
     _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return _managedObjectModel;
 }
@@ -132,11 +84,14 @@
         return _persistentStoreCoordinator;
     }
     
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Trip"];
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"UnsyncedTrip"];
     
     NSError *error = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+        
+        // TODO: handle error correctly!
+        
         /*
          Replace this implementation with code to handle the error appropriately.
          

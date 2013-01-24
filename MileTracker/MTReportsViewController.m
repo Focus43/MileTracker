@@ -212,7 +212,7 @@
     
     for (int i=0; i<[trips count]; i++) {
         Trip *trip = [Trip tripWithData:[trips objectAtIndex:i]];
-        [writeString appendString:[NSString stringWithFormat:@"\"%@\", %@, %@, %@, %@\n", trip.title, [trip dateToString], trip.startOdometer, trip.endOdometer, [trip totaTriplDistance]]];
+        [writeString appendString:[NSString stringWithFormat:@"\"%@\", %@, %@, %@, %@\n", trip.title, [trip dateToString], trip.startOdometer, trip.endOdometer, [trip totalTripDistance]]];
     }
     
     return writeString;

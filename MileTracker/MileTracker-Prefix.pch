@@ -12,6 +12,10 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
     #import <CoreData/CoreData.h>
+    #import <Parse/Parse.h>
 
     #import "MTFormatting.h"
+    #import "MTCoreDataController.h"
+    #import "MBProgressHUD.h" 
+    #import "PFObject+Trip.h"
 #endif

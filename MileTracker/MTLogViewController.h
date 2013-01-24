@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 
-@interface MTLogViewController : PFQueryTableViewController
+//@interface MTLogViewController : PFQueryTableViewController
+@interface MTLogViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
+@property (nonatomic, retain) NSString *className;
+//@property (nonatomic, assign) NSUInteger objectsPerPage;
 
 @end
