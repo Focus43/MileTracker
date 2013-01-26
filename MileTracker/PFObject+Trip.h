@@ -14,9 +14,12 @@
 
 @interface PFObject (Trip)
 
-+ (PFObject *)tr_objectWithData:(NSDictionary *)data className:(NSString *)objectId;
+//+ (PFObject *)tr_objectWithData:(NSDictionary *)data objectId:(NSString *)objectId;
++ (PFObject *)tr_objectWithData:(id)data objectId:(NSString *)objectId;
 
 - (PFObject *)tr_updateWithData:(NSDictionary *)data;
+- (void)deleteFromCloudAndDeleteManagedObject:(NSManagedObject *)obj;
+- (void)syncWithCloudAndDeleteManagedObject:(NSManagedObject *)obj;
 
 - (NSString *)tr_decimalToString:(NSNumber *)aNumber;
 - (NSString *)tr_dateToString;

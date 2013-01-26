@@ -189,18 +189,25 @@
         
         NSError *error;
         NSArray *unsyncedFetchArray = [moc executeFetchRequest:request error:&error];
+        
         NSMutableArray *unsyncedNewArray = [NSMutableArray arrayWithCapacity:0];
         NSMutableArray *unsyncedExistingArray = [NSMutableArray arrayWithCapacity:0];
+        NSMutableArray *unsyncedDeletedArray = [NSMutableArray arrayWithCapacity:0];
         NSMutableArray *newObjectsArray = [NSMutableArray arrayWithCapacity:0];
        
         if ( [unsyncedFetchArray count] > 0 ) {
             
             for ( UnsyncedTrip *obj in unsyncedFetchArray ) {
-                PFObject *trip = [PFObject tr_objectWithData:obj.unsyncedObjInfo className:self.className];
-                if ( ![obj.isNew boolValue] ) {
-                    [unsyncedExistingArray addObject:trip];
+                
+                if ( obj.unsyncedObjInfo ) {
+                    PFObject *trip = [PFObject tr_objectWithData:obj.unsyncedObjInfo objectId:obj.objectId];
+                    if ( ![obj.isNew boolValue] ) {
+                        [unsyncedExistingArray addObject:trip];
+                    } else {
+                        [unsyncedNewArray addObject:trip];
+                    }
                 } else {
-                    [unsyncedNewArray addObject:trip];
+                    [unsyncedDeletedArray addObject:obj.objectId];
                 }
             }
             
@@ -221,7 +228,21 @@
                         [newObjectsArray replaceObjectAtIndex:index withObject:obj];
                     }
                 }
+            }
+            
+            if ( [unsyncedDeletedArray count] > 0 ) {
                 
+                for ( NSString *objId in unsyncedDeletedArray ) {
+                    NSPredicate *shouldDeletePred = [NSPredicate predicateWithFormat:@"(objectId == %@)",objId];
+                    
+                    NSUInteger index = [newObjectsArray indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                        return [shouldDeletePred evaluateWithObject:obj];
+                    }];
+                    
+                    if ( index != NSNotFound ) {
+                        [newObjectsArray removeObjectAtIndex:index];
+                    }
+                }
             }
             
             self.trips = newObjectsArray;
@@ -264,43 +285,6 @@
     return 1;
 }
 
-/*
- // Override if you need to change the ordering of objects in the table.
- - (PFObject *)objectAtIndex:(NSIndexPath *)indexPath {
- return [objects objectAtIndex:indexPath.row];
- }
- */
-
-/*
- // Override to customize the look of the cell that allows the user to load the next page of objects.
- // The default implementation is a UITableViewCellStyleDefault cell with simple labels.
- - (UITableViewCell *)tableView:(UITableView *)tableView cellForNextPageAtIndexPath:(NSIndexPath *)indexPath 
- {
- static NSString *CellIdentifier = @"NextPage";
- 
- UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
- 
- if (cell == nil) {
- cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
- }
- 
- cell.selectionStyle = UITableViewCellSelectionStyleNone;
- cell.textLabel.text = @"Load more...";
- 
- return cell;
- }
- */
-
-
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
 #pragma mark - Table view delegate
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -313,21 +297,48 @@
  {
      if (editingStyle == UITableViewCellEditingStyleDelete) {
          
-         [[self.trips objectAtIndex:indexPath.row] deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+         NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+         
+         if (networkStatus == NotReachable) {
+             PFObject *objectToDelete = [self.trips objectAtIndex:indexPath.row];
+//             [objectToDelete setObject:nil forKey:@"date"];
              
-             if (!succeeded) {
-                 if ([error code] == kPFErrorConnectionFailed ) {
-                     UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"Can't connect to the cloud, so try this later, when we're back online." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                     [problemAlert show];
-                 } else {
-                     NSLog(@"error when deleting: %@", error);
-                 }
-                 
+             NSError *error = nil;
+             NSArray *results = [UnsyncedTrip fetchTripsWithId:objectToDelete.objectId error:error];
+             
+             if ( !error && results && [results count] > 0 ) {
+                 // record already exists => just delete it!delete from Core Data
+                 [[[MTCoreDataController sharedInstance] managedObjectContext] deleteObject:[results objectAtIndex:0]];
              } else {
-                 // Delete the row 
+                 [UnsyncedTrip createTripForEntityDecriptionAndLoadWithData:nil objectId:objectToDelete.objectId];
+             }
+             
+             [[[MTCoreDataController sharedInstance] managedObjectContext] save:&error];
+             if (error) {
+                 NSLog(@"can't save");
+             } else {
+                 // Delete the row
                  [self loadTrips];
              }
-         }];
+             
+         } else {
+             
+             [[self.trips objectAtIndex:indexPath.row] deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                 
+                 if (!succeeded) {
+                     if ([error code] == kPFErrorConnectionFailed ) {
+                         UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Oops!" message:@"Can't connect to the cloud, so try this later, when we're back online." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                         [problemAlert show];
+                     } else {
+                         NSLog(@"error when deleting: %@", error);
+                     }
+                     
+                 } else {
+                     // Delete the row
+                     [self loadTrips];
+                 }
+             }];
+         }
          
      } 
  }

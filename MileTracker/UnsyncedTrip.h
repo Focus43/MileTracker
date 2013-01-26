@@ -11,7 +11,7 @@
 
 @interface UnsyncedTrip : NSManagedObject
 
-@property (nonatomic, strong) NSDictionary *unsyncedObjInfo;
+@property (nonatomic, strong) PFObject *unsyncedObjInfo;
 @property (nonatomic, strong) NSNumber *isNew;
 @property (nonatomic, strong) NSDate *savedTime;
 @property (nonatomic, strong) NSString *objectId;

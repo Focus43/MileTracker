@@ -248,8 +248,6 @@
 			children = (
 				E336B9BB167B6E76009A03EF /* MTAppDelegate.h */,
 				E336B9BC167B6E76009A03EF /* MTAppDelegate.m */,
-				E34E458916A0C79F00C51E67 /* MTCoreDataController.h */,
-				E34E458816A0C79F00C51E67 /* MTCoreDataController.m */,
 				E336B9CA167B6E76009A03EF /* MTTripViewController.h */,
 				E336B9CB167B6E76009A03EF /* MTTripViewController.m */,
 				E336B9D1167B6E76009A03EF /* MTLogViewController.h */,
@@ -266,6 +264,8 @@
 				E35E129116977F5C0085EBA2 /* MTSignUpViewController.m */,
 				E336B9C4167B6E76009A03EF /* MainStoryboard_iPhone.storyboard */,
 				E336B9C7167B6E76009A03EF /* MainStoryboard_iPad.storyboard */,
+				E34E458916A0C79F00C51E67 /* MTCoreDataController.h */,
+				E34E458816A0C79F00C51E67 /* MTCoreDataController.m */,
 				E34E459E16A22DD900C51E67 /* UnsyncedTrip.xcdatamodeld */,
 				E31222D216A6099300B3BE95 /* MTUnsyncedTripValueTransformer.h */,
 				E31222D316A6099300B3BE95 /* MTUnsyncedTripValueTransformer.m */,

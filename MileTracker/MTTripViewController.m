@@ -135,11 +135,11 @@
         NSDate *tripDate = self.selectedDate ? self.selectedDate : [self.trip objectForKey:@"date"];
         NSString *objectId = (self.trip) ? self.trip.objectId : @"";
         
-        NSArray *data = [NSArray arrayWithObjects:self.titleField.text, tripDate, start, end, currentUser, objectId, nil];
-        NSArray *keys = [NSArray arrayWithObjects:@"title", @"date", @"startOdometer", @"endOdometer", @"user", @"objectId", nil];
-        NSDictionary *tripData = [NSDictionary dictionaryWithObjects:data forKeys:keys];
+        NSArray *data = [NSArray arrayWithObjects:self.titleField.text, tripDate, start, end, currentUser, nil];
+        NSArray *keys = [NSArray arrayWithObjects:@"title", @"date", @"startOdometer", @"endOdometer", @"user", nil];
+        NSMutableDictionary *tripData = [NSDictionary dictionaryWithObjects:data forKeys:keys];
         
-        PFObject *tripToSave = [PFObject tr_objectWithData:tripData className:@"Trip"];
+        PFObject *tripToSave = [PFObject tr_objectWithData:tripData objectId:objectId];
         
         BOOL isNewTrip = YES;
         if (self.trip) {
@@ -206,7 +206,6 @@
     } else {
         NSLog(@"not a new trip");
         
-        NSDate *searchDate = [tripData objectForKey:@"date"];
         NSError *error = nil;
         NSArray *results = [UnsyncedTrip fetchTripsWithId:objectId error:error];
         

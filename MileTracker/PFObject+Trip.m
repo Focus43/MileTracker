@@ -14,12 +14,26 @@
 
 @implementation PFObject (Trip)
 
-+ (PFObject *)tr_objectWithData:(NSDictionary *)data className:(NSString *)objectId
++ (PFObject *)tr_objectWithData:(id)data objectId:(NSString *)objectId
 {
-    PFObject *tripObj = [PFObject objectWithoutDataWithClassName:@"Trip" objectId:[data objectForKey:@"objectId"]];
-    NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithDictionary:data];
+    PFObject *tripObj;
     
-    [dataDict removeObjectForKey:@"objectId"];
+    if ( objectId && ![objectId isEqualToString:@""] ) {
+        tripObj = [PFObject objectWithoutDataWithClassName:@"Trip" objectId:objectId];
+    } else {
+        tripObj = [PFObject objectWithClassName:@"Trip"];
+    }
+    
+    NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithCapacity:0];
+    
+    if ( [data isKindOfClass:[PFObject class]]) {
+        for (NSString * key in [data allKeys]) {
+            [dataDict  setObject:data[key] forKey:key];
+        }
+    } else {
+        [dataDict addEntriesFromDictionary:data];
+    }
+    
     [dataDict setObject:[PFUser currentUser] forKey:@"user"];
     
     return [tripObj tr_updateWithData:dataDict];
@@ -36,6 +50,44 @@
     }
     
     return self;
+}
+
+- (void)syncWithCloudAndDeleteManagedObject:(NSManagedObject *)obj
+{
+    [self saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            NSManagedObject *aManagedObject = obj;
+            NSManagedObjectContext *context = [aManagedObject managedObjectContext];
+            [context deleteObject:aManagedObject];
+            NSError *error;
+            if (![context save:&error]) {
+                NSLog(@"can't delete the object- error : %@", error);
+            } else {
+                NSLog(@"deleted the object");
+            }
+        } else {
+            NSLog(@"sync error = %@", error);
+        }
+    }];
+}
+
+- (void)deleteFromCloudAndDeleteManagedObject:(NSManagedObject *)obj
+{
+    [self deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            NSManagedObject *aManagedObject = obj;
+            NSManagedObjectContext *context = [aManagedObject managedObjectContext];
+            [context deleteObject:aManagedObject];
+            NSError *error;
+            if (![context save:&error]) {
+                NSLog(@"can't delete the object- error : %@", error);
+            } else {
+                NSLog(@"deleted the object");
+            }
+        } else {
+            NSLog(@"delete error = %@", error);
+        }
+    }];
 }
 
 - (NSString *)tr_decimalToString:(NSNumber *)aNumber

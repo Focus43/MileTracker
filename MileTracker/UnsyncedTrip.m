@@ -21,13 +21,19 @@
     UnsyncedTrip *unsyncedTrip = (UnsyncedTrip *)[NSEntityDescription insertNewObjectForEntityForName:@"UnsyncedTrip"
                                                                                inManagedObjectContext:[[MTCoreDataController sharedInstance] managedObjectContext]];
     
-    NSMutableDictionary *tripDict = [NSMutableDictionary dictionaryWithDictionary:tripData];
-    [tripDict removeObjectForKey:@"user"];
-    
     BOOL isNew = (objectId) ? NO : YES;
     
-    [unsyncedTrip setValue:tripDict forKey:@"unsyncedObjInfo"];
-    [unsyncedTrip setValue:[tripDict objectForKey:@"date"] forKey:@"savedTime"];
+    if (tripData) {
+        NSMutableDictionary *tripDict = [NSMutableDictionary dictionaryWithDictionary:tripData];
+        [tripDict removeObjectForKey:@"user"];
+        
+        [unsyncedTrip setValue:tripDict forKey:@"unsyncedObjInfo"];
+        [unsyncedTrip setValue:[tripDict objectForKey:@"date"] forKey:@"savedTime"];
+        
+    } else {
+        [unsyncedTrip setValue:nil forKey:@"unsyncedObjInfo"];
+    }
+    
     [unsyncedTrip setValue:[NSNumber numberWithBool:isNew] forKey:@"isNew"];
     [unsyncedTrip setValue:objectId forKey:@"objectId"];
     
