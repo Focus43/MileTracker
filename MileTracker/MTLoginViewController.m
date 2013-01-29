@@ -8,6 +8,12 @@
 
 #import "MTLoginViewController.h"
 
+@interface MTLoginViewController ()
+
+@property (nonatomic, strong) UIImageView *fieldsBackground;
+
+@end
+
 @implementation MTLoginViewController
 
 - (void)viewDidLoad
@@ -43,10 +49,10 @@
 //    [self.logInView.signUpButton setTitle:@"" forState:UIControlStateHighlighted];
     
     // Add login field background
-//    fieldsBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginFieldBG.png"]];
-//    [self.logInView addSubview:self.fieldsBackground];
-//    [self.logInView sendSubviewToBack:self.fieldsBackground];
-//    
+    _fieldsBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_bg.png"]];
+    [self.logInView addSubview:self.fieldsBackground];
+    [self.logInView sendSubviewToBack:self.fieldsBackground];
+//
 //    // Remove text shadow
 //    CALayer *layer = self.logInView.usernameField.layer;
 //    layer.shadowOpacity = 0.0f;
@@ -58,5 +64,24 @@
 //    [self.logInView.passwordField setTextColor:[UIColor colorWithRed:135.0f/255.0f green:118.0f/255.0f blue:92.0f/255.0f alpha:1.0]];
     
 }
+
+- (void)viewDidLayoutSubviews {
+    // Set frame for elements
+//    [self.logInView.dismissButton setFrame:CGRectMake(10.0f, 10.0f, 87.5f, 45.5f)];
+//    [self.logInView.logo setFrame:CGRectMake(66.5f, 70.0f, 187.0f, 58.5f)];
+//    [self.logInView.facebookButton setFrame:CGRectMake(35.0f, 287.0f, 120.0f, 40.0f)];
+//    [self.logInView.twitterButton setFrame:CGRectMake(35.0f+130.0f, 287.0f, 120.0f, 40.0f)];
+//    [self.logInView.signUpButton setFrame:CGRectMake(35.0f, 385.0f, 250.0f, 40.0f)];
+    [self.fieldsBackground setFrame:CGRectMake(37.0f, 185.0f, 245.0f, 90.0f)];
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    if ( fromInterfaceOrientation != UIDeviceOrientationLandscapeLeft && fromInterfaceOrientation != UIDeviceOrientationLandscapeRight ) {
+        [self.fieldsBackground setFrame:CGRectMake(160.0f, 50.0f, 245.0f, 90.0f)];
+        
+    }
+}
+
 
 @end

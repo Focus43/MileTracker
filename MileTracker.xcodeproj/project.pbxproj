@@ -26,11 +26,7 @@
 		E336B9C6167B6E76009A03EF /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E336B9C4167B6E76009A03EF /* MainStoryboard_iPhone.storyboard */; };
 		E336B9C9167B6E76009A03EF /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E336B9C7167B6E76009A03EF /* MainStoryboard_iPad.storyboard */; };
 		E336B9CC167B6E76009A03EF /* MTTripViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E336B9CB167B6E76009A03EF /* MTTripViewController.m */; };
-		E336B9CE167B6E76009A03EF /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = E336B9CD167B6E76009A03EF /* first.png */; };
-		E336B9D0167B6E76009A03EF /* first@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E336B9CF167B6E76009A03EF /* first@2x.png */; };
 		E336B9D3167B6E76009A03EF /* MTLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E336B9D2167B6E76009A03EF /* MTLogViewController.m */; };
-		E336B9D5167B6E76009A03EF /* second.png in Resources */ = {isa = PBXBuildFile; fileRef = E336B9D4167B6E76009A03EF /* second.png */; };
-		E336B9D7167B6E76009A03EF /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E336B9D6167B6E76009A03EF /* second@2x.png */; };
 		E34E458716A0C10100C51E67 /* UnsyncedTrip.m in Sources */ = {isa = PBXBuildFile; fileRef = E34E458616A0C10100C51E67 /* UnsyncedTrip.m */; };
 		E34E458A16A0C79F00C51E67 /* MTCoreDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = E34E458816A0C79F00C51E67 /* MTCoreDataController.m */; };
 		E34E459416A225E000C51E67 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E34E459316A225E000C51E67 /* CoreFoundation.framework */; };
@@ -59,6 +55,8 @@
 		E35E129816978CAB0085EBA2 /* addressbook.png in Resources */ = {isa = PBXBuildFile; fileRef = E35E129716978CAB0085EBA2 /* addressbook.png */; };
 		E35E129B169E0A9B0085EBA2 /* MTFormatting.m in Sources */ = {isa = PBXBuildFile; fileRef = E35E129A169E0A9A0085EBA2 /* MTFormatting.m */; };
 		E3B10CEF16B1E24900FA6EF4 /* PFObject+Trip.m in Sources */ = {isa = PBXBuildFile; fileRef = E3B10CEE16B1E24900FA6EF4 /* PFObject+Trip.m */; };
+		E3B10CFF16B76B4C00FA6EF4 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = E3B10CFD16B76B4C00FA6EF4 /* background.png */; };
+		E3B10D0016B76B4C00FA6EF4 /* background@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = E3B10CFE16B76B4C00FA6EF4 /* background@2X.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -137,6 +135,8 @@
 		E3B10CED16B1E24900FA6EF4 /* PFObject+Trip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PFObject+Trip.h"; sourceTree = "<group>"; };
 		E3B10CEE16B1E24900FA6EF4 /* PFObject+Trip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PFObject+Trip.m"; sourceTree = "<group>"; };
 		E3B10CF016B71F6700FA6EF4 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		E3B10CFD16B76B4C00FA6EF4 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
+		E3B10CFE16B76B4C00FA6EF4 /* background@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2X.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -281,6 +281,8 @@
 		E336B9B3167B6E76009A03EF /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E3B10CFD16B76B4C00FA6EF4 /* background.png */,
+				E3B10CFE16B76B4C00FA6EF4 /* background@2X.png */,
 				E336B9B4167B6E76009A03EF /* MileTracker-Info.plist */,
 				E336B9B5167B6E76009A03EF /* InfoPlist.strings */,
 				E336B9B8167B6E76009A03EF /* main.m */,
@@ -388,13 +390,11 @@
 				E336B9C3167B6E76009A03EF /* Default-568h@2x.png in Resources */,
 				E336B9C6167B6E76009A03EF /* MainStoryboard_iPhone.storyboard in Resources */,
 				E336B9C9167B6E76009A03EF /* MainStoryboard_iPad.storyboard in Resources */,
-				E336B9CE167B6E76009A03EF /* first.png in Resources */,
-				E336B9D0167B6E76009A03EF /* first@2x.png in Resources */,
-				E336B9D5167B6E76009A03EF /* second.png in Resources */,
-				E336B9D7167B6E76009A03EF /* second@2x.png in Resources */,
 				E35E129516978BFF0085EBA2 /* add-item.png in Resources */,
 				E35E129616978BFF0085EBA2 /* next-item.png in Resources */,
 				E35E129816978CAB0085EBA2 /* addressbook.png in Resources */,
+				E3B10CFF16B76B4C00FA6EF4 /* background.png in Resources */,
+				E3B10D0016B76B4C00FA6EF4 /* background@2X.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
