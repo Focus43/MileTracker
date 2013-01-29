@@ -133,7 +133,7 @@
             break;
     }
     
-    PFQuery *query = [PFQuery queryWithClassName:@"Trip"];
+    PFQuery *query = [PFQuery queryWithClassName:kPFObjectClassName];
     [query whereKey:@"date" lessThanOrEqualTo:[self dateSetToMidnightUsingComponents:endComponents]];
     [query whereKey:@"date" greaterThan:[self dateSetToMidnightUsingComponents:startComponents]];
     [query whereKey:@"user" equalTo:[PFUser currentUser]];

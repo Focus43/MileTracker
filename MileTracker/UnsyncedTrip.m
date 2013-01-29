@@ -18,7 +18,7 @@
 
 + (UnsyncedTrip *)createTripForEntityDecriptionAndLoadWithData:(NSDictionary *)tripData objectId:(NSString *)objectId
 {
-    UnsyncedTrip *unsyncedTrip = (UnsyncedTrip *)[NSEntityDescription insertNewObjectForEntityForName:@"UnsyncedTrip"
+    UnsyncedTrip *unsyncedTrip = (UnsyncedTrip *)[NSEntityDescription insertNewObjectForEntityForName:kUnsyncedTripEntityName
                                                                                inManagedObjectContext:[[MTCoreDataController sharedInstance] managedObjectContext]];
     
     BOOL isNew = (objectId) ? NO : YES;
@@ -44,7 +44,7 @@
 + (NSArray *)fetchTripsMatching:(NSDate *)creationDate error:(NSError *)error
 {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *trips = [NSEntityDescription entityForName:@"UnsyncedTrip" inManagedObjectContext:[[MTCoreDataController sharedInstance] managedObjectContext]];
+    NSEntityDescription *trips = [NSEntityDescription entityForName:kUnsyncedTripEntityName inManagedObjectContext:[[MTCoreDataController sharedInstance] managedObjectContext]];
     [request setEntity:trips];
     
     // All this is to account for dictionary making slight changes in the timestamp (really?? anyway:)
@@ -67,7 +67,7 @@
 + (NSArray *)fetchTripsWithId:(NSString *)objectId error:(NSError *)error
 {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    NSEntityDescription *trips = [NSEntityDescription entityForName:@"UnsyncedTrip" inManagedObjectContext:[[MTCoreDataController sharedInstance] managedObjectContext]];
+    NSEntityDescription *trips = [NSEntityDescription entityForName:kUnsyncedTripEntityName inManagedObjectContext:[[MTCoreDataController sharedInstance] managedObjectContext]];
     [request setEntity:trips];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(objectId == %@)",objectId];

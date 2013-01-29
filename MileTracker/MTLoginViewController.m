@@ -14,6 +14,9 @@
 {
     [super viewDidLoad];
     
+    UIColor *backGroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background.png"]];
+    [self.logInView setBackgroundColor:backGroundColor];
+    
     [self.logInView setLogo:nil];
     
     // Set buttons appearance

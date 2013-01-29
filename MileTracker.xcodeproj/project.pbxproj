@@ -136,6 +136,7 @@
 		E35E129A169E0A9A0085EBA2 /* MTFormatting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTFormatting.m; sourceTree = "<group>"; };
 		E3B10CED16B1E24900FA6EF4 /* PFObject+Trip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PFObject+Trip.h"; sourceTree = "<group>"; };
 		E3B10CEE16B1E24900FA6EF4 /* PFObject+Trip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PFObject+Trip.m"; sourceTree = "<group>"; };
+		E3B10CF016B71F6700FA6EF4 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -324,6 +325,7 @@
 				E35E129A169E0A9A0085EBA2 /* MTFormatting.m */,
 				E34E459116A21F9000C51E67 /* Reachability.h */,
 				E34E459216A21F9000C51E67 /* Reachability.m */,
+				E3B10CF016B71F6700FA6EF4 /* Constants.h */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";

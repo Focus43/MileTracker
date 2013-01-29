@@ -71,7 +71,7 @@
     if (_managedObjectModel != nil) {
         return _managedObjectModel;
     }
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"UnsyncedTrip" withExtension:@"momd"];
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:kUnsyncedTripEntityName withExtension:@"momd"];
     _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return _managedObjectModel;
 }
@@ -84,7 +84,7 @@
         return _persistentStoreCoordinator;
     }
     
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"UnsyncedTrip"];
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:kUnsyncedTripEntityName];
     
     NSError *error = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];

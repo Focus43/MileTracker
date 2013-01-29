@@ -47,17 +47,11 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-//    Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
-//    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
-//    
-//    if (networkStatus != NotReachable) {
-//        [self syncTrips];
-//    }
+
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    NSLog(@"applicationDidBecomeActive");
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     
@@ -76,7 +70,7 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
     // TODO: move this into the Model
     NSManagedObjectContext *moc = [[MTCoreDataController sharedInstance] managedObjectContext];
     NSEntityDescription *entityDescription = [NSEntityDescription
-                                              entityForName:@"UnsyncedTrip" inManagedObjectContext:moc];
+                                              entityForName:kUnsyncedTripEntityName inManagedObjectContext:moc];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:entityDescription];
     
@@ -85,9 +79,7 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
     NSLog(@"fetch error = %@", error);
     if ( unsyncedArray != nil && [unsyncedArray count] > 0 ) {
         NSLog(@"unsaved array = %@", unsyncedArray);
-        
-        // show HUD?
-        
+                
         UIAlertView *syncAlert = [[UIAlertView alloc] initWithTitle:@"Just a sec" message:@"You had some trips that had not been synced with the cloud because you were offline. Give me a sec to update those." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [syncAlert show];
         
@@ -96,10 +88,10 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
             PFObject *unsyncedTrip;
             
             if ( obj.isNew == [NSNumber numberWithInt:1] ) {
-                unsyncedTrip = [PFObject objectWithClassName:@"Trip"];
+                unsyncedTrip = [PFObject objectWithClassName:kPFObjectClassName];
                 [unsyncedTrip tr_updateWithData:obj.unsyncedObjInfo];
             } else {
-                unsyncedTrip = [PFObject objectWithoutDataWithClassName:@"Trip" objectId:obj.objectId];
+                unsyncedTrip = [PFObject objectWithoutDataWithClassName:kPFObjectClassName objectId:obj.objectId];
                 [unsyncedTrip tr_updateWithData:obj.unsyncedObjInfo];
             }
             
@@ -113,7 +105,6 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
             
         }
         
-        // hide HUD
     }
 }
 

@@ -19,9 +19,9 @@
     PFObject *tripObj;
     
     if ( objectId && ![objectId isEqualToString:@""] ) {
-        tripObj = [PFObject objectWithoutDataWithClassName:@"Trip" objectId:objectId];
+        tripObj = [PFObject objectWithoutDataWithClassName:kPFObjectClassName objectId:objectId];
     } else {
-        tripObj = [PFObject objectWithClassName:@"Trip"];
+        tripObj = [PFObject objectWithClassName:kPFObjectClassName];
     }
     
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithCapacity:0];

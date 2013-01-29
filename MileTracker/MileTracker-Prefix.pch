@@ -14,6 +14,7 @@
     #import <CoreData/CoreData.h>
     #import <Parse/Parse.h>
 
+    #import "Constants.h"
     #import "MTFormatting.h"
     #import "MTCoreDataController.h"
     #import "MBProgressHUD.h" 
