@@ -16,6 +16,7 @@
 
     #import "Constants.h"
     #import "MTFormatting.h"
+    #import "MTViewUtils.h"
     #import "MTCoreDataController.h"
     #import "MBProgressHUD.h" 
     #import "PFObject+Trip.h"

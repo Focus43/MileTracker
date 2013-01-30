@@ -22,9 +22,6 @@
                                         </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="iie-Gr-JYV" userLabel="Date Field">
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="cZ3-o6-VeI"/>
-                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                         <connections>
@@ -32,16 +29,13 @@
                                         </connections>
                                     </textField>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Trip Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8uo-yG-XiR">
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="21" id="2g2-tf-OUz"/>
-                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YlY-nI-JKa" userLabel="Start Odometer Field">
                                         <constraints>
-                                            <constraint firstAttribute="width" priority="847" constant="135" type="user" id="DEi-rr-lJp"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="133" type="user" id="chE-5D-Gx8" userLabel="Width - Start Odometer Field"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
@@ -50,6 +44,9 @@
                                         </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="y8W-lw-LHd" userLabel="Odometer End Field">
+                                        <constraints>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="133" type="user" id="RRV-M6-3OW"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numbersAndPunctuation"/>
                                         <connections>
@@ -58,53 +55,54 @@
                                     </textField>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Trip Destination" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aGr-up-4QU">
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Odometer Start" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cAO-CV-Htx">
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Odometer End" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0QB-SF-lqz">
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="iie-Gr-JYV" firstAttribute="leading" secondItem="LUG-vi-JDs" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="0yv-uF-PAh"/>
                                     <constraint firstItem="cAO-CV-Htx" firstAttribute="top" secondItem="ZjP-ER-K4a" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="1Fa-ud-TcB"/>
-                                    <constraint firstItem="cAO-CV-Htx" firstAttribute="trailing" secondItem="aGr-up-4QU" secondAttribute="trailing" type="default" id="3BI-fZ-92L"/>
+                                    <constraint firstItem="y8W-lw-LHd" firstAttribute="width" secondItem="YlY-nI-JKa" secondAttribute="width" type="user" id="3A0-JJ-s3V"/>
                                     <constraint firstItem="YlY-nI-JKa" firstAttribute="top" secondItem="cAO-CV-Htx" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="8K6-IE-TPd"/>
-                                    <constraint firstItem="0QB-SF-lqz" firstAttribute="leading" secondItem="y8W-lw-LHd" secondAttribute="leading" type="default" id="8Nf-4Q-1x1"/>
-                                    <constraint firstAttribute="trailing" secondItem="ZjP-ER-K4a" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="Dpf-bt-4fq"/>
-                                    <constraint firstItem="0QB-SF-lqz" firstAttribute="leading" secondItem="LUG-vi-JDs" secondAttribute="leading" constant="169" id="JAf-jH-eZi"/>
+                                    <constraint firstAttribute="trailing" secondItem="y8W-lw-LHd" secondAttribute="trailing" constant="20" symbolic="YES" type="user" id="DAh-jQ-EFl"/>
+                                    <constraint firstAttribute="trailing" secondItem="ZjP-ER-K4a" secondAttribute="trailing" constant="20" symbolic="YES" type="user" id="HlB-sk-lSW"/>
+                                    <constraint firstItem="ZjP-ER-K4a" firstAttribute="leading" secondItem="LUG-vi-JDs" secondAttribute="leading" constant="20" symbolic="YES" type="user" id="JBP-DQ-KVV"/>
                                     <constraint firstItem="YlY-nI-JKa" firstAttribute="baseline" secondItem="y8W-lw-LHd" secondAttribute="baseline" type="default" id="JU9-Ta-lt5"/>
-                                    <constraint firstItem="ZjP-ER-K4a" firstAttribute="centerX" secondItem="LUG-vi-JDs" secondAttribute="centerX" type="default" id="L9T-DB-Q5i"/>
-                                    <constraint firstItem="iie-Gr-JYV" firstAttribute="top" secondItem="8uo-yG-XiR" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="Msm-W5-dI7"/>
+                                    <constraint firstItem="iie-Gr-JYV" firstAttribute="top" secondItem="8uo-yG-XiR" secondAttribute="bottom" constant="8" symbolic="YES" type="user" id="Msm-W5-dI7"/>
+                                    <constraint firstItem="y8W-lw-LHd" firstAttribute="leading" secondItem="YlY-nI-JKa" secondAttribute="trailing" constant="14" type="user" id="QsW-5H-7np"/>
                                     <constraint firstItem="ZjP-ER-K4a" firstAttribute="top" secondItem="aGr-up-4QU" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="Syx-o2-dUz"/>
-                                    <constraint firstItem="y8W-lw-LHd" firstAttribute="baseline" secondItem="iie-Gr-JYV" secondAttribute="baseline" type="default" id="WG0-Ub-fqF"/>
-                                    <constraint firstItem="ZjP-ER-K4a" firstAttribute="leading" secondItem="LUG-vi-JDs" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="WIX-Ax-5aT"/>
+                                    <constraint firstItem="iie-Gr-JYV" firstAttribute="leading" secondItem="LUG-vi-JDs" secondAttribute="leading" constant="20" symbolic="YES" type="user" id="Y6E-0H-0Wy"/>
                                     <constraint firstItem="ZjP-ER-K4a" firstAttribute="baseline" secondItem="YlY-nI-JKa" secondAttribute="baseline" type="default" id="a9i-nK-ysb"/>
-                                    <constraint firstItem="8uo-yG-XiR" firstAttribute="top" secondItem="LUG-vi-JDs" secondAttribute="top" constant="20" symbolic="YES" type="default" id="aYP-BN-d8w"/>
-                                    <constraint firstAttribute="bottom" secondItem="YlY-nI-JKa" secondAttribute="bottom" constant="150" id="clE-yq-Ofi"/>
+                                    <constraint firstItem="8uo-yG-XiR" firstAttribute="top" secondItem="LUG-vi-JDs" secondAttribute="top" constant="20" symbolic="YES" type="user" id="aYP-BN-d8w"/>
+                                    <constraint firstItem="y8W-lw-LHd" firstAttribute="leading" secondItem="0QB-SF-lqz" secondAttribute="leading" type="user" id="dm9-mI-PGi"/>
                                     <constraint firstItem="aGr-up-4QU" firstAttribute="top" secondItem="LUG-vi-JDs" secondAttribute="top" constant="91" id="kgh-zP-MjF"/>
+                                    <constraint firstAttribute="trailing" secondItem="iie-Gr-JYV" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="nB0-9g-BEH"/>
                                     <constraint firstItem="0QB-SF-lqz" firstAttribute="baseline" secondItem="cAO-CV-Htx" secondAttribute="baseline" type="default" id="pXe-Jw-Hb3"/>
-                                    <constraint firstItem="YlY-nI-JKa" firstAttribute="width" secondItem="y8W-lw-LHd" secondAttribute="width" type="user" id="sWh-qn-Ekq"/>
-                                    <constraint firstItem="8uo-yG-XiR" firstAttribute="leading" secondItem="LUG-vi-JDs" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="shC-s8-8FC"/>
-                                    <constraint firstAttribute="trailing" secondItem="iie-Gr-JYV" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="tDL-lK-kcd"/>
-                                    <constraint firstItem="cAO-CV-Htx" firstAttribute="leading" secondItem="YlY-nI-JKa" secondAttribute="leading" type="default" id="tdV-zs-G8V"/>
-                                    <constraint firstItem="aGr-up-4QU" firstAttribute="leading" secondItem="LUG-vi-JDs" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="uuN-BR-Uy0"/>
+                                    <constraint firstItem="cAO-CV-Htx" firstAttribute="leading" secondItem="LUG-vi-JDs" secondAttribute="leading" constant="20" symbolic="YES" type="user" id="q4C-fm-lii"/>
+                                    <constraint firstItem="8uo-yG-XiR" firstAttribute="leading" secondItem="LUG-vi-JDs" secondAttribute="leading" constant="20" symbolic="YES" type="user" id="shC-s8-8FC"/>
+                                    <constraint firstItem="cAO-CV-Htx" firstAttribute="leading" secondItem="YlY-nI-JKa" secondAttribute="leading" type="user" id="tdV-zs-G8V"/>
+                                    <constraint firstAttribute="bottom" secondItem="YlY-nI-JKa" secondAttribute="bottom" priority="1" constant="150" type="user" id="uUK-UQ-y3z"/>
+                                    <constraint firstItem="aGr-up-4QU" firstAttribute="leading" secondItem="LUG-vi-JDs" secondAttribute="leading" constant="20" symbolic="YES" type="user" id="uuN-BR-Uy0"/>
+                                    <constraint firstItem="ZjP-ER-K4a" firstAttribute="centerX" secondItem="LUG-vi-JDs" secondAttribute="centerX" type="user" id="zUy-Co-qgb"/>
+                                    <constraint firstItem="YlY-nI-JKa" firstAttribute="leading" secondItem="LUG-vi-JDs" secondAttribute="leading" constant="20" type="user" id="zfi-li-YhZ"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="LUG-vi-JDs" firstAttribute="top" secondItem="16" secondAttribute="top" type="default" id="DCa-JQ-gGz"/>
-                            <constraint firstItem="LUG-vi-JDs" firstAttribute="leading" secondItem="16" secondAttribute="leading" type="default" id="U03-35-TNe"/>
+                            <constraint firstItem="LUG-vi-JDs" firstAttribute="leading" secondItem="16" secondAttribute="leading" type="user" id="U03-35-TNe"/>
                             <constraint firstItem="LUG-vi-JDs" firstAttribute="bottom" secondItem="16" secondAttribute="bottom" type="default" id="Usx-cQ-zNG"/>
-                            <constraint firstItem="LUG-vi-JDs" firstAttribute="trailing" secondItem="16" secondAttribute="trailing" type="default" id="hgD-vN-iJD"/>
+                            <constraint firstItem="LUG-vi-JDs" firstAttribute="trailing" secondItem="16" secondAttribute="trailing" type="user" id="hgD-vN-iJD"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="New Trip" id="iqW-GO-f8H">
@@ -497,7 +495,7 @@
                                             <constraint firstAttribute="height" constant="59" type="user" id="FKX-0f-oKd"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>

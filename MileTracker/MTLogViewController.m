@@ -16,6 +16,7 @@
 #define kTripCellIdentifier @"TripCell"
 #define kLoadingCellIdentifier @"LoadingCell"
 const int kLoadCellTag = 1234;
+const int kNoTripsCellTag = 5678;
 
 @interface MTLogViewController ()
 
@@ -32,6 +33,7 @@ const int kLoadCellTag = 1234;
 - (void)refreshTable;
 - (void)syncWithUnsavedData;
 - (UITableViewCell *)loadMoreTripsCell;
+- (UITableViewCell *)noTripsCell;
 
 @end
 
@@ -283,6 +285,24 @@ const int kLoadCellTag = 1234;
     return cell;
 }
 
+- (UITableViewCell *)noTripsCell
+{
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    
+    UILabel* noTrips =[[UILabel alloc]initWithFrame: cell.frame];
+    noTrips.backgroundColor = [UIColor clearColor];
+    noTrips.textAlignment = NSTextAlignmentCenter;
+    noTrips.font = [UIFont boldSystemFontOfSize:18];
+    noTrips.text = @"You don't have any trips saved yet...";
+    [cell addSubview:noTrips];
+    
+    cell.userInteractionEnabled = NO;
+    cell.tag = kNoTripsCellTag;
+    
+    return cell;
+}
+
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -292,6 +312,10 @@ const int kLoadCellTag = 1234;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ( [self.trips count] == 0 ) {
+        return [self noTripsCell];
+    }
+    
     if ( indexPath.row < [self.trips count] ) {
         
         MTLogTableViewCell *cell = nil;
@@ -320,14 +344,6 @@ const int kLoadCellTag = 1234;
 {
     return [self.trips count] + 1;
 }
-
-//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    if ( cell.tag == kLoadCellTag ) {
-//        _currentPage ++;
-//        [self loadTrips];
-//    }
-//}
 
  // Override to support editing the table view.
  - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath

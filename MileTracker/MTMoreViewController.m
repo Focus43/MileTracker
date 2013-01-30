@@ -36,6 +36,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self.view setBackgroundColor:[MTViewUtils backGroundColor]];
 	
     [self registerForKeyboardNotifications];
     

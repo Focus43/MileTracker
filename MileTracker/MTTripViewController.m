@@ -42,6 +42,8 @@
 {
     [super viewDidLoad];
     
+    [self.view setBackgroundColor:[MTViewUtils backGroundColor]];
+    
     if ( !self.numberFormatter ) {
         self.numberFormatter = [[NSNumberFormatter alloc] init];
         [self.numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
