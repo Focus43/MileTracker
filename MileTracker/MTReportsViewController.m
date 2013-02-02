@@ -41,11 +41,6 @@
     [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setShadowOffset:CGSizeMake(0.0, 0.0)];
     [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont systemFontOfSize:17.0]];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning
@@ -53,6 +48,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 #pragma mark - Table view data source
 
@@ -74,8 +70,61 @@
     return [gregorian dateFromComponents: components];
 }
 
-// TODO: move next 3 methods to the Trip model?
+#pragma mark - Table view delegate
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // data selection logic
+    PFQuery *query = [self queryFromReportTableSelection:indexPath];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        
+        if (error) {
+            NSLog(@"error! %@", error);
+        } else {
+            
+            if ( [objects count] > 0 ) {
+                
+                NSMutableString *writeString = [self reportStringFromTrips:objects];
+                
+                [self writeToDataFile:writeString];
+                
+                NSString *subject = @"";
+                switch ([indexPath row]) {
+                    case 0:
+                        subject = [subject stringByAppendingString:@"1st quarter"];
+                        break;
+                    case 1:
+                        subject = [subject stringByAppendingString:@"2nd quarter"];
+                        break;
+                    case 2:
+                        subject = [subject stringByAppendingString:@"3rd quarter"];
+                        break;
+                    case 3:
+                        subject = [subject stringByAppendingString:@"4th quarter"];
+                        break;
+                    case 4:
+                        subject = [subject stringByAppendingString:@"last year"];
+                        break;
+                }
+                
+                [self createEmailWithSubject:subject];
+                
+            } else {
+                
+                UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"No trips" message:@"No trips were recorded in the chosen time period" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [problemAlert show];
+                
+            }
+            
+        }
+        
+        
+    }];
+    
+}
+
+#pragma mark -- report file creation
 - (PFQuery *)queryFromReportTableSelection:(NSIndexPath *)indexPath
 {
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
@@ -189,59 +238,7 @@
     }
 }
 
-#pragma mark - Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // data selection logic
-    PFQuery *query = [self queryFromReportTableSelection:indexPath];
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        
-        if (error) {
-            NSLog(@"error! %@", error);
-        } else {
-            
-            if ( [objects count] > 0 ) {
-                
-                NSMutableString *writeString = [self reportStringFromTrips:objects];
-                
-                [self writeToDataFile:writeString];
-                
-                NSString *subject = @"";
-                switch ([indexPath row]) {
-                     case 0:
-                        subject = [subject stringByAppendingString:@"1st quarter"];
-                        break;
-                    case 1:
-                        subject = [subject stringByAppendingString:@"2nd quarter"];
-                        break;
-                    case 2:
-                        subject = [subject stringByAppendingString:@"3rd quarter"];
-                        break;
-                    case 3:
-                        subject = [subject stringByAppendingString:@"4th quarter"];
-                        break;
-                    case 4:
-                        subject = [subject stringByAppendingString:@"last year"];
-                        break;
-                }
-                
-                [self createEmailWithSubject:subject];
-                
-            } else {
-                
-                UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"No trips" message:@"No trips were recorded in the chosen time period" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [problemAlert show];
-                
-            }
-            
-        }
-         
-        
-    }];
-
-}
 #pragma mark - Mail Compose View Controller delegate
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller

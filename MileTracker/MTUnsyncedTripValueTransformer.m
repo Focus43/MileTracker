@@ -32,7 +32,6 @@
 {
     NSError *error;
     NSMutableDictionary *tripData = [NSPropertyListSerialization propertyListWithData:value options:NSPropertyListMutableContainersAndLeaves format:nil error:&error];
-    
     PFObject *tripObj = [PFObject objectWithoutDataWithClassName:kPFObjectClassName objectId:[tripData objectForKey:@"objectId"]];
 
     [tripData removeObjectForKey:@"objectId"];

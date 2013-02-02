@@ -59,21 +59,10 @@
 
 }
 
-- (void)viewDidLayoutSubviews {
-    // Set frame for elements
-    //    [self.logInView.dismissButton setFrame:CGRectMake(10.0f, 10.0f, 87.5f, 45.5f)];
-    //    [self.logInView.logo setFrame:CGRectMake(66.5f, 70.0f, 187.0f, 58.5f)];
-    //    [self.logInView.facebookButton setFrame:CGRectMake(35.0f, 287.0f, 120.0f, 40.0f)];
-    //    [self.logInView.twitterButton setFrame:CGRectMake(35.0f+130.0f, 287.0f, 120.0f, 40.0f)];
-    //    [self.logInView.signUpButton setFrame:CGRectMake(35.0f, 385.0f, 250.0f, 40.0f)];
-    
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    if ( orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight ) {
-        [self.fieldsBackground setFrame:CGRectMake(160.0f, 75.0f, 245.0f, 133.0f)];
-    } else {
-        [self.fieldsBackground setFrame:CGRectMake(37.0f, 205.0f, 245.0f, 133.0f)];
-    }
+- (void)viewDidLayoutSubviews
+{
+    CGRect signupRect = CGRectMake( self.signUpView.usernameField.frame.origin.x, self.signUpView.usernameField.frame.origin.y, 245.0f, 133.0f);
+    [self.fieldsBackground setFrame:signupRect];
 }
 
 - (void)didReceiveMemoryWarning

@@ -23,6 +23,7 @@
 @property (strong, nonatomic) IBOutlet UITextField *startOdometerField;
 @property (strong, nonatomic) IBOutlet UITextField *endOdometerField;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet ADBannerView *adView;
 
 @property (nonatomic, retain) AbstractActionSheetPicker *actionSheetPicker;
 @property (nonatomic, strong) NSDate *selectedDate;

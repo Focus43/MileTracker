@@ -29,6 +29,7 @@
         
         [unsyncedTrip setValue:tripDict forKey:@"unsyncedObjInfo"];
         [unsyncedTrip setValue:[tripDict objectForKey:@"date"] forKey:@"savedTime"];
+        [unsyncedTrip setValue:[PFUser currentUser].objectId forKey:@"u"];
         
     } else {
         [unsyncedTrip setValue:nil forKey:@"unsyncedObjInfo"];
@@ -36,6 +37,7 @@
     
     [unsyncedTrip setValue:[NSNumber numberWithBool:isNew] forKey:@"isNew"];
     [unsyncedTrip setValue:objectId forKey:@"objectId"];
+    [unsyncedTrip setValue:[PFUser currentUser].objectId forKey:@"u"];
     
     NSLog(@"createTripForEntityDecriptionAndLoadWithData unsyncedTrip = %@", unsyncedTrip);
     return unsyncedTrip;
@@ -70,7 +72,11 @@
     NSEntityDescription *trips = [NSEntityDescription entityForName:kUnsyncedTripEntityName inManagedObjectContext:[[MTCoreDataController sharedInstance] managedObjectContext]];
     [request setEntity:trips];
     
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(objectId == %@)",objectId];
+    NSPredicate *objectPredicate = [NSPredicate predicateWithFormat:@"(objectId == %@)",objectId];
+    NSPredicate *userPredicate = [NSPredicate predicateWithFormat:@"(userId == %@)",[PFUser currentUser].objectId];
+    
+    NSArray *searchPredicatesArray = [NSArray arrayWithObjects:objectPredicate, userPredicate, nil];
+    NSPredicate *predicate = [NSCompoundPredicate andPredicateWithSubpredicates:searchPredicatesArray];
     [request setPredicate:predicate];
     
     return [[[MTCoreDataController sharedInstance] managedObjectContext] executeFetchRequest:request error:&error];

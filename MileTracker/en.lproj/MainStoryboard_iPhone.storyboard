@@ -7,7 +7,7 @@
         <!--Trip View Controller - Trip-->
         <scene sceneID="11">
             <objects>
-                <viewController title="Trip" id="2" customClass="MTTripViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MTTrip" title="Trip" id="2" customClass="MTTripViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="16">
                         <rect key="frame" x="0.0" y="64" width="320" height="367"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -127,7 +127,8 @@
         <!--Tab Bar Controller-->
         <scene sceneID="15">
             <objects>
-                <tabBarController id="4" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="MTTabBar" id="4" customClass="MTTabBarController" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="Rbj-Md-apE"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="5">
                         <rect key="frame" x="0.0" y="431" width="320" height="49"/>
@@ -501,19 +502,19 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="idl-hh-XT8" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="04J-zT-M3c"/>
-                                    <constraint firstItem="A3d-wu-7bO" firstAttribute="top" secondItem="idl-hh-XT8" secondAttribute="bottom" constant="8" symbolic="YES" type="user" id="2f1-cz-cat"/>
+                                    <constraint firstItem="A3d-wu-7bO" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="242" id="720-IK-gj1"/>
                                     <constraint firstItem="CvF-Xp-5qm" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="7co-2a-h21"/>
                                     <constraint firstItem="A3d-wu-7bO" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="85q-VN-lxN"/>
-                                    <constraint firstItem="CvF-Xp-5qm" firstAttribute="centerX" secondItem="Puc-qS-B7B" secondAttribute="centerX" type="default" id="A7J-HZ-Axz"/>
-                                    <constraint firstItem="idl-hh-XT8" firstAttribute="top" secondItem="CvF-Xp-5qm" secondAttribute="bottom" constant="8" symbolic="YES" type="user" id="PFR-gU-5Aw"/>
-                                    <constraint firstAttribute="bottom" secondItem="A3d-wu-7bO" secondAttribute="bottom" constant="118" id="T11-At-3nM"/>
+                                    <constraint firstItem="idl-hh-XT8" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="196" id="9qL-lq-UtA"/>
+                                    <constraint firstItem="CvF-Xp-5qm" firstAttribute="centerX" secondItem="Puc-qS-B7B" secondAttribute="centerX" type="default" id="G4q-7K-34K"/>
                                     <constraint firstAttribute="trailing" secondItem="YIj-fJ-CRD" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="bhs-DK-dVC"/>
                                     <constraint firstAttribute="trailing" secondItem="A3d-wu-7bO" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="bxT-2g-9V1"/>
                                     <constraint firstItem="YIj-fJ-CRD" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="cio-up-vaB"/>
+                                    <constraint firstItem="YIj-fJ-CRD" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="24" id="gls-zu-GdE"/>
                                     <constraint firstAttribute="trailing" secondItem="CvF-Xp-5qm" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="jNU-7I-DeL"/>
-                                    <constraint firstItem="CvF-Xp-5qm" firstAttribute="top" secondItem="YIj-fJ-CRD" secondAttribute="bottom" constant="38" type="user" id="pCT-Ee-GZ6"/>
+                                    <constraint firstAttribute="bottom" secondItem="A3d-wu-7bO" secondAttribute="bottom" constant="82" id="kXp-8B-5ja"/>
+                                    <constraint firstItem="CvF-Xp-5qm" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="120" id="qrW-Rb-fPY"/>
                                     <constraint firstAttribute="trailing" secondItem="idl-hh-XT8" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="rfh-ro-tDD"/>
-                                    <constraint firstItem="YIj-fJ-CRD" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="20" symbolic="YES" type="user" id="xD1-fw-Qf5"/>
                                     <constraint firstAttribute="bottom" secondItem="A3d-wu-7bO" secondAttribute="bottom" priority="1" constant="206" type="user" id="zKc-w5-YN1"/>
                                 </constraints>
                             </scrollView>
@@ -521,8 +522,8 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Puc-qS-B7B" firstAttribute="leading" secondItem="3OH-bh-DeV" secondAttribute="leading" type="user" id="7hI-WT-YtF"/>
+                            <constraint firstItem="Puc-qS-B7B" firstAttribute="bottom" secondItem="3OH-bh-DeV" secondAttribute="bottom" type="default" id="HfE-bp-x3n"/>
                             <constraint firstItem="Puc-qS-B7B" firstAttribute="top" secondItem="3OH-bh-DeV" secondAttribute="top" type="user" id="mhf-m3-NJY"/>
-                            <constraint firstItem="Puc-qS-B7B" firstAttribute="bottom" secondItem="3OH-bh-DeV" secondAttribute="bottom" type="user" id="uQX-7g-Tsz"/>
                             <constraint firstItem="Puc-qS-B7B" firstAttribute="trailing" secondItem="3OH-bh-DeV" secondAttribute="trailing" type="user" id="vaN-dP-AUT"/>
                         </constraints>
                     </view>
@@ -587,10 +588,14 @@
         <class className="MTReportsViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportsViewController.h"/>
         </class>
+        <class className="MTTabBarController" superclassName="UITabBarController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTabBarController.h"/>
+        </class>
         <class className="MTTripViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTripViewController.h"/>
             <relationships>
                 <relationship kind="action" name="saveButtonTouched:"/>
+                <relationship kind="outlet" name="adView" candidateClass="ADBannerView"/>
                 <relationship kind="outlet" name="dateField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="endOdometerField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
@@ -608,6 +613,6 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="MFi-aW-UEK"/>
+        <segue reference="jIm-HT-t2D"/>
     </inferredMetricsTieBreakers>
 </document>

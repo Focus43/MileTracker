@@ -58,6 +58,8 @@
 		E37732D216B88BAC00FA71E5 /* logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E37732D016B88BAC00FA71E5 /* logo@2x.png */; };
 		E37732D416B891AF00FA71E5 /* sign_up_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = E37732D316B891AF00FA71E5 /* sign_up_bg.png */; };
 		E37732D716B8978900FA71E5 /* MTViewUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E37732D616B8978900FA71E5 /* MTViewUtils.m */; };
+		E3A2B77416B9A2EA0047FC4B /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3A2B77316B9A2EA0047FC4B /* iAd.framework */; };
+		E3A2B78B16BA0D460047FC4B /* MTTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3A2B78A16BA0D460047FC4B /* MTTabBarController.m */; };
 		E3B10CEF16B1E24900FA6EF4 /* PFObject+Trip.m in Sources */ = {isa = PBXBuildFile; fileRef = E3B10CEE16B1E24900FA6EF4 /* PFObject+Trip.m */; };
 		E3B10CFF16B76B4C00FA6EF4 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = E3B10CFD16B76B4C00FA6EF4 /* background.png */; };
 		E3B10D0016B76B4C00FA6EF4 /* background@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = E3B10CFE16B76B4C00FA6EF4 /* background@2X.png */; };
@@ -148,6 +150,9 @@
 		E37732D316B891AF00FA71E5 /* sign_up_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sign_up_bg.png; sourceTree = "<group>"; };
 		E37732D516B8978900FA71E5 /* MTViewUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewUtils.h; sourceTree = "<group>"; };
 		E37732D616B8978900FA71E5 /* MTViewUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewUtils.m; sourceTree = "<group>"; };
+		E3A2B77316B9A2EA0047FC4B /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		E3A2B78916BA0D460047FC4B /* MTTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTabBarController.h; sourceTree = "<group>"; };
+		E3A2B78A16BA0D460047FC4B /* MTTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTabBarController.m; sourceTree = "<group>"; };
 		E3B10CED16B1E24900FA6EF4 /* PFObject+Trip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PFObject+Trip.h"; sourceTree = "<group>"; };
 		E3B10CEE16B1E24900FA6EF4 /* PFObject+Trip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PFObject+Trip.m"; sourceTree = "<group>"; };
 		E3B10CF016B71F6700FA6EF4 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -175,6 +180,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E3A2B77416B9A2EA0047FC4B /* iAd.framework in Frameworks */,
 				E34E459416A225E000C51E67 /* CoreFoundation.framework in Frameworks */,
 				E35E126916921C7D0085EBA2 /* SystemConfiguration.framework in Frameworks */,
 				E35E128916974B5C0085EBA2 /* MessageUI.framework in Frameworks */,
@@ -235,6 +241,7 @@
 		E336B99D167B6E76009A03EF = {
 			isa = PBXGroup;
 			children = (
+				E3A2B77316B9A2EA0047FC4B /* iAd.framework */,
 				E336B9B2167B6E76009A03EF /* MileTracker */,
 				E336B9AB167B6E76009A03EF /* Frameworks */,
 				E336B9A9167B6E76009A03EF /* Products */,
@@ -280,6 +287,8 @@
 			children = (
 				E336B9BB167B6E76009A03EF /* MTAppDelegate.h */,
 				E336B9BC167B6E76009A03EF /* MTAppDelegate.m */,
+				E3A2B78916BA0D460047FC4B /* MTTabBarController.h */,
+				E3A2B78A16BA0D460047FC4B /* MTTabBarController.m */,
 				E336B9CA167B6E76009A03EF /* MTTripViewController.h */,
 				E336B9CB167B6E76009A03EF /* MTTripViewController.m */,
 				E336B9D1167B6E76009A03EF /* MTLogViewController.h */,
@@ -487,6 +496,7 @@
 				E31222D416A6099300B3BE95 /* MTUnsyncedTripValueTransformer.m in Sources */,
 				E3B10CEF16B1E24900FA6EF4 /* PFObject+Trip.m in Sources */,
 				E37732D716B8978900FA71E5 /* MTViewUtils.m in Sources */,
+				E3A2B78B16BA0D460047FC4B /* MTTabBarController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -585,8 +595,8 @@
 				GCC_PREFIX_HEADER = "MileTracker/MileTracker-Prefix.pch";
 				INFOPLIST_FILE = "MileTracker/MileTracker-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "663C7AA1-A3F4-436E-9FA9-223F4F3DE0DF";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "663C7AA1-A3F4-436E-9FA9-223F4F3DE0DF";
+				PROVISIONING_PROFILE = "87CD3221-61F8-4BB4-961B-0FD6E724961C";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "87CD3221-61F8-4BB4-961B-0FD6E724961C";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -604,8 +614,8 @@
 				GCC_PREFIX_HEADER = "MileTracker/MileTracker-Prefix.pch";
 				INFOPLIST_FILE = "MileTracker/MileTracker-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0D2A83BC-727D-4811-9747-7735D4838B16";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "0D2A83BC-727D-4811-9747-7735D4838B16";
+				PROVISIONING_PROFILE = "7B911DF8-7A51-4B10-B83E-25A790FE14FA";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7B911DF8-7A51-4B10-B83E-25A790FE14FA";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

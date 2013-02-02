@@ -47,15 +47,10 @@
         
 }
 
-- (void)viewDidLayoutSubviews {
-    
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    if ( orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight ) {
-        [self.fieldsBackground setFrame:CGRectMake(160.0f, 50.0f, 245.0f, 90.0f)];
-    } else {
-        [self.fieldsBackground setFrame:CGRectMake(37.0f, 190.0f, 245.0f, 90.0f)];
-    }
+- (void)viewDidLayoutSubviews
+{
+    CGRect loginRect = CGRectMake( self.logInView.usernameField.frame.origin.x, self.logInView.usernameField.frame.origin.y, 245.0f, 90.0f);
+    [self.fieldsBackground setFrame:loginRect];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation

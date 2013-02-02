@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MTMoreViewController : UIViewController <UITextFieldDelegate>
+@interface MTMoreViewController : UIViewController <UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) UIButton *logOutButton;
 @property (nonatomic, strong) UIButton *resetPasswordButton;

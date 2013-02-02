@@ -58,6 +58,7 @@
     [self.scrollView addGestureRecognizer:tap];
     
     self.networkReachability = [Reachability reachabilityForInternetConnection];
+        
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -65,36 +66,7 @@
     [super viewDidAppear:animated];
     
     self.originalCenter = self.view.center;
-    
-    if (![PFUser currentUser]) { // No user logged in
-        NetworkStatus networkStatus = [self.networkReachability currentReachabilityStatus];
         
-        if ( networkStatus == NotReachable ) {
-            UIAlertView *cannotLoginAlert = [[UIAlertView alloc] initWithTitle:@"Uh oh..."
-                                                                       message:@"To sign up or log in, you have to be online, and it looks like you're not right now."
-                                                                      delegate:nil
-                                                             cancelButtonTitle:@"I'll try again later!"
-                                                             otherButtonTitles:nil];
-            [cannotLoginAlert show];
-            
-        }
-    
-        // Create the log in view controller
-        MTLoginViewController *logInViewController = [[MTLoginViewController alloc] init];
-        [logInViewController setDelegate:self]; // Set ourselves as the delegate
-        
-        // Create the sign up view controller
-        MTSignUpViewController *signUpViewController = [[MTSignUpViewController alloc] init];
-        [signUpViewController setDelegate:self]; // Set ourselves as the delegate
-        
-        // Assign our sign up controller to be displayed from the login controller
-        [logInViewController setSignUpController:signUpViewController];
-        
-        // Present the log in view controller
-        [self presentViewController:logInViewController animated:YES completion:NULL];
-        
-    }
-    
     // if editing
     if (self.trip) {
         self.titleField.text = [self.trip objectForKey:@"title"];
@@ -197,30 +169,22 @@
 
 - (void)saveLocalVersionTripData:(NSDictionary *)tripData withNewFlag:(BOOL)isNew objectId:(NSString*)objectId
 {
-    NSLog(@"saveLocalVersionTripData tripData = %@", tripData);
     UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Network problem" message:@"You're offline, so the trip will be saved locally and backed up in the cloud when you're back online." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [problemAlert show];
         
     if ( isNew ) {
-        NSLog(@"it's a new trip");
         [UnsyncedTrip createTripForEntityDecriptionAndLoadWithData:tripData objectId:nil];
-        
-    } else {
-        NSLog(@"not a new trip");
-        
+    } else {        
         NSError *error = nil;
         NSArray *results = [UnsyncedTrip fetchTripsWithId:objectId error:error];
         
         if ( !error && results && [results count] > 0 ) {
-            NSLog(@"already in unsynced data : %@", [results objectAtIndex:0]);
             // record already exists
             [[results objectAtIndex:0] setValue:tripData forKey:@"unsyncedObjInfo"];
             [[[MTCoreDataController sharedInstance] managedObjectContext] save:&error];
             
         } else {
-            NSLog(@"first time added to unsynced data");
             [UnsyncedTrip createTripForEntityDecriptionAndLoadWithData:tripData objectId:objectId];
-            
         }
         
     }
@@ -271,64 +235,64 @@
     return [gregorian dateFromComponents: components];
 }
 
-# pragma mark - Login Delegate methods
-
-// Sent to the delegate to determine whether the log in request should be submitted to the server.
-- (BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password {
-    // Check if both fields are completed
-    if (username && password && username.length != 0 && password.length != 0) {
-        return YES; // Begin login process
-    }
-    
-    [[[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                message:@"Make sure you fill out all of the information!"
-                               delegate:nil
-                      cancelButtonTitle:@"ok"
-                      otherButtonTitles:nil] show];
-    return NO; // Interrupt login process
-}
-
-// Sent to the delegate when a PFUser is logged in.
-- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
-    [self dismissViewControllerAnimated:YES completion:NULL];
-}
-
-// Sent to the delegate when the log in attempt fails.
-- (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error {
-    NSLog(@"Failed to log in...");
-}
-
-// Sent to the delegate when the log in screen is dismissed.
-- (void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController {
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-# pragma mark - Sign Up Delegate methods
-
-// Sent to the delegate to determine whether the sign up request should be submitted to the server.
-- (BOOL)signUpViewController:(PFSignUpViewController *)signUpController shouldBeginSignUp:(NSDictionary *)info {
-    BOOL informationComplete = YES;
-    
-    // loop through all of the submitted data
-    for (id key in info) {
-        NSString *field = [info objectForKey:key];
-        if (!field || field.length == 0) { // check completion
-            informationComplete = NO;
-            break;
-        }
-    }
-    
-    // Display an alert if a field wasn't completed
-    if (!informationComplete) {
-        [[[UIAlertView alloc] initWithTitle:@"Missing Information"
-                                    message:@"Make sure you fill out all of the information!"
-                                   delegate:nil
-                          cancelButtonTitle:@"ok"
-                          otherButtonTitles:nil] show];
-    }
-    
-    return informationComplete;
-}
+//# pragma mark - Login Delegate methods
+//
+//// Sent to the delegate to determine whether the log in request should be submitted to the server.
+//- (BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password {
+//    // Check if both fields are completed
+//    if (username && password && username.length != 0 && password.length != 0) {
+//        return YES; // Begin login process
+//    }
+//    
+//    [[[UIAlertView alloc] initWithTitle:@"Missing Information"
+//                                message:@"Make sure you fill out all of the information!"
+//                               delegate:nil
+//                      cancelButtonTitle:@"ok"
+//                      otherButtonTitles:nil] show];
+//    return NO; // Interrupt login process
+//}
+//
+//// Sent to the delegate when a PFUser is logged in.
+//- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
+//    [self dismissViewControllerAnimated:YES completion:NULL];
+//}
+//
+//// Sent to the delegate when the log in attempt fails.
+//- (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error {
+//    NSLog(@"Failed to log in...");
+//}
+//
+//// Sent to the delegate when the log in screen is dismissed.
+//- (void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController {
+//    [self.navigationController popViewControllerAnimated:YES];
+//}
+//
+//# pragma mark - Sign Up Delegate methods
+//
+//// Sent to the delegate to determine whether the sign up request should be submitted to the server.
+//- (BOOL)signUpViewController:(PFSignUpViewController *)signUpController shouldBeginSignUp:(NSDictionary *)info {
+//    BOOL informationComplete = YES;
+//    
+//    // loop through all of the submitted data
+//    for (id key in info) {
+//        NSString *field = [info objectForKey:key];
+//        if (!field || field.length == 0) { // check completion
+//            informationComplete = NO;
+//            break;
+//        }
+//    }
+//    
+//    // Display an alert if a field wasn't completed
+//    if (!informationComplete) {
+//        [[[UIAlertView alloc] initWithTitle:@"Missing Information"
+//                                    message:@"Make sure you fill out all of the information!"
+//                                   delegate:nil
+//                          cancelButtonTitle:@"ok"
+//                          otherButtonTitles:nil] show];
+//    }
+//    
+//    return informationComplete;
+//}
 
 // Sent to the delegate when a PFUser is signed up.
 - (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user {
@@ -414,6 +378,11 @@
     // This scrolls the screen back to the top. Not sure I like it....
     CGPoint scrollPoint = CGPointMake(0.0, 0.0);
     [scrollView setContentOffset:scrollPoint animated:YES];
+}
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    NSLog(@"didSelectViewController");
 }
 
 @end

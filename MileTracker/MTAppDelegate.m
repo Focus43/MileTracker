@@ -10,6 +10,8 @@
 #import "Reachability.h"
 #import "UnsyncedTrip.h"
 #import "MTUnsyncedTripValueTransformer.h"
+#import "MTSignUpViewController.h"
+#import "MTLoginViewController.h"
 
 @interface MTAppDelegate ()
 
@@ -26,6 +28,7 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 {
     [Parse setApplicationId:kMTAFParseAPIApplicationId clientKey:kMTAFParseAPIKey];
     
+    // register transformer
     MTUnsyncedTripValueTransformer *transformer = [[MTUnsyncedTripValueTransformer alloc] init];
     [NSValueTransformer setValueTransformer:transformer forName:@"MTUnsyncedTripValueTransformer"];
     
@@ -55,14 +58,51 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     
-    if (networkStatus != NotReachable) {
-        [self syncTrips];
+    if (![PFUser currentUser]) { // No user logged in
+        NSLog(@"not logged in");
+        [self launchLoginScreen];
+        
+    } else {
+        
+        if (networkStatus != NotReachable) {
+            [self syncTrips];
+        }
+        
     }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)launchLoginScreen
+{
+    NetworkStatus networkStatus = [[Reachability reachabilityForInternetConnection] currentReachabilityStatus];
+    
+    if ( networkStatus == NotReachable ) {
+        UIAlertView *cannotLoginAlert = [[UIAlertView alloc] initWithTitle:@"Uh oh..."
+                                                                   message:@"To sign up or log in, you have to be online, and it looks like you're not right now."
+                                                                  delegate:nil
+                                                         cancelButtonTitle:@"I'll try again later!"
+                                                         otherButtonTitles:nil];
+        [cannotLoginAlert show];
+        
+    }
+    
+    // Create the log in view controller
+    MTLoginViewController *logInViewController = [[MTLoginViewController alloc] init];
+    [logInViewController setDelegate:self]; // Set ourselves as the delegate
+    
+    // Create the sign up view controller
+    MTSignUpViewController *signUpViewController = [[MTSignUpViewController alloc] init];
+    [signUpViewController setDelegate:self]; // Set ourselves as the delegate
+    
+    // Assign our sign up controller to be displayed from the login controller
+    [logInViewController setSignUpController:signUpViewController];
+    
+    // Present the log in view controller
+    [self.window.rootViewController presentViewController:logInViewController animated:YES completion:NULL];
 }
 
 - (void)syncTrips
@@ -78,7 +118,6 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
     NSArray *unsyncedArray = [moc executeFetchRequest:request error:&error];
     NSLog(@"fetch error = %@", error);
     if ( unsyncedArray != nil && [unsyncedArray count] > 0 ) {
-        NSLog(@"unsaved array = %@", unsyncedArray);
                 
         UIAlertView *syncAlert = [[UIAlertView alloc] initWithTitle:@"Just a sec" message:@"You had some trips that had not been synced with the cloud because you were offline. Give me a sec to update those." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [syncAlert show];
@@ -106,6 +145,72 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
         }
         
     }
+}
+
+# pragma mark - Login Delegate methods
+
+// Sent to the delegate to determine whether the log in request should be submitted to the server.
+- (BOOL)logInViewController:(PFLogInViewController *)logInController shouldBeginLogInWithUsername:(NSString *)username password:(NSString *)password {
+    // Check if both fields are completed
+    if (username && password && username.length != 0 && password.length != 0) {
+        return YES; // Begin login process
+    }
+    
+    [[[UIAlertView alloc] initWithTitle:@"Missing Information"
+                                message:@"Make sure you fill out all of the information!"
+                               delegate:nil
+                      cancelButtonTitle:@"ok"
+                      otherButtonTitles:nil] show];
+    return NO; // Interrupt login process
+}
+
+// Sent to the delegate when a PFUser is logged in.
+- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
+    [self.window.rootViewController dismissViewControllerAnimated:YES completion:NULL];
+}
+
+// Sent to the delegate when the log in attempt fails.
+- (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error
+{
+    NSLog(@"Failed to log in...");
+}
+
+// Sent to the delegate when the log in screen is dismissed.
+- (void)logInViewControllerDidCancelLogIn:(PFLogInViewController *)logInController
+{
+    [self.window.rootViewController dismissModalViewControllerAnimated:YES];
+    
+    NetworkStatus networkStatus = [[Reachability reachabilityForInternetConnection] currentReachabilityStatus];
+    if (networkStatus != NotReachable) {
+        [self syncTrips];
+    }
+}
+
+# pragma mark - Sign Up Delegate methods
+
+// Sent to the delegate to determine whether the sign up request should be submitted to the server.
+- (BOOL)signUpViewController:(PFSignUpViewController *)signUpController shouldBeginSignUp:(NSDictionary *)info {
+    BOOL informationComplete = YES;
+    
+    // loop through all of the submitted data
+    for (id key in info) {
+        NSString *field = [info objectForKey:key];
+        if (!field || field.length == 0) { // check completion
+            informationComplete = NO;
+            break;
+        }
+    }
+    
+    // Display an alert if a field wasn't completed
+    if (!informationComplete) {
+        [[[UIAlertView alloc] initWithTitle:@"Missing Information"
+                                    message:@"Make sure you fill out all of the information!"
+                                   delegate:nil
+                          cancelButtonTitle:@"ok"
+                          otherButtonTitles:nil] show];
+    }
+    
+    return informationComplete;
 }
 
 @end
