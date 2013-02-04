@@ -58,21 +58,21 @@
 
 - (IBAction)logOutAction:(id)sender
 {
-    NSManagedObjectContext *moc = [[MTCoreDataController sharedInstance] managedObjectContext];
-    NSEntityDescription *entityDescription = [NSEntityDescription
-                                              entityForName:kUnsyncedTripEntityName inManagedObjectContext:moc];
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:entityDescription];
-    
+//    NSManagedObjectContext *moc = [[MTCoreDataController sharedInstance] managedObjectContext];
+//    NSEntityDescription *entityDescription = [NSEntityDescription
+//                                              entityForName:kUnsyncedTripEntityName inManagedObjectContext:moc];
+//    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+//    [request setEntity:entityDescription];
+//    
     NSString *messageString;
-    NSError *error;
-    NSArray *unsyncedArray = [moc executeFetchRequest:request error:&error];
+//    NSError *error;
+//    NSArray *unsyncedArray = [moc executeFetchRequest:request error:&error];
     
-    if ( unsyncedArray != nil && [unsyncedArray count] > 0 ) {
-        messageString = @"You have some unsynced trips. FYI: You have to be online to log back in. If you log in as a different user, the syncing will go haywire. If you want to avoid it, wait to log out until you have been back online. Not to worry: We're working on an update so you don't have to worry about it.";
-    } else {
+//    if ( unsyncedArray != nil && [unsyncedArray count] > 0 ) {
+//        messageString = @"You have some unsynced trips. FYI: You have to be online to log back in. If you log in as a different user, the syncing will go haywire. If you want to avoid it, wait to log out until you have been back online. Not to worry: We're working on an update so you don't have to worry about it.";
+//    } else {
         messageString = @"You sure? FYI: You have to be online to log back in.";
-    }
+//    }
     
     UIAlertView *youSureAlert = [[UIAlertView alloc] initWithTitle:@"You sure?" message:messageString delegate:self cancelButtonTitle:@"Never mind then" otherButtonTitles:@"Sign me out!", nil];
     [youSureAlert show];

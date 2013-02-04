@@ -84,7 +84,6 @@ const int kNoTripsCellTag = 5678;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSLog(@"prepareForSegue : %@", segue.identifier);
     if ([segue.identifier isEqualToString:kDetailViewSegue]) {
         MTTripViewController *tripDetailViewController = segue.destinationViewController;
         MTLogTableViewCell *cell = (MTLogTableViewCell *)sender;
@@ -277,7 +276,12 @@ const int kNoTripsCellTag = 5678;
     loadMore.backgroundColor = [UIColor clearColor];
     loadMore.textAlignment = NSTextAlignmentCenter;
     loadMore.font = [UIFont boldSystemFontOfSize:18];
-    loadMore.text = @"Load more trips...";
+    if ( [self.trips count] > self.objectsPerPage ) {
+        loadMore.text = @"Load more trips...";
+    } else {
+        loadMore.text = @"";
+    }
+    
     [cell addSubview:loadMore];
     
     cell.tag = kLoadCellTag;

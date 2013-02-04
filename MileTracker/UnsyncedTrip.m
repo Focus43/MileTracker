@@ -29,7 +29,7 @@
         
         [unsyncedTrip setValue:tripDict forKey:@"unsyncedObjInfo"];
         [unsyncedTrip setValue:[tripDict objectForKey:@"date"] forKey:@"savedTime"];
-        [unsyncedTrip setValue:[PFUser currentUser].objectId forKey:@"u"];
+        [unsyncedTrip setValue:[PFUser currentUser].objectId forKey:@"userId"];
         
     } else {
         [unsyncedTrip setValue:nil forKey:@"unsyncedObjInfo"];
@@ -37,7 +37,7 @@
     
     [unsyncedTrip setValue:[NSNumber numberWithBool:isNew] forKey:@"isNew"];
     [unsyncedTrip setValue:objectId forKey:@"objectId"];
-    [unsyncedTrip setValue:[PFUser currentUser].objectId forKey:@"u"];
+    [unsyncedTrip setValue:[PFUser currentUser].objectId forKey:@"userId"];
     
     NSLog(@"createTripForEntityDecriptionAndLoadWithData unsyncedTrip = %@", unsyncedTrip);
     return unsyncedTrip;

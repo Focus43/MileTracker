@@ -59,7 +59,6 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     
     if (![PFUser currentUser]) { // No user logged in
-        NSLog(@"not logged in");
         [self launchLoginScreen];
         
     } else {
