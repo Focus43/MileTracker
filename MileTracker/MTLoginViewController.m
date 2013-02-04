@@ -56,7 +56,7 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    if ( orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight ) {
+    if ( (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) && [[UIDevice currentDevice].model isEqualToString:@"iPad"] ) {
         [self.logInView setLogo:nil];
     } else {
         [self.logInView setLogo:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo.png"]]];
