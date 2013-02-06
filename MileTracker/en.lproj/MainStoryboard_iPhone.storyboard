@@ -9,7 +9,7 @@
             <objects>
                 <viewController storyboardIdentifier="MTTrip" title="Trip" id="2" customClass="MTTripViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="16">
-                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LUG-vi-JDs">
@@ -193,7 +193,7 @@
             <objects>
                 <tableViewController id="Nhg-Ay-OVU" customClass="MTReportsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="GPX-FP-Af4">
-                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <sections>
@@ -218,7 +218,8 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="mc2-g6-gtm" firstAttribute="leading" secondItem="it5-4b-bTu" secondAttribute="leading" constant="30" id="Nzj-9f-ekf"/>
+                                            <constraint firstItem="mc2-g6-gtm" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="it5-4b-bTu" secondAttribute="leading" constant="30" type="user" id="Nzj-9f-ekf"/>
+                                            <constraint firstItem="mc2-g6-gtm" firstAttribute="leading" secondItem="it5-4b-bTu" secondAttribute="leading" priority="1" constant="30" type="user" id="Y9D-Ud-VbD"/>
                                             <constraint firstItem="mc2-g6-gtm" firstAttribute="centerY" secondItem="it5-4b-bTu" secondAttribute="centerY" type="default" id="bis-19-6Aj"/>
                                         </constraints>
                                     </tableViewCell>
@@ -231,7 +232,7 @@
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="2nd Quarter" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bIH-vK-mWa">
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="240" id="s47-iB-dBX"/>
+                                                        <constraint firstAttribute="width" constant="240" type="user" id="s47-iB-dBX"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -241,7 +242,8 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="bIH-vK-mWa" firstAttribute="leading" secondItem="mTG-hd-EOC" secondAttribute="leading" constant="30" id="VFM-mm-bEE"/>
+                                            <constraint firstItem="bIH-vK-mWa" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="mTG-hd-EOC" secondAttribute="leading" priority="1" constant="30" type="user" id="IQl-ml-R4Z"/>
+                                            <constraint firstItem="bIH-vK-mWa" firstAttribute="leading" secondItem="mTG-hd-EOC" secondAttribute="leading" constant="30" type="user" id="VFM-mm-bEE"/>
                                             <constraint firstItem="bIH-vK-mWa" firstAttribute="top" secondItem="mTG-hd-EOC" secondAttribute="top" constant="11" id="c37-4D-CGg"/>
                                         </constraints>
                                     </tableViewCell>
@@ -323,6 +325,13 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Export Report" id="XeL-v6-PBM"/>
+                    <connections>
+                        <outlet property="label1" destination="mc2-g6-gtm" id="gm9-3b-jh7"/>
+                        <outlet property="label2" destination="bIH-vK-mWa" id="8PL-tt-78U"/>
+                        <outlet property="label3" destination="pyE-kv-xcS" id="fxk-VT-6Vh"/>
+                        <outlet property="label4" destination="Uqc-wg-yze" id="rFR-VF-iQz"/>
+                        <outlet property="label5" destination="ak7-iF-CRo" id="ps9-iM-JQ0"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aJs-0d-RZI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -333,7 +342,7 @@
             <objects>
                 <tableViewController title="Log" id="x8a-VA-IIC" customClass="MTLogViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" pagingEnabled="YES" dataMode="prototypes" style="plain" rowHeight="52" sectionHeaderHeight="22" sectionFooterHeight="22" id="kNz-IE-1ag">
-                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -444,7 +453,7 @@
             <objects>
                 <viewController id="gl3-wA-4cp" customClass="MTMoreViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3OH-bh-DeV">
-                        <rect key="frame" x="0.0" y="64" width="320" height="367"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Puc-qS-B7B">
@@ -587,6 +596,13 @@
         </class>
         <class className="MTReportsViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTReportsViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="label1" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="label2" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="label3" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="label4" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="label5" candidateClass="UILabel"/>
+            </relationships>
         </class>
         <class className="MTTabBarController" superclassName="UITabBarController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MTTabBarController.h"/>
@@ -610,7 +626,7 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="jIm-HT-t2D"/>

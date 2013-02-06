@@ -11,4 +11,10 @@
 
 @interface MTReportsViewController : UITableViewController <MFMailComposeViewControllerDelegate>
 
+@property (nonatomic, strong) IBOutlet UILabel *label1;
+@property (nonatomic, strong) IBOutlet UILabel *label2;
+@property (nonatomic, strong) IBOutlet UILabel *label3;
+@property (nonatomic, strong) IBOutlet UILabel *label4;
+@property (nonatomic, strong) IBOutlet UILabel *label5;
+
 @end

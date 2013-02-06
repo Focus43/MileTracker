@@ -41,6 +41,15 @@
     [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setShadowOffset:CGSizeMake(0.0, 0.0)];
     [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont systemFontOfSize:17.0]];
 
+    // Hack to fix the layout on iPad
+    if ([[UIDevice currentDevice].model isEqualToString:@"iPad"] ) {
+        self.label1.text = [NSString stringWithFormat:@"              %@", self.label1.text];
+        self.label2.text = [NSString stringWithFormat:@"              %@", self.label2.text];
+        self.label3.text = [NSString stringWithFormat:@"              %@", self.label3.text];
+        self.label4.text = [NSString stringWithFormat:@"              %@", self.label4.text];
+        self.label5.text = [NSString stringWithFormat:@"              %@", self.label5.text];
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning
