@@ -66,12 +66,8 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
-    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
-    
     if (![PFUser currentUser]) { // No user logged in
         [self launchLoginScreen];
-        
     }
 }
 
@@ -82,10 +78,9 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 
 - (void) updateInterfaceWithReachability: (Reachability*) curReach
 {
-//        NetworkStatus netStatus = [curReach currentReachabilityStatus];
-        if(curReach == internetReach) {
-            [self syncTrips];
-        }
+    if(curReach == internetReach) {
+        [self syncTrips];
+    }
 }
 
 //Called by Reachability whenever status changes.

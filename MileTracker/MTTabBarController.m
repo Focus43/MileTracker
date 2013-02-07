@@ -101,7 +101,6 @@
 
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner
 {
-    NSLog(@"bannerViewDidLoadAd");
     if (!self.bannerIsVisible) {
         [UIView animateWithDuration:1 animations:^{
             if ( [[UIDevice currentDevice].model isEqualToString:@"iPhone"] ) {
@@ -116,7 +115,6 @@
 
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
 {
-    NSLog(@"didFailToReceiveAdWithError");
     if (self.bannerIsVisible) {
         [UIView animateWithDuration:1 animations:^{
             if ( [[UIDevice currentDevice].model isEqualToString:@"iPhone"] ) {
