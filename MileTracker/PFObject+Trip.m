@@ -71,6 +71,8 @@
     }];
 }
 
+// TODO: add isEqual method
+
 - (void)deleteFromCloudAndDeleteManagedObject:(NSManagedObject *)obj
 {
     [self deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {

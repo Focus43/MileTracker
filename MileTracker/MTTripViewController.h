@@ -10,13 +10,10 @@
 #import <Parse/Parse.h>
 
 #import "ActionSheetPicker.h"
-//#import "Trip.h"
 
 @interface MTTripViewController : UIViewController <UITextFieldDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
 
-// TODO: combine these two
 @property (nonatomic, strong) PFObject *trip;
-@property (nonatomic, strong) PFObject *tripObj;
 
 @property (strong, nonatomic) IBOutlet UITextField *titleField;
 @property (strong, nonatomic) IBOutlet UITextField *dateField;

@@ -32,6 +32,17 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
     MTUnsyncedTripValueTransformer *transformer = [[MTUnsyncedTripValueTransformer alloc] init];
     [NSValueTransformer setValueTransformer:transformer forName:@"MTUnsyncedTripValueTransformer"];
     
+    // reachability notifier
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    
+//	hostReach = [Reachability reachabilityWithHostName: @"api.parse.com"];
+//	[hostReach startNotifier];
+//	[self updateInterfaceWithReachability: hostReach];
+	
+    internetReach = [Reachability reachabilityForInternetConnection];
+	[internetReach startNotifier];
+	[self updateInterfaceWithReachability: internetReach];
+    
     return YES;
 }
 							
@@ -61,18 +72,71 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
     if (![PFUser currentUser]) { // No user logged in
         [self launchLoginScreen];
         
-    } else {
-        
-        if (networkStatus != NotReachable) {
-            [self syncTrips];
-        }
-        
     }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void) updateInterfaceWithReachability: (Reachability*) curReach
+{
+//        NetworkStatus netStatus = [curReach currentReachabilityStatus];
+        if(curReach == internetReach) {
+            [self syncTrips];
+        }
+}
+
+//Called by Reachability whenever status changes.
+- (void) reachabilityChanged: (NSNotification* )note
+{
+	Reachability* curReach = [note object];
+	NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
+	[self updateInterfaceWithReachability: curReach];
+}
+
+
+- (void)syncTrips
+{
+    // TODO: move this into the Model
+    NSManagedObjectContext *moc = [[MTCoreDataController sharedInstance] managedObjectContext];
+    NSEntityDescription *entityDescription = [NSEntityDescription
+                                              entityForName:kUnsyncedTripEntityName inManagedObjectContext:moc];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entityDescription];
+    
+    NSError *error;
+    NSArray *unsyncedArray = [moc executeFetchRequest:request error:&error];
+    NSLog(@"fetch error = %@", error);
+    if ( unsyncedArray != nil && [unsyncedArray count] > 0 ) {
+                
+        UIAlertView *syncAlert = [[UIAlertView alloc] initWithTitle:@"Just a sec" message:@"You had some trips that had not been synced with the cloud because you were offline. Those will be backed up now." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [syncAlert show];
+        
+        for ( UnsyncedTrip *obj in unsyncedArray ) {
+            
+            PFObject *unsyncedTrip;
+            
+            if ( obj.isNew == [NSNumber numberWithInt:1] ) {
+                unsyncedTrip = [PFObject objectWithClassName:kPFObjectClassName];
+                [unsyncedTrip tr_updateWithData:obj.unsyncedObjInfo];
+            } else {
+                unsyncedTrip = [PFObject objectWithoutDataWithClassName:kPFObjectClassName objectId:obj.objectId];
+                [unsyncedTrip tr_updateWithData:obj.unsyncedObjInfo];
+            }
+            
+            unsyncedTrip.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+            
+            if (obj.unsyncedObjInfo) {
+                [unsyncedTrip syncWithCloudAndDeleteManagedObject:obj];
+            } else {
+                [unsyncedTrip deleteFromCloudAndDeleteManagedObject:obj];
+            }
+            
+        }
+        
+    }
 }
 
 - (void)launchLoginScreen
@@ -104,47 +168,6 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
     [self.window.rootViewController presentViewController:logInViewController animated:YES completion:NULL];
 }
 
-- (void)syncTrips
-{
-    // TODO: move this into the Model
-    NSManagedObjectContext *moc = [[MTCoreDataController sharedInstance] managedObjectContext];
-    NSEntityDescription *entityDescription = [NSEntityDescription
-                                              entityForName:kUnsyncedTripEntityName inManagedObjectContext:moc];
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:entityDescription];
-    
-    NSError *error;
-    NSArray *unsyncedArray = [moc executeFetchRequest:request error:&error];
-    NSLog(@"fetch error = %@", error);
-    if ( unsyncedArray != nil && [unsyncedArray count] > 0 ) {
-                
-        UIAlertView *syncAlert = [[UIAlertView alloc] initWithTitle:@"Just a sec" message:@"You had some trips that had not been synced with the cloud because you were offline. Give me a sec to update those." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [syncAlert show];
-        
-        for ( UnsyncedTrip *obj in unsyncedArray ) {
-            
-            PFObject *unsyncedTrip;
-            
-            if ( obj.isNew == [NSNumber numberWithInt:1] ) {
-                unsyncedTrip = [PFObject objectWithClassName:kPFObjectClassName];
-                [unsyncedTrip tr_updateWithData:obj.unsyncedObjInfo];
-            } else {
-                unsyncedTrip = [PFObject objectWithoutDataWithClassName:kPFObjectClassName objectId:obj.objectId];
-                [unsyncedTrip tr_updateWithData:obj.unsyncedObjInfo];
-            }
-            
-            unsyncedTrip.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-            
-            if (obj.unsyncedObjInfo) {
-                [unsyncedTrip syncWithCloudAndDeleteManagedObject:obj];
-            } else {
-                [unsyncedTrip deleteFromCloudAndDeleteManagedObject:obj];
-            }
-            
-        }
-        
-    }
-}
 
 # pragma mark - Login Delegate methods
 

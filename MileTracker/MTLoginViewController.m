@@ -44,6 +44,10 @@
     layer.shadowOpacity = 0.0f;
     layer = self.logInView.passwordField.layer;
     layer.shadowOpacity = 0.0f;
+    
+    // remove dismiss button
+    [self.logInView.dismissButton setImage:nil forState:UIControlStateNormal];
+    self.logInView.dismissButton.frame = CGRectMake(0, 0, 0, 0);
         
 }
 
