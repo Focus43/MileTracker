@@ -9,6 +9,7 @@
 #import "MTMoreViewController.h"
 #import "MTAppDelegate.h"
 #import <Parse/Parse.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
 @interface MTMoreViewController ()
 
@@ -56,23 +57,31 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)logOutAction:(id)sender
+- (IBAction)sendFeedbackAction:(id)sender
 {
-//    NSManagedObjectContext *moc = [[MTCoreDataController sharedInstance] managedObjectContext];
-//    NSEntityDescription *entityDescription = [NSEntityDescription
-//                                              entityForName:kUnsyncedTripEntityName inManagedObjectContext:moc];
-//    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-//    [request setEntity:entityDescription];
-//    
-    NSString *messageString;
-//    NSError *error;
-//    NSArray *unsyncedArray = [moc executeFetchRequest:request error:&error];
+    UIDevice *currentDevice = [UIDevice currentDevice];
+    NSString *model = [currentDevice model];
+    NSString *systemVersion = [currentDevice systemVersion];
+    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+    NSString *deviceSpecs = [NSString stringWithFormat:@"%@ - %@ - %@", model, systemVersion, appVersion];
     
-//    if ( unsyncedArray != nil && [unsyncedArray count] > 0 ) {
-//        messageString = @"You have some unsynced trips. FYI: You have to be online to log back in. If you log in as a different user, the syncing will go haywire. If you want to avoid it, wait to log out until you have been back online. Not to worry: We're working on an update so you don't have to worry about it.";
-//    } else {
-        messageString = @"You sure? FYI: You have to be online to log back in.";
-//    }
+    if ([MFMailComposeViewController canSendMail]) {
+        MFMailComposeViewController* controller = [[MFMailComposeViewController alloc] init];
+        controller.mailComposeDelegate = self;
+        [controller setSubject:@"TripTrax feedback"];
+        [controller setMessageBody:[@"If you are reporting a bug, it would be great if you don't delete this device data:\n" stringByAppendingString:deviceSpecs] isHTML:NO];
+        
+        if (controller) [self presentModalViewController:controller animated:YES];
+        
+    } else {
+        UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Looks like your device needs to be configured to send email. Update your settings and come back hrere and try again!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [problemAlert show];
+    }
+}
+
+- (IBAction)logOutAction:(id)sender
+{  
+    NSString *messageString;
     
     UIAlertView *youSureAlert = [[UIAlertView alloc] initWithTitle:@"You sure?" message:messageString delegate:self cancelButtonTitle:@"Never mind then" otherButtonTitles:@"Sign me out!", nil];
     [youSureAlert show];

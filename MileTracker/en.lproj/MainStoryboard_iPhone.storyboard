@@ -490,6 +490,23 @@
                                             <action selector="resetPasswordAction:" destination="gl3-wA-4cp" eventType="touchUpInside" id="UNJ-ez-Ako"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DKB-qm-Cpm">
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="43" type="user" id="XHv-As-z4i"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Send us feedback!">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="resetPasswordAction:" destination="gl3-wA-4cp" eventType="touchUpInside" id="tgt-cF-s1P"/>
+                                            <action selector="sendFeedbackAction:" destination="gl3-wA-4cp" eventType="touchUpInside" id="119-CR-5Au"/>
+                                        </connections>
+                                    </button>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="idl-hh-XT8">
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" type="user" id="OU9-ql-GS9"/>
@@ -515,15 +532,18 @@
                                     <constraint firstItem="CvF-Xp-5qm" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="7co-2a-h21"/>
                                     <constraint firstItem="A3d-wu-7bO" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="85q-VN-lxN"/>
                                     <constraint firstItem="idl-hh-XT8" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="196" id="9qL-lq-UtA"/>
-                                    <constraint firstItem="CvF-Xp-5qm" firstAttribute="centerX" secondItem="Puc-qS-B7B" secondAttribute="centerX" type="default" id="G4q-7K-34K"/>
+                                    <constraint firstAttribute="bottom" secondItem="DKB-qm-Cpm" secondAttribute="bottom" constant="90" id="ShX-Hv-3Cj"/>
                                     <constraint firstAttribute="trailing" secondItem="YIj-fJ-CRD" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="bhs-DK-dVC"/>
                                     <constraint firstAttribute="trailing" secondItem="A3d-wu-7bO" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="bxT-2g-9V1"/>
                                     <constraint firstItem="YIj-fJ-CRD" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="cio-up-vaB"/>
+                                    <constraint firstItem="DKB-qm-Cpm" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="gJF-KR-0hE"/>
+                                    <constraint firstItem="YIj-fJ-CRD" firstAttribute="centerX" secondItem="Puc-qS-B7B" secondAttribute="centerX" type="default" id="gcy-MZ-W21"/>
                                     <constraint firstItem="YIj-fJ-CRD" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="24" id="gls-zu-GdE"/>
                                     <constraint firstAttribute="trailing" secondItem="CvF-Xp-5qm" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="jNU-7I-DeL"/>
-                                    <constraint firstAttribute="bottom" secondItem="A3d-wu-7bO" secondAttribute="bottom" constant="82" id="kXp-8B-5ja"/>
+                                    <constraint firstAttribute="trailing" secondItem="DKB-qm-Cpm" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="jxj-Tw-4Ch"/>
                                     <constraint firstItem="CvF-Xp-5qm" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="120" id="qrW-Rb-fPY"/>
                                     <constraint firstAttribute="trailing" secondItem="idl-hh-XT8" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="rfh-ro-tDD"/>
+                                    <constraint firstItem="DKB-qm-Cpm" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="322" id="wne-no-ATl"/>
                                     <constraint firstAttribute="bottom" secondItem="A3d-wu-7bO" secondAttribute="bottom" priority="1" constant="206" type="user" id="zKc-w5-YN1"/>
                                 </constraints>
                             </scrollView>
@@ -539,6 +559,7 @@
                     <navigationItem key="navigationItem" title="User Settings" id="OkY-CI-GJU"/>
                     <connections>
                         <outlet property="emailField" destination="idl-hh-XT8" id="PBz-qW-e4E"/>
+                        <outlet property="feedbackButton" destination="DKB-qm-Cpm" id="OHv-4G-NsX"/>
                         <outlet property="scrollView" destination="Puc-qS-B7B" id="DK5-Hd-pIT"/>
                     </connections>
                 </viewController>
@@ -590,7 +611,9 @@
             <relationships>
                 <relationship kind="action" name="logOutAction:"/>
                 <relationship kind="action" name="resetPasswordAction:"/>
+                <relationship kind="action" name="sendFeedbackAction:"/>
                 <relationship kind="outlet" name="emailField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="feedbackButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
             </relationships>
         </class>

@@ -8,15 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MTMoreViewController : UIViewController <UITextFieldDelegate, UIAlertViewDelegate>
+@interface MTMoreViewController : UIViewController <UITextFieldDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (nonatomic, strong) UIButton *logOutButton;
 @property (nonatomic, strong) UIButton *resetPasswordButton;
 
+@property (nonatomic, strong) IBOutlet UIButton *feedbackButton;
 @property (strong, nonatomic) IBOutlet UITextField *emailField;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
 - (IBAction)logOutAction:(id)sender;
 - (IBAction)resetPasswordAction:(id)sender;
+- (IBAction)sendFeedbackAction:(id)sender;
 
 @end
