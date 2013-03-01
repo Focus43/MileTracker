@@ -63,7 +63,16 @@
 }
 
 - (UIView *)configuredPickerView {
-    CGRect datePickerFrame = CGRectMake(0, 40, self.viewSize.width, 216);
+    
+    // tweak for ipad (stine)
+    CGFloat sheetWidth = 0;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        sheetWidth = 320.0;
+    else
+        sheetWidth = self.viewSize.width;
+    
+    
+    CGRect datePickerFrame = CGRectMake(0, 40, sheetWidth, 216);
     UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:datePickerFrame];
     datePicker.datePickerMode = self.datePickerMode;
     [datePicker setDate:self.selectedDate animated:NO];

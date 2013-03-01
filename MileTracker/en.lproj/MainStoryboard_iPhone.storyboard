@@ -503,7 +503,6 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="resetPasswordAction:" destination="gl3-wA-4cp" eventType="touchUpInside" id="tgt-cF-s1P"/>
                                             <action selector="sendFeedbackAction:" destination="gl3-wA-4cp" eventType="touchUpInside" id="119-CR-5Au"/>
                                         </connections>
                                     </button>

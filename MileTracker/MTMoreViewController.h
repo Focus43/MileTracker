@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
 @interface MTMoreViewController : UIViewController <UITextFieldDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate>
 

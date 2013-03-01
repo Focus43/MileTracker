@@ -11,6 +11,8 @@
 #import <Parse/Parse.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
+#define kFeedbackToAddress @"triptrax@focus-43.com"
+
 @interface MTMoreViewController ()
 
 @property (nonatomic, strong) UITextField *activeTextField;
@@ -68,8 +70,9 @@
     if ([MFMailComposeViewController canSendMail]) {
         MFMailComposeViewController* controller = [[MFMailComposeViewController alloc] init];
         controller.mailComposeDelegate = self;
+        [controller setToRecipients:[NSArray arrayWithObject:kFeedbackToAddress]];
         [controller setSubject:@"TripTrax feedback"];
-        [controller setMessageBody:[@"If you are reporting a bug, it would be great if you don't delete this device data:\n" stringByAppendingString:deviceSpecs] isHTML:NO];
+        [controller setMessageBody:[@"\n\n\nIf you are reporting a bug, it would be great if you don't delete this device data: " stringByAppendingString:deviceSpecs] isHTML:NO];
         
         if (controller) [self presentModalViewController:controller animated:YES];
         
@@ -83,7 +86,7 @@
 {  
     NSString *messageString;
     
-    UIAlertView *youSureAlert = [[UIAlertView alloc] initWithTitle:@"You sure?" message:messageString delegate:self cancelButtonTitle:@"Never mind then" otherButtonTitles:@"Sign me out!", nil];
+    UIAlertView *youSureAlert = [[UIAlertView alloc] initWithTitle:@"You sure?" message:messageString delegate:self cancelButtonTitle:@"Never mind..." otherButtonTitles:@"Sign me out!", nil];
     [youSureAlert show];
 }
 
@@ -203,6 +206,19 @@
     // This scrolls the screen back to the top. Not sure I like it....
     CGPoint scrollPoint = CGPointMake(0.0, 0.0);
     [scrollView setContentOffset:scrollPoint animated:YES];
+}
+
+#pragma mark - Mail Compose View Controller delegate
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller
+          didFinishWithResult:(MFMailComposeResult)result
+                        error:(NSError*)error;
+{
+    if (result == MFMailComposeResultSent) {
+        UIAlertView *thanksAlert = [[UIAlertView alloc] initWithTitle:@"Thank you!" message:@"We appreciate you taking the time to let us know what you think!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [thanksAlert show];
+    }
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 @end

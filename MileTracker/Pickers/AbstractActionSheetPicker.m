@@ -131,7 +131,16 @@
 #pragma mark - Actions
 
 - (void)showActionSheetPicker {
-    UIView *masterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.viewSize.width, 260)];    
+    
+    // tweak for ipad (stine)
+    CGFloat sheetWidth = 0;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        sheetWidth = 320.0;
+    } else {
+        sheetWidth = self.viewSize.width;
+    }
+    
+    UIView *masterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, sheetWidth, 260)];    
     UIToolbar *pickerToolbar = [self createPickerToolbarWithTitle:self.title];
     [pickerToolbar setBarStyle:UIBarStyleBlackTranslucent];
     [masterView addSubview:pickerToolbar];
@@ -198,7 +207,15 @@
 }
 
 - (UIToolbar *)createPickerToolbarWithTitle:(NSString *)title  {
-    CGRect frame = CGRectMake(0, 0, self.viewSize.width, 44);
+    
+    // tweak for ipad (stine)
+    CGFloat sheetWidth = 0;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        sheetWidth = 320.0;
+    else
+        sheetWidth = self.viewSize.width;
+    
+    CGRect frame = CGRectMake(0, 0, sheetWidth, 44);
     UIToolbar *pickerToolbar = [[UIToolbar alloc] initWithFrame:frame];
     pickerToolbar.barStyle = UIBarStyleBlackOpaque;
     NSMutableArray *barItems = [[NSMutableArray alloc] init];
@@ -218,11 +235,11 @@
     }
     UIBarButtonItem *flexSpace = [self createButtonWithType:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     [barItems addObject:flexSpace];
-    if (title){
-        UIBarButtonItem *labelButton = [self createToolbarLabelWithTitle:title];
-        [barItems addObject:labelButton];    
-        [barItems addObject:flexSpace];
-    }
+//    if (title){
+//        UIBarButtonItem *labelButton = [self createToolbarLabelWithTitle:title];
+//        [barItems addObject:labelButton];    
+//        [barItems addObject:flexSpace];
+//    }
     UIBarButtonItem *doneButton = [self createButtonWithType:UIBarButtonSystemItemDone target:self action:@selector(actionPickerDone:)];
     [barItems addObject:doneButton];
     [pickerToolbar setItems:barItems animated:YES];
@@ -276,7 +293,6 @@
 
 - (void)presentPickerForView:(UIView *)aView {
     self.presentFromRect = aView.frame;
-    
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         [self configureAndPresentPopoverForView:aView];
     else
@@ -328,9 +344,9 @@
     if (self.barButtonItem) {
         [popover presentPopoverFromBarButtonItem:_barButtonItem permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
         return;
-    }
-    else if ((self.containerView) && NO == CGRectIsEmpty(self.presentFromRect)) {
-        [popover presentPopoverFromRect:_presentFromRect inView:_containerView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    } else if ((self.containerView) && NO == CGRectIsEmpty(self.containerView.frame)) {
+        // traded _presentFromRect with the text box rect (stine)
+        [popover presentPopoverFromRect:CGRectMake(0, 0, _containerView.frame.size.width, _containerView.frame.size.height) inView:_containerView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
         return;
     }
     // Unfortunately, things go to hell whenever you try to present a popover from a table view cell.  These are failsafes.

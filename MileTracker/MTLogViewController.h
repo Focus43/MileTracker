@@ -1,5 +1,5 @@
 //
-//  MTSecondViewController.h
+//  MTLogViewController.h
 //  MileTracker
 //
 //  Created by Stine Richvoldsen on 12/14/12.
@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 
-//@interface MTLogViewController : PFQueryTableViewController
 @interface MTLogViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;

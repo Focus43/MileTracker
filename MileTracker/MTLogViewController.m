@@ -32,7 +32,7 @@ const int kNoTripsCellTag = 5678;
 - (PFQuery *)queryForTable;
 - (void)refreshTable;
 - (void)syncWithUnsavedData;
-- (UITableViewCell *)loadMoreTripsCell;
+- (UITableViewCell *)loadMoreTripsCell:(NSIndexPath *)indexPath;
 - (UITableViewCell *)noTripsCell;
 
 @end
@@ -268,7 +268,7 @@ const int kNoTripsCellTag = 5678;
     }
 }
 
-- (UITableViewCell *)loadMoreTripsCell
+- (UITableViewCell *)loadMoreTripsCell:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     
@@ -276,15 +276,19 @@ const int kNoTripsCellTag = 5678;
     loadMore.backgroundColor = [UIColor clearColor];
     loadMore.textAlignment = NSTextAlignmentCenter;
     loadMore.font = [UIFont boldSystemFontOfSize:18];
-    if ( [self.trips count] > self.objectsPerPage ) {
+    
+    if ( indexPath.row == [self.trips count] ) {
         loadMore.text = @"Load more trips...";
+        cell.tag = kLoadCellTag;
+        cell.userInteractionEnabled = YES;
+        self.loadMoreIdxPath = indexPath;
     } else {
         loadMore.text = @"";
+        cell.tag = kLoadCellTag + 1;
+        cell.userInteractionEnabled = NO;
     }
     
     [cell addSubview:loadMore];
-    
-    cell.tag = kLoadCellTag;
     
     return cell;
 }
@@ -314,6 +318,13 @@ const int kNoTripsCellTag = 5678;
     return 1;
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [self.trips count] + 2;
+    // adding one for see more cell and one for empty cell that brings table up above ads
+}
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ( [self.trips count] == 0 ) {
@@ -337,16 +348,8 @@ const int kNoTripsCellTag = 5678;
         return cell;
         
     } else {
-        _loadMoreIdxPath = indexPath;
-        return [self loadMoreTripsCell];
-        
+        return [self loadMoreTripsCell:indexPath];
     }
-}
-
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [self.trips count] + 1;
 }
 
  // Override to support editing the table view.
@@ -403,7 +406,9 @@ const int kNoTripsCellTag = 5678;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ( indexPath.row == self.loadMoreIdxPath.row) {
+    NSLog(@"didSelectRowAtIndexPath indexPath = %@", indexPath);
+    NSLog(@"didSelectRowAtIndexPath self.loadMoreIdxPath.row  = %d", self.loadMoreIdxPath.row );
+    if ( indexPath.row == self.loadMoreIdxPath.row ) {
         _currentPage ++;
         [self loadTrips];
     } else {
