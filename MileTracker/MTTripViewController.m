@@ -235,20 +235,6 @@
     return [gregorian dateFromComponents: components];
 }
 
-// Sent to the delegate when a PFUser is signed up.
-- (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user {
-    [self dismissModalViewControllerAnimated:YES]; // Dismiss the PFSignUpViewController
-}
-
-// Sent to the delegate when the sign up attempt fails.
-- (void)signUpViewController:(PFSignUpViewController *)signUpController didFailToSignUpWithError:(NSError *)error {
-    NSLog(@"Failed to sign up...");
-}
-
-// Sent to the delegate when the sign up screen is dismissed.
-- (void)signUpViewControllerDidCancelSignUp:(PFSignUpViewController *)signUpController {
-    NSLog(@"User dismissed the signUpViewController");
-}
 
 # pragma mark - Text Field Delegate methods
 
@@ -302,7 +288,7 @@
         scrollView.scrollIndicatorInsets = contentInsets;
     }
     
-    CGRect aRect = self.view.frame;
+    CGRect aRect = self.view.frame; 
     aRect.size.height -= kbSize.height;
     if (!CGRectContainsPoint(aRect, self.activeTextField.frame.origin) ) {
         CGPoint scrollPoint = CGPointMake(0.0, self.activeTextField.frame.origin.y - 25);

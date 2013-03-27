@@ -73,6 +73,7 @@ const int kNoTripsCellTag = 5678;
     self.refreshControl = refreshControl;
     [refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
     
+    _loadMoreIdxPath = [NSIndexPath indexPathForRow:10 inSection:0];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -295,6 +296,7 @@ const int kNoTripsCellTag = 5678;
 
 - (UITableViewCell *)noTripsCell
 {
+    NSLog(@"noTripsCell");
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     
     UILabel* noTrips =[[UILabel alloc]initWithFrame: cell.frame];
@@ -320,13 +322,25 @@ const int kNoTripsCellTag = 5678;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.trips count] + 2;
-    // adding one for see more cell and one for empty cell that brings table up above ads
+    int number;
+    int count = [self.trips count];
+
+    if ( count >= 9 ) {
+        number = count + 2;
+    } else if ( count == 0 ) {
+        number = 1;
+    } else {
+        number = count;
+    }
+    return number;
+    // if count is more than 9: adding one for see more cell and one for empty cell that brings table up above ads
+    // unless there are zero entries, then we only need one for the no trips message
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"cellForRowAtIndexPath - row = %d", indexPath.row);
     if ( [self.trips count] == 0 ) {
         return [self noTripsCell];
     }

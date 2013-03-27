@@ -11,7 +11,7 @@
 
 #import "ActionSheetPicker.h"
 
-@interface MTTripViewController : UIViewController <UITextFieldDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate>
+@interface MTTripViewController : UIViewController <UITextFieldDelegate>
 
 @property (nonatomic, strong) PFObject *trip;
 

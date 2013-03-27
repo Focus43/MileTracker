@@ -241,7 +241,6 @@
 		E336B99D167B6E76009A03EF = {
 			isa = PBXGroup;
 			children = (
-				E3A2B77316B9A2EA0047FC4B /* iAd.framework */,
 				E336B9B2167B6E76009A03EF /* MileTracker */,
 				E336B9AB167B6E76009A03EF /* Frameworks */,
 				E336B9A9167B6E76009A03EF /* Products */,
@@ -259,6 +258,7 @@
 		E336B9AB167B6E76009A03EF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E3A2B77316B9A2EA0047FC4B /* iAd.framework */,
 				E34E459316A225E000C51E67 /* CoreFoundation.framework */,
 				E35E128816974B5C0085EBA2 /* MessageUI.framework */,
 				E35E12741694C50B0085EBA2 /* QuartzCore.framework */,
@@ -614,8 +614,8 @@
 				GCC_PREFIX_HEADER = "MileTracker/MileTracker-Prefix.pch";
 				INFOPLIST_FILE = "MileTracker/MileTracker-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "D398A49F-8C29-431F-AE38-140CE5189A30";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D398A49F-8C29-431F-AE38-140CE5189A30";
+				PROVISIONING_PROFILE = "ED7BB28F-9A70-4F16-881A-3D7538819AEF";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ED7BB28F-9A70-4F16-881A-3D7538819AEF";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
