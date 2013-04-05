@@ -17,6 +17,7 @@
 - (NSString *)reportStringFromTrips:(NSArray *)trips;
 - (void)writeToDataFile:(NSString *)tripExportString;
 - (void)createEmailWithSubject:(NSString *)subject;
+- (PFQuery *)queryFromReportTableSelection:(NSIndexPath *)indexPath;
 
 @end
 
