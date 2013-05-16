@@ -32,7 +32,7 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
     MTUnsyncedTripValueTransformer *transformer = [[MTUnsyncedTripValueTransformer alloc] init];
     [NSValueTransformer setValueTransformer:transformer forName:@"MTUnsyncedTripValueTransformer"];
     
-    // Notofications
+    // Notifications
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     // reachability notifier
     [notificationCenter addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
@@ -109,7 +109,9 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 // Called  whenever total mileage has been found.
 - (void) mileageTotalFound:(NSNotification *)note
 {
-    NSLog(@"mileage updated: %@", note);
+    NSString *labelStr = [NSString stringWithFormat:@"So far this year, you have saved %@.\nYou can always go to 'More' to see the latest savings number.", note.object];
+    UIAlertView *syncAlert = [[UIAlertView alloc] initWithTitle:@"Way to log and save!" message:labelStr delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [syncAlert show];
 }
 
 - (void)syncTrips
