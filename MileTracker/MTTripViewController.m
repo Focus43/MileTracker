@@ -114,6 +114,7 @@
         NSMutableDictionary *tripData = [NSDictionary dictionaryWithObjects:data forKeys:keys];
         
         PFObject *tripToSave = [PFObject tr_objectWithData:tripData objectId:objectId];
+        tripToSave.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
         
         BOOL isNewTrip = YES;
         if (self.trip) {

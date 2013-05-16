@@ -340,7 +340,6 @@ const int kNoTripsCellTag = 5678;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"cellForRowAtIndexPath - row = %d", indexPath.row);
     if ( [self.trips count] == 0 ) {
         return [self noTripsCell];
     }

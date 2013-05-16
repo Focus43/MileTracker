@@ -10,6 +10,7 @@
 #import "MTAppDelegate.h"
 #import <Parse/Parse.h>
 #import <MessageUI/MFMailComposeViewController.h>
+#import "MTTotalMileage.h"
 
 #define kFeedbackToAddress @"triptrax@focus-43.com"
 
@@ -21,6 +22,7 @@
 - (BOOL) validateEmail:(NSString *)candidate;
 - (void)registerForKeyboardNotifications;
 - (void)dismissKeyboard;
+- (void)updateSavingsLabel;
 
 @end
 
@@ -50,6 +52,10 @@
                                    action:@selector(dismissKeyboard)];
     
     [self.scrollView addGestureRecognizer:tap];
+    
+    // Set the savings label depending on user defaults
+    [self updateSavingsLabel:nil];
+    
 }
 
 
@@ -113,6 +119,13 @@
     }
 }
 
+- (IBAction)updateSavings:(id)sender
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSavingsLabel:) name:kMileageTotalFoundNotification object:nil];
+    [MTTotalMileage initiateSavingsUntilNowCalc];
+//    [self updateSavings:nil];
+}
+
 - (BOOL)validateEmail:(NSString *)candidate
 {
     NSString *emailRegex =
@@ -145,6 +158,22 @@
         [appDelegate launchLoginScreen];
         [PFQuery clearAllCachedResults];
     }
+}
+
+- (void)updateSavingsLabel:(NSNotification *)note
+{
+    NSString *labelStr;
+    
+    if (note) {
+        labelStr = [NSString stringWithFormat:@"So far this year, you have saved %@.\nTap to update to latest number.", note.object];
+    } else {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        NSString *stdStr = [prefs stringForKey:kUserDefaultsSavingsKey];
+        labelStr = (stdStr) ?
+        [NSString stringWithFormat:@"So far this year, you have saved %@.\nTap to update to latest number.", stdStr] :
+        @"Tap to retrieve your total savings so far this year.";        
+    }
+    [self.savingsLabel setText:labelStr];
 }
 
 # pragma mark - move view around on showing keyboard

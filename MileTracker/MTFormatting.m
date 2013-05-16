@@ -34,6 +34,14 @@
     
         self.numberFormatter = [[NSNumberFormatter alloc] init];
         [self.numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        
+        self.currencyFormatter = [[NSNumberFormatter alloc] init];
+        [self.currencyFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+        NSString *groupingSeparator = [[NSLocale currentLocale] objectForKey:NSLocaleGroupingSeparator];
+        [self.currencyFormatter setGroupingSeparator:groupingSeparator];
+        [self.currencyFormatter setGroupingSize:3];
+        [self.currencyFormatter setAlwaysShowsDecimalSeparator:NO];
+        [self.currencyFormatter setUsesGroupingSeparator:YES];
     }
     
     return self;

@@ -11,3 +11,7 @@
 //#define kPFObjectClassName2 @"Destination"
 
 #define kUnsyncedTripEntityName @"UnsyncedTrip"
+#define kMileageTotalFoundNotification @"MileageTotalFoundNotification"
+#define kUserDefaultsSavingsKey @"savingsToDate"
+
+#define kDollarPerMileTaxDeduction 0.565

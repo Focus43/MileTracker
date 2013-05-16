@@ -32,8 +32,15 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
     MTUnsyncedTripValueTransformer *transformer = [[MTUnsyncedTripValueTransformer alloc] init];
     [NSValueTransformer setValueTransformer:transformer forName:@"MTUnsyncedTripValueTransformer"];
     
+    // Notofications
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     // reachability notifier
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    
+    // total logged mileage notifier
+    [notificationCenter addObserver:self selector:@selector(mileageTotalFound:) name:kMileageTotalFoundNotification object:nil];
+    
+    [notificationCenter addObserver:self selector:@selector(defaultsChanged:) name:NSUserDefaultsDidChangeNotification object:nil];
     
 //	hostReach = [Reachability reachabilityWithHostName: @"api.parse.com"];
 //	[hostReach startNotifier];
@@ -84,13 +91,26 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 }
 
 //Called by Reachability whenever status changes.
-- (void) reachabilityChanged: (NSNotification* )note
+- (void)reachabilityChanged: (NSNotification *)note
 {
 	Reachability* curReach = [note object];
 	NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
 	[self updateInterfaceWithReachability: curReach];
 }
 
+// Called when user defaults are updated
+- (void)defaultsChanged:(NSNotification *)note
+{
+    NSUserDefaults *defaults = (NSUserDefaults *)[note object];
+    NSLog(@"Defaults updated: %@", defaults);
+    
+}
+
+// Called  whenever total mileage has been found.
+- (void) mileageTotalFound:(NSNotification *)note
+{
+    NSLog(@"mileage updated: %@", note);
+}
 
 - (void)syncTrips
 {

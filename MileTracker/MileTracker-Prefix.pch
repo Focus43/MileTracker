@@ -13,7 +13,7 @@
     #import <Foundation/Foundation.h>
     #import <CoreData/CoreData.h>
     #import <Parse/Parse.h>
-    #import <iAd/iAd.h>;
+    #import <iAd/iAd.h>
 
     #import "Constants.h"
     #import "MTFormatting.h"

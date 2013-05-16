@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="2844" systemVersion="12C3012" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12D78" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="4">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="1930"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
         <!--Trip View Controller - Trip-->
@@ -524,25 +524,52 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tma-Wp-cEj">
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Update YTD savings">
+                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="updateSavings:" destination="gl3-wA-4cp" eventType="touchUpInside" id="zWP-gV-4AS"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="MlR-HB-IbF">
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="42" id="2aO-3F-UBP"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="idl-hh-XT8" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="04J-zT-M3c"/>
-                                    <constraint firstItem="A3d-wu-7bO" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="242" id="720-IK-gj1"/>
+                                    <constraint firstItem="CvF-Xp-5qm" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="20" symbolic="YES" type="default" id="4uf-FH-CVZ"/>
                                     <constraint firstItem="CvF-Xp-5qm" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="7co-2a-h21"/>
                                     <constraint firstItem="A3d-wu-7bO" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="85q-VN-lxN"/>
-                                    <constraint firstItem="idl-hh-XT8" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="196" id="9qL-lq-UtA"/>
-                                    <constraint firstAttribute="bottom" secondItem="DKB-qm-Cpm" secondAttribute="bottom" constant="90" id="ShX-Hv-3Cj"/>
+                                    <constraint firstItem="Tma-Wp-cEj" firstAttribute="top" secondItem="MlR-HB-IbF" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="JWu-pX-gQP"/>
+                                    <constraint firstItem="YIj-fJ-CRD" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="341" id="QAE-gi-J7u"/>
+                                    <constraint firstAttribute="trailing" secondItem="MlR-HB-IbF" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="TOp-1t-BCv"/>
+                                    <constraint firstItem="MlR-HB-IbF" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="Wdi-hm-aNQ"/>
+                                    <constraint firstItem="Tma-Wp-cEj" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="XiE-Su-9nC"/>
                                     <constraint firstAttribute="trailing" secondItem="YIj-fJ-CRD" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="bhs-DK-dVC"/>
                                     <constraint firstAttribute="trailing" secondItem="A3d-wu-7bO" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="bxT-2g-9V1"/>
                                     <constraint firstItem="YIj-fJ-CRD" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="cio-up-vaB"/>
                                     <constraint firstItem="DKB-qm-Cpm" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="gJF-KR-0hE"/>
-                                    <constraint firstItem="YIj-fJ-CRD" firstAttribute="centerX" secondItem="Puc-qS-B7B" secondAttribute="centerX" type="default" id="gcy-MZ-W21"/>
-                                    <constraint firstItem="YIj-fJ-CRD" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="24" id="gls-zu-GdE"/>
+                                    <constraint firstItem="idl-hh-XT8" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="96" id="hgE-ah-34c"/>
+                                    <constraint firstAttribute="bottom" secondItem="DKB-qm-Cpm" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="hmj-SE-1tE"/>
                                     <constraint firstAttribute="trailing" secondItem="CvF-Xp-5qm" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="jNU-7I-DeL"/>
                                     <constraint firstAttribute="trailing" secondItem="DKB-qm-Cpm" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="jxj-Tw-4Ch"/>
-                                    <constraint firstItem="CvF-Xp-5qm" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="120" id="qrW-Rb-fPY"/>
+                                    <constraint firstItem="MlR-HB-IbF" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="222" id="nST-oW-BOb"/>
+                                    <constraint firstItem="idl-hh-XT8" firstAttribute="centerX" secondItem="Puc-qS-B7B" secondAttribute="centerX" type="default" id="oRa-UM-PrQ"/>
+                                    <constraint firstItem="A3d-wu-7bO" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="142" id="p2T-5T-mxC"/>
                                     <constraint firstAttribute="trailing" secondItem="idl-hh-XT8" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="rfh-ro-tDD"/>
-                                    <constraint firstItem="DKB-qm-Cpm" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="322" id="wne-no-ATl"/>
+                                    <constraint firstItem="DKB-qm-Cpm" firstAttribute="top" secondItem="YIj-fJ-CRD" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="txv-nR-OLA"/>
+                                    <constraint firstAttribute="trailing" secondItem="Tma-Wp-cEj" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="vxS-zp-plu"/>
                                     <constraint firstAttribute="bottom" secondItem="A3d-wu-7bO" secondAttribute="bottom" priority="1" constant="206" type="user" id="zKc-w5-YN1"/>
                                 </constraints>
                             </scrollView>
@@ -559,6 +586,7 @@
                     <connections>
                         <outlet property="emailField" destination="idl-hh-XT8" id="PBz-qW-e4E"/>
                         <outlet property="feedbackButton" destination="DKB-qm-Cpm" id="OHv-4G-NsX"/>
+                        <outlet property="savingsLabel" destination="MlR-HB-IbF" id="ujU-cd-T06"/>
                         <outlet property="scrollView" destination="Puc-qS-B7B" id="DK5-Hd-pIT"/>
                     </connections>
                 </viewController>
@@ -611,8 +639,10 @@
                 <relationship kind="action" name="logOutAction:"/>
                 <relationship kind="action" name="resetPasswordAction:"/>
                 <relationship kind="action" name="sendFeedbackAction:"/>
+                <relationship kind="action" name="updateSavings:"/>
                 <relationship kind="outlet" name="emailField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="feedbackButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="savingsLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
             </relationships>
         </class>

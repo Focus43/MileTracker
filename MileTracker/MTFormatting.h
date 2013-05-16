@@ -12,6 +12,7 @@
 
 @property (strong, nonatomic) NSDateFormatter *dateFormatter;
 @property (strong, nonatomic) NSNumberFormatter *numberFormatter;
+@property (strong, nonatomic) NSNumberFormatter *currencyFormatter;
 
 + (MTFormatting *)sharedUtility;
 - (id)init;
