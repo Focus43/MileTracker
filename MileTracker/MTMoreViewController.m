@@ -165,12 +165,12 @@
     NSString *labelStr;
     
     if (note) {
-        labelStr = [NSString stringWithFormat:@"So far this year, you have saved %@.\nTap to update to latest number.", note.object];
+        labelStr = [NSString stringWithFormat:@"So far this year, you have logged enough miles to deduct %@ on your taxes!\nTap to update to latest number.", note.object];
     } else {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
         NSString *stdStr = [prefs stringForKey:kUserDefaultsSavingsKey];
         labelStr = (stdStr) ?
-        [NSString stringWithFormat:@"So far this year, you have saved %@.\nTap to update to latest number.", stdStr] :
+        [NSString stringWithFormat:@"So far this year, you have logged enough miles to deduct %@ on your taxes!\nTap to update to latest number.", stdStr] :
         @"Tap to retrieve your total savings so far this year.";        
     }
     [self.savingsLabel setText:labelStr];

@@ -537,9 +537,9 @@
                                             <action selector="updateSavings:" destination="gl3-wA-4cp" eventType="touchUpInside" id="zWP-gV-4AS"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="MlR-HB-IbF">
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="MlR-HB-IbF">
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="42" id="2aO-3F-UBP"/>
+                                            <constraint firstAttribute="height" constant="62" id="RaC-so-0o8"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -555,6 +555,7 @@
                                     <constraint firstItem="YIj-fJ-CRD" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="341" id="QAE-gi-J7u"/>
                                     <constraint firstAttribute="trailing" secondItem="MlR-HB-IbF" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="TOp-1t-BCv"/>
                                     <constraint firstItem="MlR-HB-IbF" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="Wdi-hm-aNQ"/>
+                                    <constraint firstItem="CvF-Xp-5qm" firstAttribute="centerX" secondItem="Puc-qS-B7B" secondAttribute="centerX" type="default" id="Xha-Z6-haT"/>
                                     <constraint firstItem="Tma-Wp-cEj" firstAttribute="leading" secondItem="Puc-qS-B7B" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="XiE-Su-9nC"/>
                                     <constraint firstAttribute="trailing" secondItem="YIj-fJ-CRD" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="bhs-DK-dVC"/>
                                     <constraint firstAttribute="trailing" secondItem="A3d-wu-7bO" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="bxT-2g-9V1"/>
@@ -564,8 +565,7 @@
                                     <constraint firstAttribute="bottom" secondItem="DKB-qm-Cpm" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="hmj-SE-1tE"/>
                                     <constraint firstAttribute="trailing" secondItem="CvF-Xp-5qm" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="jNU-7I-DeL"/>
                                     <constraint firstAttribute="trailing" secondItem="DKB-qm-Cpm" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="jxj-Tw-4Ch"/>
-                                    <constraint firstItem="MlR-HB-IbF" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="222" id="nST-oW-BOb"/>
-                                    <constraint firstItem="idl-hh-XT8" firstAttribute="centerX" secondItem="Puc-qS-B7B" secondAttribute="centerX" type="default" id="oRa-UM-PrQ"/>
+                                    <constraint firstItem="MlR-HB-IbF" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="202" id="k9w-ia-xR9"/>
                                     <constraint firstItem="A3d-wu-7bO" firstAttribute="top" secondItem="Puc-qS-B7B" secondAttribute="top" constant="142" id="p2T-5T-mxC"/>
                                     <constraint firstAttribute="trailing" secondItem="idl-hh-XT8" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="rfh-ro-tDD"/>
                                     <constraint firstItem="DKB-qm-Cpm" firstAttribute="top" secondItem="YIj-fJ-CRD" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="txv-nR-OLA"/>

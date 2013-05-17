@@ -57,8 +57,11 @@
             if ( [objects count] > 0 ) {
                 for (int i=0; i<[objects count]; i++) {
                     PFObject *trip = [objects objectAtIndex:i];
-                    float totalMilesForTrip = [[trip objectForKey:@"endOdometer"] floatValue]- [[trip objectForKey:@"startOdometer"] floatValue];
-                    totalMiles = totalMiles + totalMilesForTrip;
+                    float totalMilesForTrip = [[trip objectForKey:@"endOdometer"] floatValue] - [[trip objectForKey:@"startOdometer"] floatValue];
+                    
+                    if ( totalMilesForTrip > 0 ) {
+                       totalMiles = totalMiles + totalMilesForTrip; 
+                    }
                 }
                 
                 self.totalMilesForYear = totalMiles;

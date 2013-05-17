@@ -109,7 +109,7 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 // Called  whenever total mileage has been found.
 - (void) mileageTotalFound:(NSNotification *)note
 {
-    NSString *labelStr = [NSString stringWithFormat:@"So far this year, you have saved %@.\nYou can always go to 'More' to see the latest savings number.", note.object];
+    NSString *labelStr = [NSString stringWithFormat:@"So far this year, you have logged enough miles to deduct %@ on your taxes!\nYou can always go to 'More' to see the latest savings number.", note.object];
     UIAlertView *syncAlert = [[UIAlertView alloc] initWithTitle:@"Way to log and save!" message:labelStr delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [syncAlert show];
 }
