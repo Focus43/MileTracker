@@ -10,7 +10,7 @@
 
 @class Reachability;
 
-@interface MTAppDelegate : UIResponder <UIApplicationDelegate, PFSignUpViewControllerDelegate, PFLogInViewControllerDelegate> {
+@interface MTAppDelegate : UIResponder <UIApplicationDelegate,UIAlertViewDelegate, PFSignUpViewControllerDelegate, PFLogInViewControllerDelegate> {
     Reachability* hostReach;
     Reachability* internetReach;
 }

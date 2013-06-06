@@ -72,7 +72,9 @@
                 NSNumberFormatter *formatter = [[MTFormatting sharedUtility]currencyFormatter];
                 NSString *savedStr = [formatter stringFromNumber:totalSaved];
                 [[NSNotificationCenter defaultCenter] postNotificationName:kMileageTotalFoundNotification object:savedStr];
-                [[NSUserDefaults standardUserDefaults] setObject:savedStr forKey:kUserDefaultsSavingsKey];
+                [[NSUserDefaults standardUserDefaults] setObject:savedStr forKey:kUserDefaultsSavingsStringKey];
+                [[NSUserDefaults standardUserDefaults] setObject:totalSaved forKey:kUserDefaultsSavingsKey];
+                [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:self.totalMilesForYear] forKey:kUserDefaultsTotalMilesKey];
                 [[NSUserDefaults standardUserDefaults] synchronize];
             }
         }
@@ -89,22 +91,22 @@
     return [[NSNumber alloc] initWithInt:self.totalMilesForYear];
 }
 
-+ (NSString *)dollarsSavedUntilNow
-{
-    // TODO: get rid of this one
-    MTTotalMileage *totalMileage = [[self alloc] init];
-    NSNumber *totalMiles = [totalMileage getCurrentTotalMileage];
-    NSNumber *totalSaved = [[NSNumber alloc] initWithFloat:[totalMiles floatValue] * kDollarPerMileTaxDeduction];
-    
-    NSNumberFormatter *formatter = [[MTFormatting sharedUtility] currencyFormatter];    
-    NSString *savedStr = [formatter stringFromNumber:totalSaved];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kMileageTotalFoundNotification object:savedStr];
-    [[NSUserDefaults standardUserDefaults] setObject:savedStr forKey:kUserDefaultsSavingsKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    return savedStr;
-}
-            
+//+ (NSString *)dollarsSavedUntilNow
+//{
+//    // TODO: get rid of this one
+//    MTTotalMileage *totalMileage = [[self alloc] init];
+//    NSNumber *totalMiles = [totalMileage getCurrentTotalMileage];
+//    NSNumber *totalSaved = [[NSNumber alloc] initWithFloat:[totalMiles floatValue] * kDollarPerMileTaxDeduction];
+//    
+//    NSNumberFormatter *formatter = [[MTFormatting sharedUtility] currencyFormatter];    
+//    NSString *savedStr = [formatter stringFromNumber:totalSaved];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kMileageTotalFoundNotification object:savedStr];
+//    [[NSUserDefaults standardUserDefaults] setObject:savedStr forKey:kUserDefaultsSavingsStringKey];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
+//    
+//    return savedStr;
+//}
+
 + (void)initiateSavingsUntilNowCalc
 {
     MTTotalMileage *totalMileage = [[self alloc] init];

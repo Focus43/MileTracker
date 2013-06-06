@@ -97,6 +97,13 @@
     [self.startOdometerField resignFirstResponder];
     [self.endOdometerField resignFirstResponder];
     
+    BOOL isNewTrip = YES;
+    NSNumber *oldTotalMilesForTrip;
+    if (self.trip) {
+        isNewTrip = NO;
+        oldTotalMilesForTrip = [self.trip tr_totalTripDistance];
+    }
+    
     if ( !([self.dateField.text isEqualToString:@""] || [self.titleField.text isEqualToString:@""]) ) {
         
         NSNumber *start = [self.numberFormatter numberFromString:self.startOdometerField.text];
@@ -115,11 +122,6 @@
         
         PFObject *tripToSave = [PFObject tr_objectWithData:tripData objectId:objectId];
         tripToSave.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-        
-        BOOL isNewTrip = YES;
-        if (self.trip) {
-            isNewTrip = NO;
-        }
                 
         NetworkStatus networkStatus = [self.networkReachability currentReachabilityStatus];
         
@@ -141,8 +143,46 @@
             [self.hud show:YES];
             
             [tripToSave saveInBackgroundWithBlock: ^(BOOL succeeded, NSError *error) {
+                
                 if (succeeded) {
-                    UIAlertView *successAlert = [[UIAlertView alloc] initWithTitle:@"Yessss!" message:@"Trip was saved" delegate:nil cancelButtonTitle:@"Sweet!" otherButtonTitles:nil];
+                    float currentTripTotal, newTripTotal;
+                    NSNumber *newTotalSaved;
+                    NSString *savingsStr;
+                    
+                    if ([end intValue] > 0) {
+                        currentTripTotal = [end floatValue] - [start floatValue];
+                        
+                        if (oldTotalMilesForTrip && [oldTotalMilesForTrip floatValue] != currentTripTotal) {
+                            currentTripTotal -= [oldTotalMilesForTrip floatValue];
+                        }
+                        
+                        newTripTotal = currentTripTotal + [[[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsTotalMilesKey] floatValue];
+                        
+                        if (currentTripTotal > 0 ) {
+                            
+                            newTotalSaved = [[NSNumber alloc] initWithFloat:newTripTotal * kDollarPerMileTaxDeduction];
+                            
+                            NSNumberFormatter *formatter = [[MTFormatting sharedUtility] currencyFormatter];
+                            NSString *savedStr = [formatter stringFromNumber:newTotalSaved];
+                            
+                            [[NSUserDefaults standardUserDefaults] setObject:savedStr forKey:kUserDefaultsSavingsStringKey];
+                            [[NSUserDefaults standardUserDefaults] setObject:newTotalSaved forKey:kUserDefaultsSavingsKey];
+                            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:newTripTotal] forKey:kUserDefaultsTotalMilesKey];
+                            
+//                            NSString *savingsKeyStr = [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsSavingsStringKey];
+                            if ( savedStr != NULL && ![savedStr isEqualToString:@""] ) {
+                                savingsStr = [NSString stringWithFormat:@"So far this year, you have logged enough miles to deduct %@ on your taxes!", savedStr];
+                            } else {
+                                savingsStr = @"";
+                            }
+                            
+                        } else {
+                            savingsStr = @", but you just updated this trip to less than zero miles driven.";                        }
+                    }
+                    
+                    NSString *message = [NSString stringWithFormat:@"Trip was saved%@\n", savingsStr];
+                    
+                    UIAlertView *successAlert = [[UIAlertView alloc] initWithTitle:@"Yessss!" message:message delegate:nil cancelButtonTitle:@"Sweet!" otherButtonTitles:nil];
                     [successAlert show];
                     
                     if (self.hud) {
@@ -162,7 +202,7 @@
             self.startOdometerField.text = @"";
             self.endOdometerField.text = @"";
         }
-        
+    
     } else {
         [self showCannotSaveAlert];
     }

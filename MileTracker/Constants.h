@@ -12,6 +12,10 @@
 
 #define kUnsyncedTripEntityName @"UnsyncedTrip"
 #define kMileageTotalFoundNotification @"MileageTotalFoundNotification"
+
+#define kUserDefaultsInitialTallyDoneKey @"initialTallyDone"
 #define kUserDefaultsSavingsKey @"savingsToDate"
+#define kUserDefaultsSavingsStringKey @"savingsToDateString"
+#define kUserDefaultsTotalMilesKey @"mileageToDate"
 
 #define kDollarPerMileTaxDeduction 0.565

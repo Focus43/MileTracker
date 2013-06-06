@@ -53,9 +53,14 @@
     
     [self.scrollView addGestureRecognizer:tap];
     
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
     // Set the savings label depending on user defaults
     [self updateSavingsLabel:nil];
-    
 }
 
 
@@ -168,7 +173,7 @@
         labelStr = [NSString stringWithFormat:@"So far this year, you have logged enough miles to deduct %@ on your taxes!\nTap to update to latest number.", note.object];
     } else {
         NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        NSString *stdStr = [prefs stringForKey:kUserDefaultsSavingsKey];
+        NSString *stdStr = [prefs stringForKey:kUserDefaultsSavingsStringKey];
         labelStr = (stdStr) ?
         [NSString stringWithFormat:@"So far this year, you have logged enough miles to deduct %@ on your taxes!\nTap to update to latest number.", stdStr] :
         @"Tap to retrieve your total savings so far this year.";        

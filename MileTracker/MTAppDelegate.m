@@ -42,10 +42,6 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
     
     [notificationCenter addObserver:self selector:@selector(defaultsChanged:) name:NSUserDefaultsDidChangeNotification object:nil];
     
-//	hostReach = [Reachability reachabilityWithHostName: @"api.parse.com"];
-//	[hostReach startNotifier];
-//	[self updateInterfaceWithReachability: hostReach];
-	
     internetReach = [Reachability reachabilityForInternetConnection];
 	[internetReach startNotifier];
 	[self updateInterfaceWithReachability: internetReach];
@@ -90,7 +86,7 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
     }
 }
 
-//Called by Reachability whenever status changes.
+// Called by Reachability whenever status changes.
 - (void)reachabilityChanged: (NSNotification *)note
 {
 	Reachability* curReach = [note object];
@@ -102,14 +98,13 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 - (void)defaultsChanged:(NSNotification *)note
 {
     NSUserDefaults *defaults = (NSUserDefaults *)[note object];
-    NSLog(@"Defaults updated: %@", defaults);
-    
+    NSLog(@"Defaults updated: %@, %@, %@", [[defaults dictionaryRepresentation] objectForKey:kUserDefaultsSavingsKey], [[defaults dictionaryRepresentation] objectForKey:kUserDefaultsSavingsStringKey], [[defaults dictionaryRepresentation] objectForKey:kUserDefaultsTotalMilesKey]);
 }
 
 // Called  whenever total mileage has been found.
 - (void) mileageTotalFound:(NSNotification *)note
 {
-    NSString *labelStr = [NSString stringWithFormat:@"So far this year, you have logged enough miles to deduct %@ on your taxes!\nYou can always go to 'More' to see the latest savings number.", note.object];
+    NSString *labelStr = [NSString stringWithFormat:@"So far this year, you have logged enough miles to deduct %@ on your taxes!\nYou can always go to 'More' to sync the latest savings number.", note.object];
     UIAlertView *syncAlert = [[UIAlertView alloc] initWithTitle:@"Way to log and save!" message:labelStr delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [syncAlert show];
 }
@@ -204,8 +199,10 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 }
 
 // Sent to the delegate when a PFUser is logged in.
-- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
+- (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user
+{
     [self.window.rootViewController dismissViewControllerAnimated:YES completion:NULL];
+    
 }
 
 // Sent to the delegate when the log in attempt fails.
@@ -270,6 +267,5 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 {
     NSLog(@"User dismissed the signUpViewController");
 }
-
 
 @end

@@ -11,7 +11,7 @@
 @interface MTTotalMileage : NSObject
 
 - (NSNumber *)getCurrentTotalMileage;
-+ (NSString *)dollarsSavedUntilNow;
+//+ (NSString *)dollarsSavedUntilNow;
 + (void)initiateSavingsUntilNowCalc;
 
 @end
