@@ -99,9 +99,13 @@
     
     BOOL isNewTrip = YES;
     NSNumber *oldTotalMilesForTrip;
+    float addedLastTime = 0.0;
     if (self.trip) {
         isNewTrip = NO;
         oldTotalMilesForTrip = [self.trip tr_totalTripDistance];
+        // get what was added last time, but then delete the entry from dict to not save to Parse
+        addedLastTime = [self.trip getAddedLastTime];
+        [self.trip voidAddedLastTime];
     }
     
     if ( !([self.dateField.text isEqualToString:@""] || [self.titleField.text isEqualToString:@""]) ) {
@@ -145,39 +149,48 @@
             [tripToSave saveInBackgroundWithBlock: ^(BOOL succeeded, NSError *error) {
                 
                 if (succeeded) {
-                    float currentTripTotal, newTripTotal;
+                    
+                    float currentTripTotal, newTripTotal = 0.0;
                     NSNumber *newTotalSaved;
                     NSString *savingsStr;
+                    NSString *savedStr;
                     
                     if ([end intValue] > 0) {
                         currentTripTotal = [end floatValue] - [start floatValue];
                         
-                        if (oldTotalMilesForTrip && [oldTotalMilesForTrip floatValue] != currentTripTotal) {
-                            currentTripTotal -= [oldTotalMilesForTrip floatValue];
-                        }
-                        
-                        newTripTotal = currentTripTotal + [[[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsTotalMilesKey] floatValue];
-                        
                         if (currentTripTotal > 0 ) {
+                        
+                            if ( oldTotalMilesForTrip ) {
+                                currentTripTotal -= [oldTotalMilesForTrip floatValue];
+                            }
                             
+                            newTripTotal = currentTripTotal + [[[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsTotalMilesKey] floatValue] - addedLastTime;
+                            // set the addedLastTime for the trip, to use in case it gets re-entered
+                            [self.trip setAddedLastTime:currentTripTotal];
+                          
                             newTotalSaved = [[NSNumber alloc] initWithFloat:newTripTotal * kDollarPerMileTaxDeduction];
                             
                             NSNumberFormatter *formatter = [[MTFormatting sharedUtility] currencyFormatter];
-                            NSString *savedStr = [formatter stringFromNumber:newTotalSaved];
+                            savedStr = [formatter stringFromNumber:newTotalSaved];
                             
-                            [[NSUserDefaults standardUserDefaults] setObject:savedStr forKey:kUserDefaultsSavingsStringKey];
-                            [[NSUserDefaults standardUserDefaults] setObject:newTotalSaved forKey:kUserDefaultsSavingsKey];
-                            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:newTripTotal] forKey:kUserDefaultsTotalMilesKey];
-                            
-//                            NSString *savingsKeyStr = [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsSavingsStringKey];
                             if ( savedStr != NULL && ![savedStr isEqualToString:@""] ) {
-                                savingsStr = [NSString stringWithFormat:@"So far this year, you have logged enough miles to deduct %@ on your taxes!", savedStr];
+                                savingsStr = [NSString stringWithFormat:@". So far this year, you have logged enough miles to deduct %@ on your taxes!", savedStr];
                             } else {
-                                savingsStr = @"";
+                                savingsStr = @".";
                             }
                             
                         } else {
-                            savingsStr = @", but you just updated this trip to less than zero miles driven.";                        }
+                            savingsStr = @", but you just updated this trip to less than zero miles driven.";
+                        }
+                        
+                        [[NSUserDefaults standardUserDefaults] setObject:savedStr forKey:kUserDefaultsSavingsStringKey];
+                        [[NSUserDefaults standardUserDefaults] setObject:newTotalSaved forKey:kUserDefaultsSavingsKey];
+                        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithFloat:newTripTotal] forKey:kUserDefaultsTotalMilesKey];
+                        
+                    } else if ([end intValue] == 0) {
+                        savingsStr = @".";
+                    } else {
+                        savingsStr = @", but you entered a negative number for your odometer settings. So that's weird...";
                     }
                     
                     NSString *message = [NSString stringWithFormat:@"Trip was saved%@\n", savingsStr];

@@ -89,15 +89,22 @@ const int kNoTripsCellTag = 5678;
 {
     if ([segue.identifier isEqualToString:kDetailViewSegue]) {
         MTTripViewController *tripDetailViewController = segue.destinationViewController;
-        MTLogTableViewCell *cell = (MTLogTableViewCell *)sender;
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
         
-        tripDetailViewController.trip = [self.trips objectAtIndex:indexPath.row];       
+        NSIndexPath *indexPath;
+        if ( [sender isKindOfClass:[MTLogTableViewCell class]] ) {
+            MTLogTableViewCell *cell = (MTLogTableViewCell *)sender;
+            indexPath = [self.tableView indexPathForCell:cell];
+        } else {
+            indexPath = (NSIndexPath *)sender; 
+        }
+        
+        tripDetailViewController.trip = [self.trips objectAtIndex:indexPath.row];
         tripDetailViewController.navigationItem.title = @"Edit Trip Details";
         
         self.reloadObjectsOnBackAction = true;
-        
-    } 
+//        
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning

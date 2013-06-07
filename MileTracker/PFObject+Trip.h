@@ -28,5 +28,9 @@
 - (NSNumber *)tr_totalTripDistance;
 - (NSString *)tr_totalDistanceString;
 
+- (void)setAddedLastTime:(float)added;
+- (float)getAddedLastTime;
+- (void)voidAddedLastTime;
+
 
 @end

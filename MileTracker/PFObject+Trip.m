@@ -134,4 +134,25 @@
     
 }
 
+- (void)setAddedLastTime:(float)added
+{
+
+    [self setObject:[NSNumber numberWithFloat:added] forKey:@"addedLastTime"];
+}
+
+- (float)getAddedLastTime
+{
+    if ([self objectForKey:@"addedLastTime"]) {
+       return [[self objectForKey:@"addedLastTime"] floatValue]; 
+    } else {
+        return 0.0;
+    }
+    
+}
+
+- (void)voidAddedLastTime 
+{
+    [self removeObjectForKey:@"addedLastTime"];
+}
+
 @end

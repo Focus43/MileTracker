@@ -65,6 +65,7 @@
     [self.fieldsBackground setFrame:signupRect];
 }
 
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
