@@ -72,8 +72,9 @@
         sheetWidth = self.viewSize.width;
     
     
-    CGRect datePickerFrame = CGRectMake(0, 40, sheetWidth, 216);
+    CGRect datePickerFrame = CGRectMake(0, 40, sheetWidth, 176);
     UIDatePicker *datePicker = [[UIDatePicker alloc] initWithFrame:datePickerFrame];
+    datePicker.backgroundColor = [UIColor whiteColor];
     datePicker.datePickerMode = self.datePickerMode;
     [datePicker setDate:self.selectedDate animated:NO];
     [datePicker addTarget:self action:@selector(eventForDatePicker:) forControlEvents:UIControlEventValueChanged];

@@ -301,14 +301,14 @@
 
 - (void)configureAndPresentActionSheetForView:(UIView *)aView {
     NSString *paddedSheetTitle = nil;
-    CGFloat sheetHeight = self.viewSize.height - 47;
+    CGFloat sheetHeight = self.viewSize.height - 147;
     if ([self isViewPortrait]) {
         paddedSheetTitle = @"\n\n\n"; // looks hacky to me
     } else {
         NSString *reqSysVer = @"5.0";
         NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
         if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending) {
-            sheetHeight = self.viewSize.width;
+            sheetHeight = self.viewSize.width - 162;
         } else {
             sheetHeight += 103;
         }

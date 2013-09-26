@@ -36,15 +36,18 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     // reachability notifier
     [notificationCenter addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
-    
     // total logged mileage notifier
     [notificationCenter addObserver:self selector:@selector(mileageTotalFound:) name:kMileageTotalFoundNotification object:nil];
+    // show login screen notifier
+    [notificationCenter addObserver:self selector:@selector(launchLoginScreen) name:kLaunchLoginScreenNotification object:nil];
     
     [notificationCenter addObserver:self selector:@selector(defaultsChanged:) name:NSUserDefaultsDidChangeNotification object:nil];
     
     internetReach = [Reachability reachabilityForInternetConnection];
 	[internetReach startNotifier];
 	[self updateInterfaceWithReachability: internetReach];
+    
+//    [PFUser enableAutomaticUser];
     
     return YES;
 }
@@ -69,9 +72,9 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    if (![PFUser currentUser]) { // No user logged in
-        [self launchLoginScreen];
-    }
+//    if (![PFUser currentUser]) { // No user logged in
+//        [self launchLoginScreen];
+//    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -111,6 +114,9 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 
 - (void)syncTrips
 {
+//    if ( ![[PFUser currentUser] isAuthenticated] )
+//        return;
+    
     // TODO: move this into the Model
     NSManagedObjectContext *moc = [[MTCoreDataController sharedInstance] managedObjectContext];
     NSEntityDescription *entityDescription = [NSEntityDescription

@@ -38,7 +38,7 @@
     
     [self.view setBackgroundColor:[MTViewUtils backGroundColor]];
     
-    [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setColor:[UIColor whiteColor]];
+//    [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setColor:[UIColor whiteColor]];
     [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setShadowOffset:CGSizeMake(0.0, 0.0)];
     [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont systemFontOfSize:17.0]];
 

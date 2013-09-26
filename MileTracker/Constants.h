@@ -12,6 +12,7 @@
 
 #define kUnsyncedTripEntityName @"UnsyncedTrip"
 #define kMileageTotalFoundNotification @"MileageTotalFoundNotification"
+#define kLaunchLoginScreenNotification @"LaunchLoginScreenNotification"
 
 #define kUserDefaultsInitialTallyDoneKey @"initialTallyDone"
 #define kUserDefaultsSavingsKey @"savingsToDate"

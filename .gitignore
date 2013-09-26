@@ -10,3 +10,7 @@ MileTracker.xcodeproj/xcuserdata/superrunt.xcuserdatad/xcdebugger/Breakpoints.xc
 MileTracker.xcodeproj/xcuserdata/superrunt.xcuserdatad/xcschemes/MileTracker.xcscheme
 
 MileTracker.xcodeproj/xcuserdata/superrunt.xcuserdatad/xcschemes/xcschememanagement.plist
+
+*.xcbkptlist
+
+*.xccheckout

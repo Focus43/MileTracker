@@ -58,7 +58,11 @@
     [self.scrollView addGestureRecognizer:tap];
     
     self.networkReachability = [Reachability reachabilityForInternetConnection];
-        
+    
+//    if (![PFUser currentUser]) { // No user logged in
+//        [[NSNotificationCenter defaultCenter] postNotificationName:kLaunchLoginScreenNotification object:self];
+//    }
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -91,6 +95,10 @@
 
 - (IBAction)saveButtonTouched:(id)sender
 {
+    if (![PFUser currentUser]) { // No user logged in
+        [[NSNotificationCenter defaultCenter] postNotificationName:kLaunchLoginScreenNotification object:self];
+    }
+    
     // dismiss keyboard
     [self.titleField resignFirstResponder];
     [self.dateField resignFirstResponder];
@@ -357,7 +365,7 @@
     scrollView.scrollIndicatorInsets = contentInsets;
     
     // This scrolls the screen back to the top. Not sure I like it....
-    CGPoint scrollPoint = CGPointMake(0.0, 0.0);
+    CGPoint scrollPoint = CGPointMake(0.0, -60.0);
     [scrollView setContentOffset:scrollPoint animated:YES];
 }
 

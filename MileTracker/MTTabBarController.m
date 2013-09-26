@@ -32,11 +32,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Add ad banner
-    _banner = [[ADBannerView alloc] init];
+	// Add ad banner    
+    _banner = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
+    _banner.frame = CGRectMake(0.0, [UIScreen mainScreen].bounds.size.height - 50, _banner.frame.size.width, _banner.frame.size.height);
     _banner.delegate = self;
-    _banner.frame = CGRectMake(0.0, [UIScreen mainScreen].bounds.size.height - 49, _banner.frame.size.width, _banner.frame.size.height);
-    _banner.requiredContentSizeIdentifiers = [NSSet setWithObjects: ADBannerContentSizeIdentifierPortrait, ADBannerContentSizeIdentifierLandscape, nil];
+    
     [_banner setBackgroundColor:[MTViewUtils backGroundColor]];
     
     [self.view insertSubview:_banner belowSubview:self.tabBar];
@@ -58,7 +58,7 @@
     
     if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
         
-        _banner.currentContentSizeIdentifier = ADBannerContentSizeIdentifierLandscape;
+        _banner.currentContentSizeIdentifier = ADBannerContentSizeIdentifier480x32;
         
         int orientationDiff = orientation - toInterfaceOrientation;
         
@@ -67,7 +67,7 @@
         } else {
             
             if ( [[UIDevice currentDevice].model isEqualToString:@"iPhone"] ) {
-                dy = -([UIScreen mainScreen].bounds.size.height - [UIScreen mainScreen].bounds.size.width - 18);
+                dy = -([UIScreen mainScreen].bounds.size.height - [UIScreen mainScreen].bounds.size.width-18);
             } else {
                 dy = -([UIScreen mainScreen].bounds.size.height - [UIScreen mainScreen].bounds.size.width);
             }
@@ -76,10 +76,10 @@
         
     } else {
         
-        _banner.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
+        _banner.currentContentSizeIdentifier = ADBannerContentSizeIdentifier320x50;
         
         if ( [[UIDevice currentDevice].model isEqualToString:@"iPhone"] ) {
-            dy = [UIScreen mainScreen].bounds.size.height - [UIScreen mainScreen].bounds.size.width - 18;
+            dy = [UIScreen mainScreen].bounds.size.height - [UIScreen mainScreen].bounds.size.width-18;
         } else {
             dy = [UIScreen mainScreen].bounds.size.height - [UIScreen mainScreen].bounds.size.width;
         }
