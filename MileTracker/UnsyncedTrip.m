@@ -39,7 +39,6 @@
     [unsyncedTrip setValue:objectId forKey:@"objectId"];
     [unsyncedTrip setValue:[PFUser currentUser].objectId forKey:@"userId"];
     
-    NSLog(@"createTripForEntityDecriptionAndLoadWithData unsyncedTrip = %@", unsyncedTrip);
     return unsyncedTrip;
 }
 

@@ -45,10 +45,9 @@
     layer = self.logInView.passwordField.layer;
     layer.shadowOpacity = 0.0f;
     
-    // remove dismiss button
-    [self.logInView.dismissButton setImage:nil forState:UIControlStateNormal];
-    self.logInView.dismissButton.frame = CGRectMake(0, 0, 0, 0);
-        
+    // move dismiss button
+    self.logInView.dismissButton.frame = CGRectMake(self.logInView.dismissButton.frame.origin.x, self.logInView.dismissButton.frame.origin.y + 20, self.logInView.dismissButton.frame.size.width, self.logInView.dismissButton.frame.size.height + 20);
+    
 }
 
 - (void)viewDidLayoutSubviews

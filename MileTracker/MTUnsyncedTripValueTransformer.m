@@ -35,7 +35,12 @@
     PFObject *tripObj = [PFObject objectWithoutDataWithClassName:kPFObjectClassName objectId:[tripData objectForKey:@"objectId"]];
 
     [tripData removeObjectForKey:@"objectId"];
-    [tripData setObject:[PFUser currentUser] forKey:@"user"];
+    
+    if ( [PFUser currentUser] ) {
+        [tripData setObject:[PFUser currentUser] forKey:@"user"];
+    } else {
+        [tripData setObject:@"anonymous" forKey:@"user"];
+    }
     
     return [tripObj tr_updateWithData:tripData];
 }

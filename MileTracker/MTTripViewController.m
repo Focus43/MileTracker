@@ -95,9 +95,9 @@
 
 - (IBAction)saveButtonTouched:(id)sender
 {
-    if (![PFUser currentUser]) { // No user logged in
-        [[NSNotificationCenter defaultCenter] postNotificationName:kLaunchLoginScreenNotification object:self];
-    }
+//    if (![PFUser currentUser]) { // No user logged in
+//        [[NSNotificationCenter defaultCenter] postNotificationName:kLaunchLoginScreenNotification object:self];
+//    }
     
     // dismiss keyboard
     [self.titleField resignFirstResponder];
@@ -125,6 +125,10 @@
         if (!end) end = [NSNumber numberWithInt:0];
         
         PFUser *currentUser = [PFUser currentUser];
+        if (!currentUser)
+            (NSString *)currentUser;
+            currentUser = @"anonymous";
+        
         NSDate *tripDate = self.selectedDate ? self.selectedDate : [self.trip objectForKey:@"date"];
         NSString *objectId = (self.trip) ? self.trip.objectId : @"";
         
@@ -133,11 +137,14 @@
         NSMutableDictionary *tripData = [NSDictionary dictionaryWithObjects:data forKeys:keys];
         
         PFObject *tripToSave = [PFObject tr_objectWithData:tripData objectId:objectId];
-        tripToSave.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-                
+        
+        if ( [PFUser currentUser]) {
+            tripToSave.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+        }
+        
         NetworkStatus networkStatus = [self.networkReachability currentReachabilityStatus];
         
-        if ( networkStatus == NotReachable ) {
+        if ( networkStatus == NotReachable || ![PFUser currentUser].sessionToken ) {
             
             [self saveLocalVersionTripData:tripData withNewFlag:isNewTrip objectId:objectId];
             
@@ -236,7 +243,7 @@
         
     if ( isNew ) {
         [UnsyncedTrip createTripForEntityDecriptionAndLoadWithData:tripData objectId:nil];
-    } else {        
+    } else {
         NSError *error = nil;
         NSArray *results = [UnsyncedTrip fetchTripsWithId:objectId error:error];
         

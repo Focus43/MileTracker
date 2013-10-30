@@ -18,21 +18,26 @@
 
 @property (nonatomic, strong) UITextField *activeTextField;
 
+- (void)showUpdatePasswordAlert;
+- (void)updatePasswordWith:(NSString *)newPassword;
+- (void)updateSavings;
+- (void)sendFeedback;
+- (void)doUserAction:(NSString *)action;
+
 - (void)showEmailProblemAlert;
-- (BOOL) validateEmail:(NSString *)candidate;
+- (BOOL)validateEmail:(NSString *)candidate;
 - (void)registerForKeyboardNotifications;
 - (void)dismissKeyboard;
 - (void)updateSavingsLabel;
+- (void)updateLoginLabel;
 
 @end
 
 @implementation MTMoreViewController
 
-@synthesize emailField, scrollView, activeTextField;
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithStyle:(UITableViewStyle)style
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
     }
@@ -44,14 +49,6 @@
     [super viewDidLoad];
     
     [self.view setBackgroundColor:[MTViewUtils backGroundColor]];
-	
-    [self registerForKeyboardNotifications];
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
-                                   initWithTarget:self
-                                   action:@selector(dismissKeyboard)];
-    
-    [self.scrollView addGestureRecognizer:tap];
     
 }
 
@@ -61,6 +58,8 @@
     
     // Set the savings label depending on user defaults
     [self updateSavingsLabel:nil];
+    // Set the login label depending on user status
+    [self updateLoginLabel];
 }
 
 
@@ -70,7 +69,74 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)sendFeedbackAction:(id)sender
+- (void)updateLoginLabel
+{
+    NSString *labelStr = @"Log In / Register";
+    
+    if ( [PFUser currentUser].sessionToken ) {
+        labelStr = @"Log Out";
+    }
+    
+    [self.loginLabel setText:labelStr];
+}
+
+- (void)updateSavingsLabel:(NSNotification *)note
+{
+    NSString *labelStr;
+    
+    if (note) {
+        labelStr = [NSString stringWithFormat:@"You can deduct %@ on your taxes!", note.object];
+    } else {
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        NSString *stdStr = [prefs stringForKey:kUserDefaultsSavingsStringKey];
+        
+        if ( [PFUser currentUser] || stdStr ) {
+            
+            if ( [PFUser currentUser] ) {
+                labelStr = (stdStr) ?
+                    [NSString stringWithFormat:@"You can deduct %@ on your taxes!", stdStr] :
+                    @"Tap to retrieve your total savings so far this year.";
+            } else {
+                labelStr = (stdStr) ?
+                    [NSString stringWithFormat:@"You can deduct %@ on your taxes!", stdStr] :
+                    @"Sign in to access this information.";
+            }
+            
+        } else {
+            labelStr = @"Sign in to access this information.";
+        }
+    }
+    
+    [self.savingsLabel setText:labelStr];
+}
+
+# pragma mark - action methods
+
+- (void)doUserAction:(NSString *)action
+{
+    if ( [PFUser currentUser].sessionToken ) {
+        [self logOut];
+    } else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kLaunchLoginScreenNotification object:self];
+    }
+}
+
+- (void)showUpdatePasswordAlert
+{
+    if ( [PFUser currentUser].sessionToken ) {
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Reset Password" message:@"Enter the email used for sign up, and we'll send you instructions:" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+        alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+        UITextField * alertTextField = [alert textFieldAtIndex:0];
+        alertTextField.keyboardType = UIKeyboardTypeEmailAddress;
+        alertTextField.placeholder = @"Email address";
+        [alert show];
+    } else {
+        UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Log In" message:@"You have to be logged in to reset your password." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [problemAlert show];
+    }
+}
+
+- (void)sendFeedback
 {
     UIDevice *currentDevice = [UIDevice currentDevice];
     NSString *model = [currentDevice model];
@@ -85,7 +151,7 @@
         [controller setSubject:@"TripTrax feedback"];
         [controller setMessageBody:[@"\n\n\nIf you are reporting a bug, it would be great if you don't delete this device data: " stringByAppendingString:deviceSpecs] isHTML:NO];
         
-        if (controller) [self presentModalViewController:controller animated:YES];
+        if (controller) [self presentViewController:controller animated:YES completion:NULL];
         
     } else {
         UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Looks like your device needs to be configured to send email. Update your settings and come back hrere and try again!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -93,24 +159,36 @@
     }
 }
 
-- (IBAction)logOutAction:(id)sender
-{  
+- (void)updateSavings
+{
+    if ( [PFUser currentUser]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSavingsLabel:) name:kMileageTotalFoundNotification object:nil];
+        [MTTotalMileage initiateSavingsUntilNowCalc];
+    } else {
+        UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Sign Up!" message:@"This feature is available if you sign up and log in." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [problemAlert show];
+    }
+    
+}
+
+# pragma mark - action support methods
+
+- (void)logOut
+{
     NSString *messageString;
     
     UIAlertView *youSureAlert = [[UIAlertView alloc] initWithTitle:@"You sure?" message:messageString delegate:self cancelButtonTitle:@"Never mind..." otherButtonTitles:@"Sign me out!", nil];
     [youSureAlert show];
 }
 
-- (IBAction)resetPasswordAction:(id)sender
+- (void)updatePasswordWith:(NSString *)newPassword
 {
-    if ( self.emailField.text ) {
-        if ( [self validateEmail:self.emailField.text] ) {
-            [PFUser requestPasswordResetForEmailInBackground:self.emailField.text block:^(BOOL succeeded, NSError *error) {
+    if ( newPassword ) {
+        if ( [self validateEmail:newPassword] ) {
+            [PFUser requestPasswordResetForEmailInBackground:newPassword block:^(BOOL succeeded, NSError *error) {
                 if (succeeded) {
                     UIAlertView *successAlert = [[UIAlertView alloc] initWithTitle:@"Password Updated" message:@"Your password has been updated. Check your email!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                     [successAlert show];
-                    self.emailField.text = @"";
-                    [self.emailField resignFirstResponder];
                 } else {
                     UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:[[error userInfo] objectForKey:@"error"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                     [problemAlert show];
@@ -124,12 +202,6 @@
     }
 }
 
-- (IBAction)updateSavings:(id)sender
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSavingsLabel:) name:kMileageTotalFoundNotification object:nil];
-    [MTTotalMileage initiateSavingsUntilNowCalc];
-//    [self updateSavings:nil];
-}
 
 - (BOOL)validateEmail:(NSString *)candidate
 {
@@ -148,98 +220,57 @@
 
 - (void)showEmailProblemAlert
 {
-    UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Invalid email" message:@"You must enter a valid emil address." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Invalid email" message:@"You must enter a valid email address." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [problemAlert show];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if ( buttonIndex == 1 ) {
-        NSLog(@"logging out");
-        [PFUser logOut];
-        UITabBarController *tabBarController = self.view.window.rootViewController;
-        [tabBarController setSelectedIndex:0];
-        MTAppDelegate *appDelegate = (MTAppDelegate *)([UIApplication sharedApplication].delegate);
-        [appDelegate launchLoginScreen];
-        [PFQuery clearAllCachedResults];
-    }
-}
-
-- (void)updateSavingsLabel:(NSNotification *)note
-{
-    NSString *labelStr;
-    
-    if (note) {
-        labelStr = [NSString stringWithFormat:@"So far this year, you have logged enough miles to deduct %@ on your taxes!\nTap to update to latest number.", note.object];
+    if ( alertView.alertViewStyle == UIAlertViewStylePlainTextInput ) {
+        [self updatePasswordWith: [[alertView textFieldAtIndex:0] text]];
     } else {
-        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-        NSString *stdStr = [prefs stringForKey:kUserDefaultsSavingsStringKey];
-        labelStr = (stdStr) ?
-        [NSString stringWithFormat:@"So far this year, you have logged enough miles to deduct %@ on your taxes!\nTap to update to latest number.", stdStr] :
-        @"Tap to retrieve your total savings so far this year.";        
-    }
-    [self.savingsLabel setText:labelStr];
-}
-
-# pragma mark - move view around on showing keyboard
-// move to a UIVIewController category
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    self.activeTextField = textField;
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    self.activeTextField = nil;
-}
-
-- (void)registerForKeyboardNotifications
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
-    
-}
-
-// Called when the UIKeyboardDidShowNotification is sent.
-- (void)keyboardWasShown:(NSNotification*)aNotification
-{
-    NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-    if ( !scrollView.contentInset.bottom == contentInsets.bottom ) {
-        scrollView.contentInset = contentInsets;
-        scrollView.scrollIndicatorInsets = contentInsets;
-    }
-    
-    CGRect aRect = self.view.frame;
-    aRect.size.height -= kbSize.height;
-    if (!CGRectContainsPoint(aRect, self.activeTextField.frame.origin) ) {
-        CGPoint scrollPoint = CGPointMake(0.0, self.activeTextField.frame.origin.y - 20);
-        [scrollView setContentOffset:scrollPoint animated:YES];
+        if ( buttonIndex == 1 ) {
+            NSLog(@"logging out");
+            [PFUser logOut];
+            UITabBarController *tabBarController = self.view.window.rootViewController;
+            [tabBarController setSelectedIndex:0];
+            MTAppDelegate *appDelegate = (MTAppDelegate *)([UIApplication sharedApplication].delegate);
+            [appDelegate launchLoginScreen];
+            [PFQuery clearAllCachedResults];
+        }
     }
 }
 
-- (void)dismissKeyboard
+# pragma mark - table view methods
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.activeTextField resignFirstResponder];
+    if ( [indexPath section] == 0 ) {
+        if ( [indexPath row] == 0 ) {
+            [self doUserAction: [tableView cellForRowAtIndexPath:indexPath].textLabel.text];
+        } else if ( [indexPath row] == 1 ) {
+            [self showUpdatePasswordAlert];
+        }
+    } else if ( [indexPath section] == 1 ) {
+        if ( [indexPath row] == 0 ) {
+            [self updateSavings];
+        }
+    } else if ( [indexPath section] == 2 ) {
+        if ( [indexPath row] == 0 ) {
+            [self sendFeedback];
+        }
+    }
+    
+    [[tableView cellForRowAtIndexPath:indexPath] setSelected:NO];
 }
 
-// Called when the UIKeyboardWillHideNotification is sent
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-    scrollView.contentInset = contentInsets;
-    scrollView.scrollIndicatorInsets = contentInsets;
+    UITableViewHeaderFooterView *view = [tableView headerViewForSection:section];
+//    view.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    view.backgroundColor = [UIColor redColor];
     
-    // This scrolls the screen back to the top. Not sure I like it....
-    CGPoint scrollPoint = CGPointMake(0.0, 0.0);
-    [scrollView setContentOffset:scrollPoint animated:YES];
+    return view;
 }
 
 #pragma mark - Mail Compose View Controller delegate

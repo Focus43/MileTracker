@@ -76,12 +76,13 @@ const int kNoTripsCellTag = 5678;
     [refreshControl addTarget:self action:@selector(refreshTable) forControlEvents:UIControlEventValueChanged];
     
     _loadMoreIdxPath = [NSIndexPath indexPathForRow:10 inSection:0];
+    
+//    [self loadTrips];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
     [self loadTrips];
 }
 
@@ -102,7 +103,6 @@ const int kNoTripsCellTag = 5678;
         tripDetailViewController.navigationItem.title = @"Edit Trip Details";
         
         self.reloadObjectsOnBackAction = true;
-//        
     }
     
 }
@@ -128,40 +128,45 @@ const int kNoTripsCellTag = 5678;
     [self.hud show:YES];
 
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
-   
-    [self.queryForTable findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        self.trips = objects;
-        if ( networkStatus == NotReachable ) {
-            [self syncWithUnsavedData];
-        }
-
-        if (!error) {
-            [self.tableView reloadData];
+    
+    if (![PFUser currentUser].sessionToken) {
+        [self syncWithUnsavedData];
+    } else {
+        [self.queryForTable findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             
-            if (self.trips.count > 0 ) {
-                [self displayTallyTripsOffer];
-            } else {
-                NSNumber *tallyDone = [NSNumber numberWithBool:TRUE];
-                [[NSUserDefaults standardUserDefaults] setObject:tallyDone forKey:kUserDefaultsInitialTallyDoneKey];
+            self.trips = objects;
+            if ( networkStatus == NotReachable || ![PFUser currentUser].sessionToken ) {
+                [self syncWithUnsavedData];
             }
             
-            NSIndexPath *idxPath = [NSIndexPath indexPathForRow:[objects count]-9 inSection:0];
-            [self.tableView scrollToRowAtIndexPath:idxPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-        }
-        
-        if (self.hud) {
-            [self.hud hide:YES afterDelay:0.5];
-        }
-    
-    }];
+            if (!error) {
+                [self.tableView reloadData];
+                
+                if (self.trips.count > 0 ) {
+                    [self displayTallyTripsOffer];
+                } else {
+                    NSNumber *tallyDone = [NSNumber numberWithBool:TRUE];
+                    [[NSUserDefaults standardUserDefaults] setObject:tallyDone forKey:kUserDefaultsInitialTallyDoneKey];
+                }
+                
+                NSIndexPath *idxPath = [NSIndexPath indexPathForRow:[objects count]-9 inSection:0];
+                [self.tableView scrollToRowAtIndexPath:idxPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+            }
+            
+            if (self.hud) {
+                [self.hud hide:YES afterDelay:0.5];
+            }
+            
+        }];
+    }
 }
 
 - (void)refreshTable
 {
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     
-    if ( networkStatus == NotReachable ) {
-        UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Network problem" message:@"Seems like your device is offline, so only cached results can be displayed." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    if ( networkStatus == NotReachable  || ![PFUser currentUser].sessionToken ) {
+        UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Network problem" message:@"Seems like either your device is offline or you're not logged in, so only cached results can be displayed." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [problemAlert show];
     } else {
         [self loadTrips];
@@ -176,7 +181,6 @@ const int kNoTripsCellTag = 5678;
 - (PFQuery *)queryForTable
 {
     PFQuery *query = [PFQuery queryWithClassName:self.className];
-    
     [query whereKey:@"user" equalTo:[PFUser currentUser]];
     [query orderByDescending:@"date"];
     query.limit = self.objectsPerPage * _currentPage;
@@ -191,13 +195,13 @@ const int kNoTripsCellTag = 5678;
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
 
     if (self.trips.count == 0) {
-        if ( networkStatus != NotReachable ) {
+        if ( networkStatus != NotReachable && [PFUser currentUser].sessionToken ) {
             query.cachePolicy = kPFCachePolicyCacheThenNetwork;
         } else {
             query.cachePolicy = kPFCachePolicyCacheOnly;
         }
     } else {
-        if ( networkStatus == NotReachable ) {
+        if ( networkStatus == NotReachable && ![PFUser currentUser].sessionToken ) {
             query.cachePolicy = kPFCachePolicyCacheOnly;
         } 
     }
@@ -209,7 +213,7 @@ const int kNoTripsCellTag = 5678;
 {
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
     
-    if (networkStatus == NotReachable) {
+    if ( networkStatus == NotReachable || ![PFUser currentUser].sessionToken ) {
         // Compare w unsynced objects
         // TODO: move fetch into the Model - getAll
         NSManagedObjectContext *moc = [[MTCoreDataController sharedInstance] managedObjectContext];
@@ -228,7 +232,6 @@ const int kNoTripsCellTag = 5678;
         if ( [unsyncedFetchArray count] > 0 ) {
             
             for ( UnsyncedTrip *obj in unsyncedFetchArray ) {
-                
                 if ( obj.unsyncedObjInfo ) {
                     PFObject *trip = [PFObject tr_objectWithData:obj.unsyncedObjInfo objectId:obj.objectId];
                     if ( ![obj.isNew boolValue] ) {
@@ -243,7 +246,11 @@ const int kNoTripsCellTag = 5678;
             
             // Set up the new object array
             [newObjectsArray addObjectsFromArray:unsyncedNewArray];
-            [newObjectsArray addObjectsFromArray:self.trips];
+            
+            if ( [PFUser currentUser].sessionToken ) {
+                [newObjectsArray addObjectsFromArray:self.trips];
+            }
+            
                         
             if ( [unsyncedExistingArray count] > 0 ) {
                 // compare trips and update self.objects with the latest data
@@ -276,6 +283,10 @@ const int kNoTripsCellTag = 5678;
             }
             
             self.trips = newObjectsArray;
+            NSLog(@"self.trips =  %@", self.trips);
+            if ( ![PFUser currentUser].sessionToken ) {
+                [self.tableView reloadData];
+            }
         }
         
     }
@@ -400,7 +411,7 @@ const int kNoTripsCellTag = 5678;
          
          NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
          
-         if (networkStatus == NotReachable) {
+         if ( networkStatus == NotReachable || ![PFUser currentUser].sessionToken ) {
              PFObject *objectToDelete = [self.trips objectAtIndex:indexPath.row];
              
              NSError *error = nil;

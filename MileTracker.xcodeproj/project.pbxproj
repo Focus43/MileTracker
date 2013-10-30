@@ -10,7 +10,6 @@
 		E31222D116A4EB7B00B3BE95 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E31222D016A4EB7B00B3BE95 /* MBProgressHUD.m */; };
 		E31222D416A6099300B3BE95 /* MTUnsyncedTripValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = E31222D316A6099300B3BE95 /* MTUnsyncedTripValueTransformer.m */; };
 		E326B72D168B71CF0041B755 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E326B71F168B6FBC0041B755 /* CoreData.framework */; };
-		E326B72F168B71FE0041B755 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E326B72E168B71FE0041B755 /* Parse.framework */; };
 		E326B732168C99300041B755 /* MTLogTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E326B731168C99300041B755 /* MTLogTableViewCell.m */; };
 		E326B743168CF00C0041B755 /* AbstractActionSheetPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = E326B73A168CF00C0041B755 /* AbstractActionSheetPicker.m */; };
 		E326B744168CF00C0041B755 /* ActionSheetDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = E326B73C168CF00C0041B755 /* ActionSheetDatePicker.m */; };
@@ -77,6 +76,7 @@
 		E3B10D1E16B874D100FA6EF4 /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = E3B10D1D16B874D000FA6EF4 /* Default-Portrait~ipad.png */; };
 		E3B10D2016B8750500FA6EF4 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = E3B10D1F16B8750500FA6EF4 /* Default-Landscape~ipad.png */; };
 		E3B10D2216B8776800FA6EF4 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = E3B10D2116B8776800FA6EF4 /* Default.png */; };
+		E3C531CB17F4CE1800F2BBE8 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3C531CA17F4CE1800F2BBE8 /* Parse.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,7 +85,6 @@
 		E31222D216A6099300B3BE95 /* MTUnsyncedTripValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTUnsyncedTripValueTransformer.h; sourceTree = "<group>"; };
 		E31222D316A6099300B3BE95 /* MTUnsyncedTripValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTUnsyncedTripValueTransformer.m; sourceTree = "<group>"; };
 		E326B71F168B6FBC0041B755 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		E326B72E168B71FE0041B755 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		E326B730168C99300041B755 /* MTLogTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLogTableViewCell.h; sourceTree = "<group>"; };
 		E326B731168C99300041B755 /* MTLogTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTLogTableViewCell.m; sourceTree = "<group>"; };
 		E326B737168CF00C0041B755 /* ActionSheetPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionSheetPicker.h; sourceTree = "<group>"; };
@@ -176,6 +175,7 @@
 		E3B10D2116B8776800FA6EF4 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
 		E3B10D2316B8776F00FA6EF4 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		E3B10D2516B8777D00FA6EF4 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
+		E3C531CA17F4CE1800F2BBE8 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,12 +197,12 @@
 				E35E126116921BD40085EBA2 /* Accounts.framework in Frameworks */,
 				E35E125F16921BA60085EBA2 /* CFNetwork.framework in Frameworks */,
 				E35E125D16921B820085EBA2 /* libz.dylib in Frameworks */,
+				E3C531CB17F4CE1800F2BBE8 /* Parse.framework in Frameworks */,
 				E35E125B16921B290085EBA2 /* Social.framework in Frameworks */,
 				E326B72D168B71CF0041B755 /* CoreData.framework in Frameworks */,
 				E336B9AD167B6E76009A03EF /* UIKit.framework in Frameworks */,
 				E336B9AF167B6E76009A03EF /* Foundation.framework in Frameworks */,
 				E336B9B1167B6E76009A03EF /* CoreGraphics.framework in Frameworks */,
-				E326B72F168B71FE0041B755 /* Parse.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +261,7 @@
 		E336B9AB167B6E76009A03EF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E3C531CA17F4CE1800F2BBE8 /* Parse.framework */,
 				E3A2B77316B9A2EA0047FC4B /* iAd.framework */,
 				E34E459316A225E000C51E67 /* CoreFoundation.framework */,
 				E35E128816974B5C0085EBA2 /* MessageUI.framework */,
@@ -276,7 +277,6 @@
 				E35E125E16921BA60085EBA2 /* CFNetwork.framework */,
 				E35E125C16921B810085EBA2 /* libz.dylib */,
 				E35E125A16921B290085EBA2 /* Social.framework */,
-				E326B72E168B71FE0041B755 /* Parse.framework */,
 				E326B71F168B6FBC0041B755 /* CoreData.framework */,
 				E336B9AC167B6E76009A03EF /* UIKit.framework */,
 				E336B9AE167B6E76009A03EF /* Foundation.framework */,
@@ -595,7 +595,8 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Stine Richvoldsen (FB5K6BR4SB)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"$(SRCROOT)",
+					/Users/superrunt/Xcode/MileTracker,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MileTracker/MileTracker-Prefix.pch";
@@ -616,7 +617,8 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Focus43, LLC";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"$(SRCROOT)",
+					/Users/superrunt/Xcode/MileTracker,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MileTracker/MileTracker-Prefix.pch";

@@ -56,7 +56,8 @@
     layer = self.signUpView.emailField.layer;
     layer.shadowOpacity = 0.0f;
     
-
+    // move dismiss button
+    self.signUpView.dismissButton.frame = CGRectMake(self.signUpView.dismissButton.frame.origin.x, self.signUpView.dismissButton.frame.origin.y + 20, self.signUpView.dismissButton.frame.size.width, self.signUpView.dismissButton.frame.size.height + 20);
 }
 
 - (void)viewDidLayoutSubviews

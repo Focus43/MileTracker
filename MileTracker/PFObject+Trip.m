@@ -34,7 +34,8 @@
         [dataDict addEntriesFromDictionary:data];
     }
     
-    [dataDict setObject:[PFUser currentUser] forKey:@"user"];
+    if ([PFUser currentUser])
+        [dataDict setObject:[PFUser currentUser] forKey:@"user"];
     
     return [tripObj tr_updateWithData:dataDict];
 }
@@ -54,6 +55,9 @@
 
 - (void)syncWithCloudAndDeleteManagedObject:(NSManagedObject *)obj
 {
+    self.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+    [self setObject:[PFUser currentUser] forKey:@"user"];
+    
     [self saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
             NSManagedObject *aManagedObject = obj;

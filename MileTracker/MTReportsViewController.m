@@ -84,54 +84,59 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // data selection logic
-    PFQuery *query = [self queryFromReportTableSelection:indexPath];
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+    if ( ![PFUser currentUser].sessionToken ) {
+        UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"You have to be logged in for access to this feature." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [problemAlert show];
+    } else {
         
-        if (error) {
-            NSLog(@"error! %@", error);
-        } else {
+        // data selection logic
+        PFQuery *query = [self queryFromReportTableSelection:indexPath];
+        
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             
-            if ( [objects count] > 0 ) {
-                
-                NSMutableString *writeString = [self reportStringFromTrips:objects];
-                
-                [self writeToDataFile:writeString];
-                
-                NSString *subject = @"";
-                switch ([indexPath row]) {
-                    case 0:
-                        subject = [subject stringByAppendingString:@"1st quarter"];
-                        break;
-                    case 1:
-                        subject = [subject stringByAppendingString:@"2nd quarter"];
-                        break;
-                    case 2:
-                        subject = [subject stringByAppendingString:@"3rd quarter"];
-                        break;
-                    case 3:
-                        subject = [subject stringByAppendingString:@"4th quarter"];
-                        break;
-                    case 4:
-                        subject = [subject stringByAppendingString:@"last year"];
-                        break;
-                }
-                
-                [self createEmailWithSubject:subject];
-                
+            if (error) {
+                NSLog(@"error! %@", error);
             } else {
                 
-                UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"No trips" message:@"No trips were recorded in the chosen time period" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                [problemAlert show];
+                if ( [objects count] > 0 ) {
+                    
+                    NSMutableString *writeString = [self reportStringFromTrips:objects];
+                    
+                    [self writeToDataFile:writeString];
+                    
+                    NSString *subject = @"";
+                    switch ([indexPath row]) {
+                        case 0:
+                            subject = [subject stringByAppendingString:@"1st quarter"];
+                            break;
+                        case 1:
+                            subject = [subject stringByAppendingString:@"2nd quarter"];
+                            break;
+                        case 2:
+                            subject = [subject stringByAppendingString:@"3rd quarter"];
+                            break;
+                        case 3:
+                            subject = [subject stringByAppendingString:@"4th quarter"];
+                            break;
+                        case 4:
+                            subject = [subject stringByAppendingString:@"last year"];
+                            break;
+                    }
+                    
+                    [self createEmailWithSubject:subject];
+                    
+                } else {
+                    
+                    UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"No trips" message:@"No trips were recorded in the chosen time period" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [problemAlert show];
+                    
+                }
                 
             }
             
-        }
-        
-        
-    }];
-    
+            
+        }];
+    }    
 }
 
 #pragma mark -- report file creation
@@ -246,6 +251,7 @@
         UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Looks like your device needs to be configured to send email. Update your settings and come back hrere and try again!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [problemAlert show];
     }
+
 }
 
 

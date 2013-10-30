@@ -47,7 +47,8 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 	[internetReach startNotifier];
 	[self updateInterfaceWithReachability: internetReach];
     
-//    [PFUser enableAutomaticUser];
+    [PFUser enableAutomaticUser];
+    [PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:YES];
     
     return YES;
 }
@@ -72,9 +73,9 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-//    if (![PFUser currentUser]) { // No user logged in
-//        [self launchLoginScreen];
-//    }
+    if (![PFUser currentUser].sessionToken) { // No user logged in
+        [self launchLoginScreen];
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -84,7 +85,7 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 
 - (void) updateInterfaceWithReachability: (Reachability*) curReach
 {
-    if(curReach == internetReach) {
+    if(curReach == internetReach && [PFUser currentUser].sessionToken) {
         [self syncTrips];
     }
 }
@@ -114,9 +115,6 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 
 - (void)syncTrips
 {
-//    if ( ![[PFUser currentUser] isAuthenticated] )
-//        return;
-    
     // TODO: move this into the Model
     NSManagedObjectContext *moc = [[MTCoreDataController sharedInstance] managedObjectContext];
     NSEntityDescription *entityDescription = [NSEntityDescription
@@ -208,6 +206,7 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user
 {
     [self.window.rootViewController dismissViewControllerAnimated:YES completion:NULL];
+    [self syncTrips];
     
 }
 
@@ -222,10 +221,13 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 {
     [self.window.rootViewController dismissModalViewControllerAnimated:YES];
     
-    NetworkStatus networkStatus = [[Reachability reachabilityForInternetConnection] currentReachabilityStatus];
-    if (networkStatus != NotReachable) {
-        [self syncTrips];
-    }
+
+    // IF no current user : create a new user and store in user defaults
+    // make sure you add as ACL!!
+    
+    
+    
+    
 }
 
 # pragma mark - Sign Up Delegate methods
