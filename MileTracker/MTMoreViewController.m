@@ -124,7 +124,7 @@
 - (void)showUpdatePasswordAlert
 {
     if ( [PFUser currentUser].sessionToken ) {
-        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Reset Password" message:@"Enter the email used for sign up, and we'll send you instructions:" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+        UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Reset Password" message:@"Enter the email used for sign up, and we'll send you instructions:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
         alert.alertViewStyle = UIAlertViewStylePlainTextInput;
         UITextField * alertTextField = [alert textFieldAtIndex:0];
         alertTextField.keyboardType = UIKeyboardTypeEmailAddress;
@@ -161,7 +161,7 @@
 
 - (void)updateSavings
 {
-    if ( [PFUser currentUser]) {
+    if ( [PFUser currentUser].sessionToken ) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSavingsLabel:) name:kMileageTotalFoundNotification object:nil];
         [MTTotalMileage initiateSavingsUntilNowCalc];
     } else {
@@ -227,7 +227,9 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if ( alertView.alertViewStyle == UIAlertViewStylePlainTextInput ) {
-        [self updatePasswordWith: [[alertView textFieldAtIndex:0] text]];
+        if ( buttonIndex == 1 ) {
+            [self updatePasswordWith: [[alertView textFieldAtIndex:0] text]];
+        }
     } else {
         if ( buttonIndex == 1 ) {
             NSLog(@"logging out");
