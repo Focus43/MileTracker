@@ -262,6 +262,7 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 - (void)signUpViewController:(PFSignUpViewController *)signUpController didSignUpUser:(PFUser *)user
 {
     [self.window.rootViewController dismissViewControllerAnimated:YES completion:NULL]; // Dismiss the PFSignUpViewController
+    [self syncTrips];
 }
 
 // Sent to the delegate when the sign up attempt fails.
