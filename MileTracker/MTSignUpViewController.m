@@ -56,14 +56,25 @@
     layer = self.signUpView.emailField.layer;
     layer.shadowOpacity = 0.0f;
     
-    // move dismiss button
-    self.signUpView.dismissButton.frame = CGRectMake(self.signUpView.dismissButton.frame.origin.x, self.signUpView.dismissButton.frame.origin.y + 20, self.signUpView.dismissButton.frame.size.width, self.signUpView.dismissButton.frame.size.height + 20);
 }
 
 - (void)viewDidLayoutSubviews
 {
+    
     CGRect signupRect = CGRectMake( self.signUpView.usernameField.frame.origin.x, self.signUpView.usernameField.frame.origin.y, 245.0f, 133.0f);
     [self.fieldsBackground setFrame:signupRect];
+    
+    // change dismiss button
+    self.signUpView.dismissButton.frame = CGRectMake(self.signUpView.signUpButton.frame.origin.x, self.signUpView.signUpButton.frame.origin.y + 50, self.signUpView.signUpButton.frame.size.width, self.signUpView.signUpButton.frame.size.height / 1.5);
+    self.signUpView.dismissButton.titleLabel.font = [UIFont systemFontOfSize: 12];
+    [self.signUpView.dismissButton  setTitle:@"Skip signing up" forState:UIControlStateNormal];
+    [self.signUpView.dismissButton setImage:nil forState:UIControlStateNormal];
+    UIImage *buttonImage = [[UIImage imageNamed:@"skip_button.png"]
+                            resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
+    UIImage *buttonImageHighlight = [[UIImage imageNamed:@"skip_button_on.png"]
+                                     resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
+    [self.signUpView.dismissButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
+    [self.signUpView.dismissButton setBackgroundImage:buttonImageHighlight forState:UIControlStateHighlighted];
 }
 
 

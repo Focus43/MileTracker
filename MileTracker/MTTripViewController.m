@@ -328,6 +328,12 @@
     self.activeTextField = nil;
 }
 
+-(BOOL) textFieldShouldReturn: (UITextField *) textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
 # pragma mark - keyboard notification handlers 
 
 - (void)dismissKeyboard
@@ -348,32 +354,28 @@
 
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad || ( [[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait || [[UIDevice currentDevice] orientation] == UIDeviceOrientationPortraitUpsideDown) ) {
+        return;
+    }
+    
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-    
-    if ( !scrollView.contentInset.bottom == contentInsets.bottom ) {
-        scrollView.contentInset = contentInsets;
-        scrollView.scrollIndicatorInsets = contentInsets;
-    }
-    
-    CGRect aRect = self.view.frame; 
-    aRect.size.height -= kbSize.height;
-    if (!CGRectContainsPoint(aRect, self.activeTextField.frame.origin) ) {
-        CGPoint scrollPoint = CGPointMake(0.0, self.activeTextField.frame.origin.y - 25);
-        [scrollView setContentOffset:scrollPoint animated:YES];
-    }
+    CGRect bkgndRect = self.activeTextField.superview.frame;
+    bkgndRect.size.height += kbSize.height;
+    [self.activeTextField.superview setFrame:bkgndRect];
+    [scrollView setContentOffset:CGPointMake(0.0, self.activeTextField.frame.origin.y-50) animated:YES];
 }
 
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
+    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
+        return;
+    }
+    
     UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    contentInsets.top += 50;
     scrollView.contentInset = contentInsets;
     scrollView.scrollIndicatorInsets = contentInsets;
-    
-    // This scrolls the screen back to the top. Not sure I like it....
-    CGPoint scrollPoint = CGPointMake(0.0, -60.0);
-    [scrollView setContentOffset:scrollPoint animated:YES];
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController

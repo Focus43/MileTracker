@@ -45,15 +45,24 @@
     layer = self.logInView.passwordField.layer;
     layer.shadowOpacity = 0.0f;
     
-    // move dismiss button
-    self.logInView.dismissButton.frame = CGRectMake(self.logInView.dismissButton.frame.origin.x, self.logInView.dismissButton.frame.origin.y + 20, self.logInView.dismissButton.frame.size.width, self.logInView.dismissButton.frame.size.height + 20);
-    
 }
 
 - (void)viewDidLayoutSubviews
 {
     CGRect loginRect = CGRectMake( self.logInView.usernameField.frame.origin.x, self.logInView.usernameField.frame.origin.y, 245.0f, 90.0f);
     [self.fieldsBackground setFrame:loginRect];
+    
+    // change dismiss button
+    self.logInView.dismissButton.frame = CGRectMake(self.logInView.signUpButton.frame.origin.x, self.logInView.signUpButton.frame.origin.y + 50, self.logInView.signUpButton.frame.size.width, self.logInView.signUpButton.frame.size.height / 1.5);
+    self.logInView.dismissButton.titleLabel.font = [UIFont systemFontOfSize: 12];
+    [self.logInView.dismissButton  setTitle:@"Skip logging in" forState:UIControlStateNormal];
+    [self.logInView.dismissButton setImage:nil forState:UIControlStateNormal];
+    UIImage *buttonImage = [[UIImage imageNamed:@"skip_button.png"]
+                            resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
+    UIImage *buttonImageHighlight = [[UIImage imageNamed:@"skip_button_on.png"]
+                                     resizableImageWithCapInsets:UIEdgeInsetsMake(18, 18, 18, 18)];
+    [self.logInView.dismissButton setBackgroundImage:buttonImage forState:UIControlStateNormal];
+    [self.logInView.dismissButton setBackgroundImage:buttonImageHighlight forState:UIControlStateHighlighted];
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
