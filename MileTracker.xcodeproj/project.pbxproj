@@ -459,6 +459,11 @@
 				CLASSPREFIX = MT;
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = Focus43;
+				TargetAttributes = {
+					E336B9A7167B6E76009A03EF = {
+						DevelopmentTeam = X7L58PS46V;
+					};
+				};
 			};
 			buildConfigurationList = E336B9A2167B6E76009A03EF /* Build configuration list for PBXProject "MileTracker" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -643,8 +648,8 @@
 		E336B9DB167B6E76009A03EF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Stine Richvoldsen (FB5K6BR4SB)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Stine Richvoldsen (FB5K6BR4SB)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Focus43, LLC (X7L58PS46V)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -655,7 +660,7 @@
 				INFOPLIST_FILE = "MileTracker/MileTracker-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "BDD60376-41AD-45B4-BFB0-FF7E4B9EF717";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BDD60376-41AD-45B4-BFB0-FF7E4B9EF717";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
@@ -665,8 +670,8 @@
 		E336B9DC167B6E76009A03EF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Focus43, LLC";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Focus43, LLC";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Focus43, LLC (X7L58PS46V)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
@@ -677,8 +682,8 @@
 				INFOPLIST_FILE = "MileTracker/MileTracker-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "D398A49F-8C29-431F-AE38-140CE5189A30";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D398A49F-8C29-431F-AE38-140CE5189A30";
+				PROVISIONING_PROFILE = "78B4C6B0-75B5-4B09-82DD-55080CF04A49";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "78B4C6B0-75B5-4B09-82DD-55080CF04A49";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};

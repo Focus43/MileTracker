@@ -232,7 +232,7 @@
         }
     } else {
         if ( buttonIndex == 1 ) {
-            NSLog(@"logging out");
+//            NSLog(@"logging out");
             [PFUser logOut];
             UITabBarController *tabBarController = self.view.window.rootViewController;
             [tabBarController setSelectedIndex:0];

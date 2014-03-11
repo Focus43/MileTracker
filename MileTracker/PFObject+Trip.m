@@ -103,6 +103,13 @@
 
 - (NSString *)tr_dateToString
 {
+//    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+//    [df setTimeZone:[NSTimeZone systemTimeZone]];
+//    [df setTimeStyle:NSDateFormatterMediumStyle];
+//    [df setDateStyle:NSDateFormatterMediumStyle];
+//    NSString *date = [df stringFromDate:[self objectForKey:@"date"]];
+//    
+//    return date;
     return [[[MTFormatting sharedUtility] dateFormatter] stringFromDate:[self objectForKey:@"date"]];
 }
 

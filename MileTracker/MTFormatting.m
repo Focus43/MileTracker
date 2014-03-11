@@ -29,7 +29,7 @@
     
     if (self) {
         self.dateFormatter = [[NSDateFormatter alloc] init];
-        [self.dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+        [self.dateFormatter setTimeZone:[NSTimeZone systemTimeZone]];
         [self.dateFormatter setDateStyle:kCFDateFormatterShortStyle];
     
         self.numberFormatter = [[NSNumberFormatter alloc] init];

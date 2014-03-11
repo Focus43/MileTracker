@@ -128,7 +128,7 @@
         if (!currentUser)
             (NSString *)currentUser;
             currentUser = @"anonymous";
-        
+    
         NSDate *tripDate = self.selectedDate ? self.selectedDate : [self.trip objectForKey:@"date"];
         NSString *objectId = (self.trip) ? self.trip.objectId : @"";
         
