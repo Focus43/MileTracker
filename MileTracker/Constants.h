@@ -20,3 +20,5 @@
 #define kUserDefaultsTotalMilesKey @"mileageToDate"
 
 #define kDollarPerMileTaxDeduction 0.565
+
+#define kDateRangeSegueIdentifier @"DateRangeSegueIdentifier"

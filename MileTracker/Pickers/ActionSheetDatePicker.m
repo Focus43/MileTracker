@@ -86,10 +86,21 @@
 }
 
 - (void)notifyTarget:(id)target didSucceedWithAction:(SEL)action origin:(id)origin {
-    if ([target respondsToSelector:action])
-        objc_msgSend(target, action, self.selectedDate, origin);
-    else
+    if ([target respondsToSelector:action]) {
+//        objc_msgSend(target, action, self.selectedDate, origin);
+//        [self notifyTarget:target didSucceedWithAction:action origin:origin];
+//        objc_msgSend(self.target, self.action, self);
+        NSArray *objects = [NSArray arrayWithObjects:self.selectedDate, origin, nil];
+        NSArray *keys = [NSArray arrayWithObjects:@"selectedDate", @"origin", nil];
+        NSDictionary *selectionObj = [NSDictionary dictionaryWithObjects:objects forKeys:keys];
+        [target performSelectorOnMainThread:action withObject:selectionObj waitUntilDone:YES];
+//
+//        void (*action)(id, SEL, int) = (void (*)(id, SEL, int)) objc_msgSend;
+//        action(self, @selector(action:), 0);
+    
+    } else {
         NSAssert(NO, @"Invalid target/action ( %s / %s ) combination used for ActionSheetPicker", object_getClassName(target), (char *)action);
+    }
 }
 
 - (void)eventForDatePicker:(id)sender {

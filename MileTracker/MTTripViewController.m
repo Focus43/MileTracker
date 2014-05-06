@@ -277,7 +277,8 @@
                                                        datePickerMode:UIDatePickerModeDate
                                                          selectedDate:pickerDate
                                                                target:self
-                                                               action:@selector(dateWasSelected:element:)
+//                                                               action:@selector(dateWasSelected:element:)
+                                                               action:@selector(dateWasSelected:)
                                                                origin:touchedField];
     
     [self.actionSheetPicker addCustomButtonWithTitle:@"Today" value:[NSDate date]];
@@ -286,11 +287,18 @@
     [self.actionSheetPicker showActionSheetPicker];
 }
 
-- (void)dateWasSelected:(NSDate *)selDate element:(id)element
+//- (void)dateWasSelected:(NSDate *)selDate element:(id)element
+//{
+//    self.selectedDate = selDate;
+//    UITextField *currentField = (UITextField *)element;
+//    currentField.text = [[[MTFormatting sharedUtility] dateFormatter] stringFromDate:selDate];
+//}
+
+- (void)dateWasSelected:(NSDictionary *)selectionObj
 {
-    self.selectedDate = selDate;
-    UITextField *currentField = (UITextField *)element;
-    currentField.text = [[[MTFormatting sharedUtility] dateFormatter] stringFromDate:selDate];
+    self.selectedDate = [selectionObj objectForKey:@"selectedDate"];
+    UITextField *currentField = (UITextField *)[selectionObj objectForKey:@"origin"];
+    currentField.text = [[[MTFormatting sharedUtility] dateFormatter] stringFromDate:self.selectedDate];
 }
 
 - (NSDate *)dateSetToMidnightUsingDate:(NSDate *)aDate
