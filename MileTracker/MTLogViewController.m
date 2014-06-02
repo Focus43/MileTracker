@@ -458,8 +458,6 @@ const int kNoTripsCellTag = 5678;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"didSelectRowAtIndexPath indexPath = %@", indexPath);
-    NSLog(@"didSelectRowAtIndexPath self.loadMoreIdxPath.row  = %d", self.loadMoreIdxPath.row );
     if ( indexPath.row == self.loadMoreIdxPath.row ) {
         _currentPage ++;
         [self loadTrips];

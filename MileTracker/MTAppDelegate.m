@@ -12,6 +12,7 @@
 #import "MTUnsyncedTripValueTransformer.h"
 #import "MTSignUpViewController.h"
 #import "MTLoginViewController.h"
+//#import <UbertestersSDK/Ubertesters.h>
 
 @interface MTAppDelegate ()
 
@@ -26,6 +27,9 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // ubertester suite
+//    [[Ubertesters shared] initialize];
+    
     [Parse setApplicationId:kMTAFParseAPIApplicationId clientKey:kMTAFParseAPIKey];
     
     // register transformer

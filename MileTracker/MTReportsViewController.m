@@ -38,10 +38,6 @@
     
     [self.view setBackgroundColor:[MTViewUtils backGroundColor]];
     
-//    [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setColor:[UIColor whiteColor]];
-//    [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setShadowOffset:CGSizeMake(0.0, 0.0)];
-//    [[UILabel appearanceWhenContainedIn:[UITableViewHeaderFooterView class], nil] setFont:[UIFont systemFontOfSize:17.0]];
-
     // Hack to fix the layout on iPad
     if ([[UIDevice currentDevice].model isEqualToString:@"iPad"] ) {
         self.label1.text = [NSString stringWithFormat:@"              %@", self.label1.text];
@@ -49,6 +45,7 @@
         self.label3.text = [NSString stringWithFormat:@"              %@", self.label3.text];
         self.label4.text = [NSString stringWithFormat:@"              %@", self.label4.text];
         self.label5.text = [NSString stringWithFormat:@"              %@", self.label5.text];
+        self.label6.text = [NSString stringWithFormat:@"              %@", self.label6.text];
     }
     
 }
@@ -85,9 +82,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ( ![PFUser currentUser].sessionToken ) {
+        
         UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"You have to be logged in for access to this feature." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [problemAlert show];
-    } else {
+        
+    } else if ( [indexPath row] != 5 ) {
         
         // data selection logic
         PFQuery *query = [self queryFromReportTableSelection:indexPath];
@@ -96,6 +95,7 @@
             
             if (error) {
                 NSLog(@"error! %@", error);
+                
             } else {
                 
                 if ( [objects count] > 0 ) {
@@ -123,7 +123,22 @@
                             break;
                     }
                     
-                    [self createEmailWithSubject:subject];
+                    // [self createEmailWithSubject:subject];
+                    
+                    // get file
+                    NSData *exportFile =[NSURL fileURLWithPath:[self dataExportFilePath]];
+                    NSArray *activityItems = [NSArray arrayWithObjects:exportFile, nil];
+                    
+                    // Open choice of action
+                    UIActivityViewController *actViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+                    actViewController.excludedActivityTypes=@[UIActivityTypeAirDrop];
+                    [actViewController setValue:[NSString stringWithFormat:@"TripTrax mileage export for %@", subject] forKey:@"subject"];
+                    
+//                    [actViewController setCompletionHandler:^(NSString *activityType, BOOL completed) {
+//                        NSLog(@"completed dialog - activity: %@ - finished flag: %d", activityType, completed);
+//                    }];
+                    
+                    [self presentViewController:actViewController animated:YES completion:nil];
                     
                 } else {
                     
@@ -138,6 +153,28 @@
         }];
     }    
 }
+
+#pragma mark -- UIActivityItemSource methods
+//- (NSString *)activityViewController:(UIActivityViewController *)activityViewController subjectForActivityType:(NSString *)activityType
+//{
+//    return @"TripTrax export";
+//}
+//
+//- (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType {
+//    if ([activityType isEqualToString:UIActivityTypeMail]) {
+//        NSURL *exportFile = [NSURL fileURLWithPath:[self dataExportFilePath]];
+//        NSArray *items = [NSArray arrayWithObjects:exportFile, nil];
+////        NSArray *items = @[@"message mail", [NSURL fileURLWithPath:[self dataExportFilePath]]];
+//        return items;
+//    }
+//    
+//    NSArray *items = @[@"Not a proper Activity", [NSURL URLWithString:@"http://www.myUrlMail.com"]];
+//    return items;
+//}
+//
+//- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController {
+//    return [NSURL fileURLWithPath:[self dataExportFilePath]];
+//}
 
 #pragma mark -- report file creation
 - (PFQuery *)queryFromReportTableSelection:(NSIndexPath *)indexPath
@@ -200,6 +237,7 @@
     }
     
     PFQuery *query = [PFQuery queryWithClassName:kPFObjectClassName];
+    query.limit = 1000;
     [query whereKey:@"date" lessThanOrEqualTo:[self dateSetToMidnightUsingComponents:endComponents]];
     [query whereKey:@"date" greaterThan:[self dateSetToMidnightUsingComponents:startComponents]];
     [query whereKey:@"user" equalTo:[PFUser currentUser]];
@@ -232,39 +270,6 @@
     handle = [NSFileHandle fileHandleForWritingAtPath: [self dataExportFilePath] ];
     [handle truncateFileAtOffset:[handle seekToEndOfFile]];
     [handle writeData:[tripExportString dataUsingEncoding:NSUTF8StringEncoding]];
-}
-
-- (void)createEmailWithSubject:(NSString *)subject
-{
-    if ([MFMailComposeViewController canSendMail]) {
-        MFMailComposeViewController* controller = [[MFMailComposeViewController alloc] init];
-        controller.mailComposeDelegate = self;
-        [controller setSubject:[@"Mileage for " stringByAppendingString:subject]];
-        [controller setMessageBody:[@"Attached is a tab delimited file with a list of business related trips from " stringByAppendingString:subject] isHTML:NO];
-        
-        NSData *exportData = [NSData dataWithContentsOfFile:[self dataExportFilePath]];
-        [controller addAttachmentData:exportData mimeType:@"application/octet-stream" fileName:[[subject stringByReplacingOccurrencesOfString:@" " withString:@"_"] stringByAppendingString:@".csv"]];
-        
-        if (controller) [self presentModalViewController:controller animated:YES];
-        
-    } else {
-        UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Looks like your device needs to be configured to send email. Update your settings and come back hrere and try again!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [problemAlert show];
-    }
-
-}
-
-
-#pragma mark - Mail Compose View Controller delegate
-
-- (void)mailComposeController:(MFMailComposeViewController*)controller
-          didFinishWithResult:(MFMailComposeResult)result
-                        error:(NSError*)error;
-{
-    if (result == MFMailComposeResultSent) {
-        NSLog(@"It's away!");
-    }
-    [self dismissModalViewControllerAnimated:YES];
 }
 
 @end

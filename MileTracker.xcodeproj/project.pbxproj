@@ -18,6 +18,13 @@
 		E326B743168CF00C0041B755 /* AbstractActionSheetPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = E326B73A168CF00C0041B755 /* AbstractActionSheetPicker.m */; };
 		E326B744168CF00C0041B755 /* ActionSheetDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = E326B73C168CF00C0041B755 /* ActionSheetDatePicker.m */; };
 		E32846841743EC03000A66A7 /* MTTotalMileage.m in Sources */ = {isa = PBXBuildFile; fileRef = E32846831743EC03000A66A7 /* MTTotalMileage.m */; };
+		E328913F18D21C3E00417232 /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E328913D18D21C3E00417232 /* UbertestersSDK.framework */; };
+		E328914018D21C3E00417232 /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E328913E18D21C3E00417232 /* UbertestersSDKResources.bundle */; };
+		E328914218D21C6800417232 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E328914118D21C6800417232 /* CoreImage.framework */; };
+		E328914418D21C7D00417232 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E328914318D21C7D00417232 /* CoreTelephony.framework */; };
+		E328914618D21C9600417232 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E328914518D21C9600417232 /* OpenGLES.framework */; };
+		E328914818D2227100417232 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E328914718D2227100417232 /* CoreMotion.framework */; };
+		E328914B18D7A14B00417232 /* MTDateRangeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E328914A18D7A14B00417232 /* MTDateRangeViewController.m */; };
 		E336B9AD167B6E76009A03EF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E336B9AC167B6E76009A03EF /* UIKit.framework */; };
 		E336B9AF167B6E76009A03EF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E336B9AE167B6E76009A03EF /* Foundation.framework */; };
 		E336B9B1167B6E76009A03EF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E336B9B0167B6E76009A03EF /* CoreGraphics.framework */; };
@@ -111,6 +118,14 @@
 		E326B73C168CF00C0041B755 /* ActionSheetDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionSheetDatePicker.m; sourceTree = "<group>"; };
 		E32846821743EC02000A66A7 /* MTTotalMileage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTotalMileage.h; sourceTree = "<group>"; };
 		E32846831743EC03000A66A7 /* MTTotalMileage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTotalMileage.m; sourceTree = "<group>"; };
+		E328913D18D21C3E00417232 /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
+		E328913E18D21C3E00417232 /* UbertestersSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UbertestersSDKResources.bundle; sourceTree = "<group>"; };
+		E328914118D21C6800417232 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		E328914318D21C7D00417232 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		E328914518D21C9600417232 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		E328914718D2227100417232 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		E328914918D7A14B00417232 /* MTDateRangeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDateRangeViewController.h; sourceTree = "<group>"; };
+		E328914A18D7A14B00417232 /* MTDateRangeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDateRangeViewController.m; sourceTree = "<group>"; };
 		E336B9A8167B6E76009A03EF /* MileTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MileTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E336B9AC167B6E76009A03EF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E336B9AE167B6E76009A03EF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -209,6 +224,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E328914818D2227100417232 /* CoreMotion.framework in Frameworks */,
+				E328914618D21C9600417232 /* OpenGLES.framework in Frameworks */,
+				E35E126716921C590085EBA2 /* CoreLocation.framework in Frameworks */,
+				E328914418D21C7D00417232 /* CoreTelephony.framework in Frameworks */,
+				E328914218D21C6800417232 /* CoreImage.framework in Frameworks */,
 				E3A2B77416B9A2EA0047FC4B /* iAd.framework in Frameworks */,
 				E34E459416A225E000C51E67 /* CoreFoundation.framework in Frameworks */,
 				E35E126916921C7D0085EBA2 /* SystemConfiguration.framework in Frameworks */,
@@ -217,7 +237,6 @@
 				E35E126F16921CE00085EBA2 /* libsqlite3.dylib in Frameworks */,
 				E35E126D16921CBC0085EBA2 /* MobileCoreServices.framework in Frameworks */,
 				E35E126B16921C9E0085EBA2 /* Security.framework in Frameworks */,
-				E35E126716921C590085EBA2 /* CoreLocation.framework in Frameworks */,
 				E35E126516921C2F0085EBA2 /* AdSupport.framework in Frameworks */,
 				E35E126316921C010085EBA2 /* AudioToolbox.framework in Frameworks */,
 				E35E126116921BD40085EBA2 /* Accounts.framework in Frameworks */,
@@ -229,6 +248,7 @@
 				E336B9AD167B6E76009A03EF /* UIKit.framework in Frameworks */,
 				E336B9AF167B6E76009A03EF /* Foundation.framework in Frameworks */,
 				E336B9B1167B6E76009A03EF /* CoreGraphics.framework in Frameworks */,
+				E328913F18D21C3E00417232 /* UbertestersSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,6 +287,15 @@
 			name = ActionPicker;
 			sourceTree = "<group>";
 		};
+		E328913C18D21C3E00417232 /* UbertestersSDK */ = {
+			isa = PBXGroup;
+			children = (
+				E328913D18D21C3E00417232 /* UbertestersSDK.framework */,
+				E328913E18D21C3E00417232 /* UbertestersSDKResources.bundle */,
+			);
+			path = UbertestersSDK;
+			sourceTree = "<group>";
+		};
 		E336B99D167B6E76009A03EF = {
 			isa = PBXGroup;
 			children = (
@@ -287,6 +316,11 @@
 		E336B9AB167B6E76009A03EF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E328914718D2227100417232 /* CoreMotion.framework */,
+				E328914518D21C9600417232 /* OpenGLES.framework */,
+				E328914318D21C7D00417232 /* CoreTelephony.framework */,
+				E328914118D21C6800417232 /* CoreImage.framework */,
+				E328913C18D21C3E00417232 /* UbertestersSDK */,
 				E3C531CA17F4CE1800F2BBE8 /* Parse.framework */,
 				E3A2B77316B9A2EA0047FC4B /* iAd.framework */,
 				E34E459316A225E000C51E67 /* CoreFoundation.framework */,
@@ -326,6 +360,8 @@
 				E326B731168C99300041B755 /* MTLogTableViewCell.m */,
 				E35E127A169544EB0085EBA2 /* MTReportsViewController.h */,
 				E35E127B169544EB0085EBA2 /* MTReportsViewController.m */,
+				E328914918D7A14B00417232 /* MTDateRangeViewController.h */,
+				E328914A18D7A14B00417232 /* MTDateRangeViewController.m */,
 				E35E128A169768BB0085EBA2 /* MTMoreViewController.h */,
 				E35E128B169768BB0085EBA2 /* MTMoreViewController.m */,
 				E35E128D16977F380085EBA2 /* MTLoginViewController.h */,
@@ -494,6 +530,7 @@
 				E35E129516978BFF0085EBA2 /* add-item.png in Resources */,
 				E35E129616978BFF0085EBA2 /* next-item.png in Resources */,
 				E31BACDA1822D3C500893F75 /* skip_button_on@2x.png in Resources */,
+				E328914018D21C3E00417232 /* UbertestersSDKResources.bundle in Resources */,
 				E35E129816978CAB0085EBA2 /* addressbook.png in Resources */,
 				E3713E051823049900F4DA29 /* icon_76.png in Resources */,
 				E31BACDD1822D42900893F75 /* skip_button@2x.png in Resources */,
@@ -546,6 +583,7 @@
 				E326B743168CF00C0041B755 /* AbstractActionSheetPicker.m in Sources */,
 				E326B744168CF00C0041B755 /* ActionSheetDatePicker.m in Sources */,
 				E35E124B168CF31B0085EBA2 /* NSDate+TCUtils.m in Sources */,
+				E328914B18D7A14B00417232 /* MTDateRangeViewController.m in Sources */,
 				E35E127C169544EB0085EBA2 /* MTReportsViewController.m in Sources */,
 				E35E128C169768BB0085EBA2 /* MTMoreViewController.m in Sources */,
 				E35E128F16977F390085EBA2 /* MTLoginViewController.m in Sources */,
@@ -648,20 +686,21 @@
 		E336B9DB167B6E76009A03EF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Focus43, LLC (X7L58PS46V)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Stine Richvoldsen (FB5K6BR4SB)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Stine Richvoldsen (FB5K6BR4SB)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
 					/Users/superrunt/Xcode/MileTracker,
+					"$(PROJECT_DIR)/UbertestersSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MileTracker/MileTracker-Prefix.pch";
 				INFOPLIST_FILE = "MileTracker/MileTracker-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BDD60376-41AD-45B4-BFB0-FF7E4B9EF717";
+				PROVISIONING_PROFILE = "3B03E076-B9CE-4875-8D0F-D354C05743E3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3B03E076-B9CE-4875-8D0F-D354C05743E3";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -671,11 +710,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Focus43, LLC (X7L58PS46V)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Focus43, LLC (X7L58PS46V)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
 					/Users/superrunt/Xcode/MileTracker,
+					"$(PROJECT_DIR)/UbertestersSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MileTracker/MileTracker-Prefix.pch";
