@@ -14,7 +14,6 @@
 
 @interface PFObject (Trip)
 
-//+ (PFObject *)tr_objectWithData:(NSDictionary *)data objectId:(NSString *)objectId;
 + (PFObject *)tr_objectWithData:(id)data objectId:(NSString *)objectId;
 
 - (PFObject *)tr_updateWithData:(NSDictionary *)data;
