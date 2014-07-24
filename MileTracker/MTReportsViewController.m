@@ -12,12 +12,12 @@
 
 @interface MTReportsViewController ()
 
+@property (nonatomic, strong) MBProgressHUD *hud;
+
 - (NSDate *)dateSetToMidnightUsingComponents:(NSDateComponents *)components;
 - (NSString *)dataExportFilePath;
-- (NSString *)reportStringFromTrips:(NSArray *)trips;
 - (void)writeToDataFile:(NSString *)tripExportString;
 - (void)createEmailWithSubject:(NSString *)subject;
-- (PFQuery *)queryFromReportTableSelection:(NSIndexPath *)indexPath;
 
 @end
 
@@ -79,6 +79,13 @@
 
 #pragma mark - Table view delegate
 
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    // Text Color
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [header.textLabel setTextColor:[UIColor whiteColor]];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ( ![PFUser currentUser].sessionToken ) {
@@ -88,21 +95,33 @@
         
     } else if ( [indexPath row] != 5 ) {
         
-        // data selection logic
-        PFQuery *query = [self queryFromReportTableSelection:indexPath];
+        NSDictionary *params = [self getReportParamsFromTableSelection:indexPath];
         
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            
+        if (!self.hud) {
+            _hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            self.hud.delegate = self;
+        }
+        
+        self.hud.mode		= MBProgressHUDModeIndeterminate;
+        self.hud.labelText	= @"Collecting Trips";
+        self.hud.margin		= 30;
+        self.hud.yOffset = 0;
+        [self.hud show:YES];
+        
+        // data selection logic
+        [PFCloud callFunctionInBackground:@"exportDataByDateRange" withParameters:params block:^(id result, NSError *error) {
             if (error) {
                 NSLog(@"error! %@", error);
-                
             } else {
-                
-                if ( [objects count] > 0 ) {
+                if ( result ) {
+                    if( error ) {
+                        NSLog(@"%@", [error localizedDescription]);
+                    } else {
+                        NSMutableString *writeString = [result objectForKey:@"data"];
+                        NSLog(@"result = %@", writeString);
+                        [self writeToDataFile:writeString];
+                    }
                     
-                    NSMutableString *writeString = [self reportStringFromTrips:objects];
-                    
-                    [self writeToDataFile:writeString];
                     
                     NSString *subject = @"";
                     switch ([indexPath row]) {
@@ -123,21 +142,19 @@
                             break;
                     }
                     
-                    // [self createEmailWithSubject:subject];
-                    
                     // get file
                     NSData *exportFile =[NSURL fileURLWithPath:[self dataExportFilePath]];
                     NSArray *activityItems = [NSArray arrayWithObjects:exportFile, nil];
                     
+                    // close hud
+                    if (self.hud) {
+                        [self.hud hide:YES afterDelay:0.5];
+                    }
+                    
                     // Open choice of action
                     UIActivityViewController *actViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-                    actViewController.excludedActivityTypes=@[UIActivityTypeAirDrop];
+                    actViewController.excludedActivityTypes=[NSArray arrayWithObject:@"UIActivityTypeAirDrop"];
                     [actViewController setValue:[NSString stringWithFormat:@"TripTrax mileage export for %@", subject] forKey:@"subject"];
-                    
-//                    [actViewController setCompletionHandler:^(NSString *activityType, BOOL completed) {
-//                        NSLog(@"completed dialog - activity: %@ - finished flag: %d", activityType, completed);
-//                    }];
-                    
                     [self presentViewController:actViewController animated:YES completion:nil];
                     
                 } else {
@@ -154,30 +171,7 @@
     }    
 }
 
-#pragma mark -- UIActivityItemSource methods
-//- (NSString *)activityViewController:(UIActivityViewController *)activityViewController subjectForActivityType:(NSString *)activityType
-//{
-//    return @"TripTrax export";
-//}
-//
-//- (id)activityViewController:(UIActivityViewController *)activityViewController itemForActivityType:(NSString *)activityType {
-//    if ([activityType isEqualToString:UIActivityTypeMail]) {
-//        NSURL *exportFile = [NSURL fileURLWithPath:[self dataExportFilePath]];
-//        NSArray *items = [NSArray arrayWithObjects:exportFile, nil];
-////        NSArray *items = @[@"message mail", [NSURL fileURLWithPath:[self dataExportFilePath]]];
-//        return items;
-//    }
-//    
-//    NSArray *items = @[@"Not a proper Activity", [NSURL URLWithString:@"http://www.myUrlMail.com"]];
-//    return items;
-//}
-//
-//- (id)activityViewControllerPlaceholderItem:(UIActivityViewController *)activityViewController {
-//    return [NSURL fileURLWithPath:[self dataExportFilePath]];
-//}
-
-#pragma mark -- report file creation
-- (PFQuery *)queryFromReportTableSelection:(NSIndexPath *)indexPath
+- (NSDictionary *)getReportParamsFromTableSelection:(NSIndexPath *) indexPath
 {
     NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
     NSDateComponents *componentsForToday = [gregorian components:NSUIntegerMax fromDate:[NSDate date]];
@@ -236,26 +230,13 @@
             break;
     }
     
-    PFQuery *query = [PFQuery queryWithClassName:kPFObjectClassName];
-    query.limit = 1000;
-    [query whereKey:@"date" lessThanOrEqualTo:[self dateSetToMidnightUsingComponents:endComponents]];
-    [query whereKey:@"date" greaterThan:[self dateSetToMidnightUsingComponents:startComponents]];
-    [query whereKey:@"user" equalTo:[PFUser currentUser]];
+    NSArray *keys = [NSArray arrayWithObjects:@"userid", @"start", @"end", nil];
+    NSArray *paramObjs = [NSArray arrayWithObjects:[PFUser currentUser].objectId, [self dateSetToMidnightUsingComponents:startComponents], [self dateSetToMidnightUsingComponents:endComponents], nil];
     
-    return query;
-}
-
-- (NSString *)reportStringFromTrips:(NSArray *)trips
-{
-    NSMutableString *writeString = [NSMutableString stringWithCapacity:0];
-    [writeString appendString:@"title, date, startOdometer, endOdometer, trip distance (mi)\n"];
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjects:paramObjs forKeys:keys];
     
-    for (int i=0; i<[trips count]; i++) {
-        PFObject *trip = [trips objectAtIndex:i];
-        [writeString appendString:[NSString stringWithFormat:@"\"%@\", %@, %@, %@, %@\n", [trip objectForKey:@"title"] , [trip tr_dateToString], [trip objectForKey:@"startOdometer" ], [trip objectForKey:@"endOdometer"], [trip tr_totalTripDistance]]];
-    }
+    return parameters;
     
-    return writeString;
 }
 
 - (void)writeToDataFile:(NSString *)tripExportString

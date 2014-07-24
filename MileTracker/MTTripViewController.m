@@ -116,7 +116,7 @@
         [self.trip voidAddedLastTime];
     }
     
-    if ( !([self.dateField.text isEqualToString:@""] || [self.titleField.text isEqualToString:@""]) ) {
+    if ( (self.dateField.text && self.titleField.text) ) {
         
         NSNumber *start = [self.numberFormatter numberFromString:self.startOdometerField.text];
         if (!start) start = [NSNumber numberWithInt:0];
@@ -158,7 +158,7 @@
             self.hud.mode		= MBProgressHUDModeIndeterminate;
             self.hud.labelText	= @"Saving trip";
             self.hud.margin		= 30;
-            self.hud.yOffset	= 30;
+            self.hud.yOffset = 0;
             [self.hud show:YES];
             
             [tripToSave saveInBackgroundWithBlock: ^(BOOL succeeded, NSError *error) {

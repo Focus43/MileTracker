@@ -124,7 +124,7 @@ const int kNoTripsCellTag = 5678;
     self.hud.mode		= MBProgressHUDModeIndeterminate;
     self.hud.labelText	= @"Loading Trips";
     self.hud.margin		= 30;
-    self.hud.yOffset	= 30;
+    self.hud.yOffset = 0;
     [self.hud show:YES];
 
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];

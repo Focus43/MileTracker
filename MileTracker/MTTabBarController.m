@@ -104,7 +104,7 @@
     if (!self.bannerIsVisible) {
         [UIView animateWithDuration:1 animations:^{
             if ( [[UIDevice currentDevice].model isEqualToString:@"iPhone"] ) {
-                banner.frame = CGRectOffset(banner.frame, 0, -50);
+                banner.frame = CGRectOffset(banner.frame, 0, -49);
             } else {
                 banner.frame = CGRectOffset(banner.frame, 0, -66);
             }

@@ -11,6 +11,7 @@
 @interface MTDateRangeViewController ()
 
 @property (strong, nonatomic) UITextField *activeTextField;
+@property (nonatomic, strong) MBProgressHUD *hud;
 
 - (void)dateOrTimeFieldTouched:(UITextField *)touchedField;
 - (NSString *)dataExportFilePath;
@@ -53,33 +54,50 @@
         return;
     }
     
-    PFQuery *query = [self queryDateRangeFrom:self.startDate to:self.endDate];
+    NSArray *keys = [NSArray arrayWithObjects:@"userid", @"start", @"end", nil];
+    NSArray *paramObjs = [NSArray arrayWithObjects:[PFUser currentUser].objectId, self.startDate, self.endDate, nil];
     
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjects:paramObjs forKeys:keys];
+    
+    if (!self.hud) {
+        _hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        self.hud.delegate = self;
+    }
+    
+    self.hud.mode		= MBProgressHUDModeIndeterminate;
+    self.hud.labelText	= @"Collecting Trips";
+    self.hud.margin		= 30;
+    self.hud.yOffset = 0;
+    [self.hud show:YES];
+
+    
+    [PFCloud callFunctionInBackground:@"exportDataByDateRange" withParameters:parameters block:^(id result, NSError *error) {
         if (error) {
             NSLog(@"error! %@", error);
-            
         } else {
-            
-            if ( [objects count] > 0 ) {
+            if ( result ) {
+                if( error ) {
+                    NSLog(@"%@", [error localizedDescription]);
+                } else {
+                    NSMutableString *writeString = [result objectForKey:@"data"];
+                    NSLog(@"result = %@", writeString);
+                    [self writeToDataFile:writeString];
+                }
                 
-                NSMutableString *writeString = [self reportStringFromTrips:objects];
                 
-                [self writeToDataFile:writeString];
-                
-                NSString *subject = @"custom date";
+                NSString *subject = @"custom date range";
                 
                 // get file
                 NSData *exportFile =[NSURL fileURLWithPath:[self dataExportFilePath]];
                 NSArray *activityItems = [NSArray arrayWithObjects:exportFile, nil];
-                
+                // close hud
+                if (self.hud) {
+                    [self.hud hide:YES afterDelay:0.5];
+                }
                 // Open choice of action
                 UIActivityViewController *actViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
-                actViewController.excludedActivityTypes=@[UIActivityTypeAirDrop];
-                [actViewController setValue:[NSString stringWithFormat:@"TripTrax mileage export for %@", subject] forKey:@"subject"];
-                
-                [self presentViewController:actViewController animated:YES completion:nil];
+                actViewController.excludedActivityTypes=[NSArray arrayWithObject:@"UIActivityTypeAirDrop"];
+                [actViewController setValue:[NSString stringWithFormat:@"TripTrax mileage export for %@", subject] forKey:@"subject"];                [self presentViewController:actViewController animated:YES completion:nil];
                 
             } else {
                 
@@ -159,39 +177,6 @@
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     return [documentsDirectory stringByAppendingPathComponent:@"trips_export.csv"];
-}
-
-- (PFQuery *)queryDateRangeFrom:(NSDate *)startDate to:(NSDate *)endDate
-{
-//    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-//    NSDateComponents *componentsForToday = [gregorian components:NSUIntegerMax fromDate:[NSDate date]];
-//    
-//    NSDateComponents *startComponents = [[NSDateComponents alloc] init];
-//    [startComponents setHour:0];
-//    [startComponents setMinute:0];
-//    [startComponents setSecond:0];
-//    NSDateComponents *endComponents = [[NSDateComponents alloc] init];
-//    [endComponents setHour:0];
-//    [endComponents setMinute:0];
-//    [endComponents setSecond:0];
-//    
-//    [startComponents setYear:([componentsForToday year] - 1)];
-//    [startComponents setMonth:12];
-//    [startComponents setDay:31];
-//    [endComponents setYear:[componentsForToday year]];
-//    [endComponents setMonth:3];
-//    [endComponents setDay:31];
-    
-    
-    
-    PFQuery *query = [PFQuery queryWithClassName:kPFObjectClassName];
-    [query whereKey:@"date" lessThanOrEqualTo:endDate];
-    [query whereKey:@"date" greaterThan:startDate];
-//    [query whereKey:@"date" lessThanOrEqualTo:[gregorian dateFromComponents:endComponents]];
-//    [query whereKey:@"date" greaterThan:[gregorian dateFromComponents:startComponents]];
-    [query whereKey:@"user" equalTo:[PFUser currentUser]];
-    
-    return query;
 }
 
 - (NSString *)reportStringFromTrips:(NSArray *)trips

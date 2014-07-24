@@ -12,7 +12,7 @@
 #import "MTUnsyncedTripValueTransformer.h"
 #import "MTSignUpViewController.h"
 #import "MTLoginViewController.h"
-//#import <UbertestersSDK/Ubertesters.h>
+#import <UbertestersSDK/Ubertesters.h>
 
 @interface MTAppDelegate ()
 
