@@ -32,7 +32,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Add ad banner    
+    
+    self.tabBar.barStyle = UIBarStyleBlack;
+    self.tabBar.translucent = NO;
+    self.tabBar.tintColor = [UIColor whiteColor];
+    
+	// Add ad banner
     _banner = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
     _banner.frame = CGRectMake(0.0, [UIScreen mainScreen].bounds.size.height - 50, _banner.frame.size.width, _banner.frame.size.height);
     _banner.delegate = self;

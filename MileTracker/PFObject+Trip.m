@@ -125,24 +125,33 @@
 
 - (NSNumber *)tr_totalTripDistance
 {
-    NSNumber *distance = [NSNumber numberWithFloat:([[self objectForKey:@"endOdometer"] floatValue] - [[self objectForKey:@"startOdometer"] floatValue])];
-    if ( [distance doubleValue] > 0.0 ) {
-        return distance;
+    if ( [self objectForKey:@"distance"] ) {
+        return [self objectForKey:@"distance"];
     } else {
-        return [NSDecimalNumber zero];
+        NSNumber *distance = [NSNumber numberWithFloat:([[self objectForKey:@"endOdometer"] floatValue] - [[self objectForKey:@"startOdometer"] floatValue])];
+        return distance;
     }
 }
 
 - (NSString *)tr_totalDistanceString
 {
-    NSNumber *totalDistance = [self tr_totalTripDistance];
+    NSString *distString = @"";
     
-    if ( [totalDistance doubleValue] > 0.0 ) {
-        return [NSString stringWithFormat:@"%@ mi", [self tr_decimalToString:totalDistance]];
+    if ( [self objectForKey:@"distance"] ) {
+        
+        float divisor = ( [[[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsLengthUnit]  isEqual: kUserDefaultsLengthUnitMile] ) ? 1609.344 : 1000.00;
+        
+        distString = [NSString stringWithFormat:@"%d %@", (int)roundf(([[self objectForKey:@"distance"] floatValue] / divisor)), [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsLengthUnit]];
     } else {
-        return @"N/A";
+        NSNumber *distance = [NSNumber numberWithFloat:([[self objectForKey:@"endOdometer"] floatValue] - [[self objectForKey:@"startOdometer"] floatValue])];
+        if ( [distance doubleValue] > 0.0 ) {
+            distString = [NSString stringWithFormat:@"%d %@", [distance intValue], [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsLengthUnit]];
+        } else {
+            distString = [NSString stringWithFormat:@"%d %@", 0, [[NSUserDefaults standardUserDefaults] stringForKey:kUserDefaultsLengthUnit]];
+        }
     }
     
+    return distString;
 }
 
 - (void)setAddedLastTime:(float)added

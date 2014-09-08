@@ -7,7 +7,6 @@
 //
 
 #import "MTLogViewController.h"
-#import "MTLogTableViewCell.h"
 #import "MTTripViewController.h"
 #import "Reachability.h"
 #import "UnsyncedTrip.h"
@@ -77,7 +76,6 @@ const int kNoTripsCellTag = 5678;
     
     _loadMoreIdxPath = [NSIndexPath indexPathForRow:10 inSection:0];
     
-//    [self loadTrips];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -92,8 +90,8 @@ const int kNoTripsCellTag = 5678;
         MTTripViewController *tripDetailViewController = segue.destinationViewController;
         
         NSIndexPath *indexPath;
-        if ( [sender isKindOfClass:[MTLogTableViewCell class]] ) {
-            MTLogTableViewCell *cell = (MTLogTableViewCell *)sender;
+        if ( [sender isKindOfClass:[UITableViewCell class]] ) {
+            UITableViewCell *cell = (UITableViewCell *)sender;
             indexPath = [self.tableView indexPathForCell:cell];
         } else {
             indexPath = (NSIndexPath *)sender; 
@@ -385,18 +383,17 @@ const int kNoTripsCellTag = 5678;
     
     if ( indexPath.row < [self.trips count] ) {
         
-        MTLogTableViewCell *cell = nil;
+        UITableViewCell *cell = nil;
         static NSString *CellIdentifier = kTripCellIdentifier;
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
         if (cell == nil) {
-            cell = [[MTLogTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
         }
         
         PFObject *trip = [self.trips objectAtIndex:indexPath.row];
-        cell.titleLabel.text = [trip objectForKey:@"title"];
-        cell.dateLabel.text = [trip tr_dateToString];
-        cell.distanceLabel.text = [trip tr_totalDistanceString];
+        cell.textLabel.text = ( ![[trip objectForKey:@"title"] isEqualToString:@""] ) ? [trip objectForKey:@"title"] : @"< no description >";
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@   %@", [trip tr_dateToString], [trip tr_totalDistanceString]];
         return cell;
         
     } else {

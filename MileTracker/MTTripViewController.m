@@ -12,8 +12,13 @@
 #import "MTSignUpViewController.h"
 #import "UnsyncedTrip.h"
 #import "Reachability.h"
+#import "PFObject+Trip.h"
 
-@interface MTTripViewController ()
+@interface MTTripViewController () {
+    float totalDistance;
+    float totalDistanceDisplay;
+    BOOL shouldResetScroll;
+}
 
 - (void)showCannotSaveAlert;
 - (void)dateOrTimeFieldTouched:(UITextField *)touchedField;
@@ -26,6 +31,12 @@
 @property (nonatomic, strong) Reachability *networkReachability;
 @property (nonatomic, strong) MBProgressHUD *hud;
 
+@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) CLLocation *startLocation;
+@property (strong, nonatomic) CLLocation *endLocation;
+@property (strong, nonatomic) NSNumber *totalMileage;
+@property (assign, nonatomic) float gpsStartOdometer;
+
 @end
 
 @implementation MTTripViewController
@@ -35,7 +46,6 @@
 @synthesize selectedDate;
 @synthesize originalCenter, activeTextField, scrollView;
 @synthesize trip, numberFormatter, networkReachability;
-@synthesize actionSheetPicker = _actionSheetPicker;
 @synthesize hud=_hud;
 
 - (void)viewDidLoad
@@ -43,42 +53,60 @@
     [super viewDidLoad];
     
     [self.view setBackgroundColor:[MTViewUtils backGroundColor]];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    [_trackButton setImage:[UIImage imageNamed:@"gps_white.png"] forState:UIControlStateNormal];
+//    [_trackButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
     
     if ( !self.numberFormatter ) {
         self.numberFormatter = [[NSNumberFormatter alloc] init];
         [self.numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
     }
 
-    [self registerForKeyboardNotifications];
-
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
                                initWithTarget:self
                                action:@selector(dismissKeyboard)];
 
     [self.scrollView addGestureRecognizer:tap];
+    shouldResetScroll = NO;
+    
+    UIDatePicker *datePicker = [[UIDatePicker alloc] init];
+    self.dateField.inputView = datePicker;
+    [datePicker addTarget:self action:@selector(updateDate:) forControlEvents:UIControlEventValueChanged];
     
     self.networkReachability = [Reachability reachabilityForInternetConnection];
     
-//    if (![PFUser currentUser]) { // No user logged in
-//        [[NSNotificationCenter defaultCenter] postNotificationName:kLaunchLoginScreenNotification object:self];
-//    }
-    
+    if (nil == _locationManager)
+        _locationManager = [[CLLocationManager alloc] init];
+    _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    _locationManager.delegate = self;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
+    [self registerForKeyboardNotifications];
+    
     self.originalCenter = self.view.center;
-        
+    
     // if editing
     if (self.trip) {
         self.titleField.text = [self.trip objectForKey:@"title"];
         self.dateField.text = [self.trip tr_dateToString];
         self.startOdometerField.text = [self.trip tr_startOdometerToString];
         self.endOdometerField.text = [self.trip tr_endOdometerToString];
+        self.distanceLabel.text = [self.trip tr_totalDistanceString];
     }
 
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    
+    [self deregisterFromKeyboardNotifications];
+    
+    [super viewWillDisappear:animated];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -89,16 +117,56 @@
 
 - (void)showCannotSaveAlert
 {
-    UIAlertView *cannotSaveAlert = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"You must enter a date and destination" delegate:nil cancelButtonTitle:@"Duh!" otherButtonTitles:nil];
+    UIAlertView *cannotSaveAlert = [[UIAlertView alloc] initWithTitle:@"Uh oh..." message:@"You must enter a date or destination" delegate:nil cancelButtonTitle:@"Duh!" otherButtonTitles:nil];
     [cannotSaveAlert show];
+}
+
+- (IBAction)dateFieldTouched:(id)sender
+{
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+	df.dateStyle = NSDateFormatterMediumStyle;
+	self.dateField.text = [NSString stringWithFormat:@"%@", [df stringFromDate:[NSDate date]]];
+}
+
+- (IBAction)updateDate:(id)sender
+{
+    UIDatePicker *dp = (UIDatePicker *)sender;
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+	df.dateStyle = NSDateFormatterMediumStyle;
+	self.dateField.text = [NSString stringWithFormat:@"%@", [df stringFromDate:dp.date]];
+}
+
+- (IBAction)trackButtonTouched:(id)sender
+{
+    if ( [_trackButton.currentTitle isEqualToString:@"  Start Tracking"] ) {
+        
+//        UIAlertView *problemAlert = [[UIAlertView alloc] initWithTitle:@"GPS not available"
+//                                                               message:@"GPS tracking is turned off. If you would like, you can turn it back on again in settings."
+//                                                              delegate:nil
+//                                                     cancelButtonTitle:@"OK"
+//                                                     otherButtonTitles:nil];
+//        [problemAlert show];
+        
+        
+        self.startOdometerField.text = @"";
+        self.endOdometerField.text = @"";
+        
+        [_trackButton setTitle:@"  Stop Tracking" forState:UIControlStateNormal];
+        // start tracking
+        [_trackButton startFlashing];
+        _startLocation = nil;
+        [_locationManager startUpdatingLocation];
+        
+    } else {
+        [_locationManager stopUpdatingLocation];
+        TFLog(@"stop updating. total dist = %f", totalDistance);
+        [_trackButton setTitle:@"  Start Tracking" forState:UIControlStateNormal];
+        [_trackButton stopFlashing];
+    }
 }
 
 - (IBAction)saveButtonTouched:(id)sender
 {
-//    if (![PFUser currentUser]) { // No user logged in
-//        [[NSNotificationCenter defaultCenter] postNotificationName:kLaunchLoginScreenNotification object:self];
-//    }
-    
     // dismiss keyboard
     [self.titleField resignFirstResponder];
     [self.dateField resignFirstResponder];
@@ -116,7 +184,7 @@
         [self.trip voidAddedLastTime];
     }
     
-    if ( (self.dateField.text && self.titleField.text) ) {
+    if ( ![self.dateField.text isEqualToString:@""] || ![self.titleField.text isEqualToString:@""] ) {
         
         NSNumber *start = [self.numberFormatter numberFromString:self.startOdometerField.text];
         if (!start) start = [NSNumber numberWithInt:0];
@@ -132,8 +200,8 @@
         NSDate *tripDate = self.selectedDate ? self.selectedDate : [self.trip objectForKey:@"date"];
         NSString *objectId = (self.trip) ? self.trip.objectId : @"";
         
-        NSArray *data = [NSArray arrayWithObjects:self.titleField.text, tripDate, start, end, currentUser, nil];
-        NSArray *keys = [NSArray arrayWithObjects:@"title", @"date", @"startOdometer", @"endOdometer", @"user", nil];
+        NSArray *data = [NSArray arrayWithObjects:self.titleField.text, tripDate, start, end, currentUser, [NSNumber numberWithFloat:totalDistance], nil];
+        NSArray *keys = [NSArray arrayWithObjects:@"title", @"date", @"startOdometer", @"endOdometer", @"user", @"distance", nil];
         NSMutableDictionary *tripData = [NSDictionary dictionaryWithObjects:data forKeys:keys];
         
         PFObject *tripToSave = [PFObject tr_objectWithData:tripData objectId:objectId];
@@ -266,34 +334,6 @@
     }
 }
 
-- (void)dateOrTimeFieldTouched:(UITextField *)touchedField
-{
-    [self.titleField resignFirstResponder];
-    [self.startOdometerField resignFirstResponder];
-    [self.endOdometerField resignFirstResponder];
-    
-    NSDate *pickerDate = self.trip ? [self.trip objectForKey:@"date"] : [NSDate date];
-    _actionSheetPicker = [[ActionSheetDatePicker alloc] initWithTitle:@""
-                                                       datePickerMode:UIDatePickerModeDate
-                                                         selectedDate:pickerDate
-                                                               target:self
-//                                                               action:@selector(dateWasSelected:element:)
-                                                               action:@selector(dateWasSelected:)
-                                                               origin:touchedField];
-    
-    [self.actionSheetPicker addCustomButtonWithTitle:@"Today" value:[NSDate date]];
-    [self.actionSheetPicker addCustomButtonWithTitle:@"Yesterday" value:[[NSDate date] TC_dateByAddingCalendarUnits:NSDayCalendarUnit amount:-1]];
-    self.actionSheetPicker.hideCancel = NO;
-    [self.actionSheetPicker showActionSheetPicker];
-}
-
-//- (void)dateWasSelected:(NSDate *)selDate element:(id)element
-//{
-//    self.selectedDate = selDate;
-//    UITextField *currentField = (UITextField *)element;
-//    currentField.text = [[[MTFormatting sharedUtility] dateFormatter] stringFromDate:selDate];
-//}
-
 - (void)dateWasSelected:(NSDictionary *)selectionObj
 {
     self.selectedDate = [selectionObj objectForKey:@"selectedDate"];
@@ -312,19 +352,37 @@
     return [gregorian dateFromComponents: components];
 }
 
+# pragma mark - Location Manager Delegate methods
+
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    TFLog(@"didUpdateLocations - locations: %@", locations);
+    
+    if (_startLocation == nil)
+        _startLocation = [locations lastObject];
+    
+    _gpsStartOdometer = [self.startOdometerField.text integerValue];
+    
+    CLLocationDistance distanceBetween = [[locations lastObject] distanceFromLocation:_startLocation];
+
+    float divisor = ( [[[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsLengthUnit]  isEqual: kUserDefaultsLengthUnitMile] ) ? 1609.344 : 1000.00;
+    NSString *endString = [NSString stringWithFormat:@"Total Distance: %d %@", (int)roundf(_gpsStartOdometer + (distanceBetween / divisor)), [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsLengthUnit]];
+    
+    self.distanceLabel.text = endString;
+    totalDistanceDisplay = distanceBetween / divisor;
+    totalDistance = distanceBetween;
+    
+    if ( [CLLocationManager deferredLocationUpdatesAvailable] )
+        [_locationManager allowDeferredLocationUpdatesUntilTraveled:CLLocationDistanceMax timeout:CLTimeIntervalMax];
+}
+
+-(void)locationManager:(CLLocationManager *)manager didFinishDeferredUpdatesWithError:(NSError *)error
+{
+    NSString *stringError = [NSString stringWithFormat:@"error: %@",[error description]];
+    TFLog(@"didFinishDeferredUpdatesWithError: %@", stringError);
+}
 
 # pragma mark - Text Field Delegate methods
-
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-    if ( textField == self.dateField ) {
-        [self dateOrTimeFieldTouched:textField];
-        
-        return false;
-    }
-    
-    return true;
-}
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
@@ -360,35 +418,39 @@
                                                  name:UIKeyboardWillHideNotification object:nil];    
 }
 
-- (void)keyboardWasShown:(NSNotification*)aNotification
-{
-    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad || ( [[UIDevice currentDevice] orientation] == UIDeviceOrientationPortrait || [[UIDevice currentDevice] orientation] == UIDeviceOrientationPortraitUpsideDown) ) {
-        return;
-    }
+- (void)deregisterFromKeyboardNotifications {
     
-    NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    CGRect bkgndRect = self.activeTextField.superview.frame;
-    bkgndRect.size.height += kbSize.height;
-    [self.activeTextField.superview setFrame:bkgndRect];
-    [scrollView setContentOffset:CGPointMake(0.0, self.activeTextField.frame.origin.y-50) animated:YES];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardDidHideNotification
+                                                  object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
+    
+}
+
+- (void)keyboardWasShown:(NSNotification*)notification
+{
+    NSDictionary* info = [notification userInfo];
+    CGSize keyboardSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    CGRect visibleRect = self.view.frame;
+    visibleRect.size.height -= keyboardSize.height;
+
+    if ( !CGRectContainsPoint(visibleRect, self.activeTextField.frame.origin) ){
+        CGPoint scrollPoint = CGPointMake(0.0, self.activeTextField.frame.origin.y - self.activeTextField.frame.size.height);
+        [scrollView setContentOffset:scrollPoint animated:YES];
+        shouldResetScroll = YES;
+    }
 }
 
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification
 {
-    if ( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
-        return;
+    if ( shouldResetScroll ) {
+        [self.scrollView setContentOffset:CGPointZero animated:YES];
+        shouldResetScroll = NO;
     }
-    
-    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-    contentInsets.top += 50;
-    scrollView.contentInset = contentInsets;
-    scrollView.scrollIndicatorInsets = contentInsets;
 }
 
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
-{
-    NSLog(@"didSelectViewController");
-}
 
 @end

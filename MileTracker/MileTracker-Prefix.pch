@@ -21,4 +21,6 @@
     #import "MTCoreDataController.h"
     #import "MBProgressHUD.h" 
     #import "PFObject+Trip.h"
+    #import "MTButton.h"
+    #import "TestFlight.h"
 #endif

@@ -38,6 +38,7 @@
     if ( deviceVersion < 7.0 ) {
         self.exportBtn.titleLabel.textColor = [UIColor blackColor];
     }
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 - (void)didReceiveMemoryWarning

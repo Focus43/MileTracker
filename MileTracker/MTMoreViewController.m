@@ -50,6 +50,13 @@
     
     [self.view setBackgroundColor:[MTViewUtils backGroundColor]];
     
+    // set defaults for unit settings and register actions for the switch events
+    _kilometerSwitch.on = NO;
+    _mileSwitch.on = YES;
+    [[NSUserDefaults standardUserDefaults] setValue:kUserDefaultsLengthUnitMile forKey:kUserDefaultsLengthUnit];
+    [_kilometerSwitch addTarget:self action:@selector(unitsChanged:) forControlEvents:UIControlEventValueChanged];
+    [_mileSwitch addTarget:self action:@selector(unitsChanged:) forControlEvents:UIControlEventValueChanged];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -173,6 +180,30 @@
 
 # pragma mark - action support methods
 
+- (void)unitsChanged:(UISwitch *)changedSwitch
+{
+    if ( changedSwitch == _mileSwitch ) {
+        if ( [_mileSwitch isOn] ) {
+            [_kilometerSwitch setOn:NO animated:YES];
+            [[NSUserDefaults standardUserDefaults] setValue:kUserDefaultsLengthUnitMile forKey:kUserDefaultsLengthUnit];
+        } else {
+            [_kilometerSwitch setOn:YES animated:YES];
+            [[NSUserDefaults standardUserDefaults] setValue:kUserDefaultsLengthUnitKilometer forKey:kUserDefaultsLengthUnit];
+        }
+    } else if ( changedSwitch == _kilometerSwitch ) {
+        if ( [_kilometerSwitch isOn] ) {
+            [_mileSwitch setOn:NO animated:YES];
+            [[NSUserDefaults standardUserDefaults] setValue:kUserDefaultsLengthUnitKilometer forKey:kUserDefaultsLengthUnit];
+        } else {
+            [_mileSwitch setOn:YES animated:YES];
+            [[NSUserDefaults standardUserDefaults] setValue:kUserDefaultsLengthUnitMile forKey:kUserDefaultsLengthUnit];
+        }
+    }
+    PFUser *user = [PFUser currentUser];
+    user[@"lengthUnit"] = [[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsLengthUnit];
+    [user saveInBackground];
+}
+
 - (void)logOut
 {
     NSString *messageString;
@@ -266,13 +297,17 @@
     [[tableView cellForRowAtIndexPath:indexPath] setSelected:NO];
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
-    UITableViewHeaderFooterView *view = [tableView headerViewForSection:section];
-//    view.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    view.backgroundColor = [UIColor redColor];
-    
-    return view;
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    header.textLabel.textColor = [UIColor whiteColor];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if (section == 0){
+        return 35;
+    }
+    return 25;
 }
 
 #pragma mark - Mail Compose View Controller delegate
