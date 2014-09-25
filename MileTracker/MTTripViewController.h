@@ -9,9 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 
-#import "ActionSheetPicker.h"
-
-@interface MTTripViewController : UIViewController <UITextFieldDelegate>
+@interface MTTripViewController : UIViewController <UITextFieldDelegate, CLLocationManagerDelegate, UIPickerViewDelegate>
 
 @property (nonatomic, strong) PFObject *trip;
 
@@ -19,14 +17,16 @@
 @property (strong, nonatomic) IBOutlet UITextField *dateField;
 @property (strong, nonatomic) IBOutlet UITextField *startOdometerField;
 @property (strong, nonatomic) IBOutlet UITextField *endOdometerField;
+@property (strong, nonatomic) IBOutlet UILabel *distanceLabel;
+@property (strong, nonatomic) IBOutlet MTButton *trackButton;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (strong, nonatomic) IBOutlet ADBannerView *adView;
 
-@property (nonatomic, retain) AbstractActionSheetPicker *actionSheetPicker;
 @property (nonatomic, strong) NSDate *selectedDate;
 
 @property (nonatomic, strong) NSNumberFormatter *numberFormatter;
 
+- (IBAction)dateFieldTouched:(id)sender;
 - (IBAction)saveButtonTouched:(id)sender;
+- (IBAction)trackButtonTouched:(id)sender;
 
 @end

@@ -118,7 +118,7 @@
                         NSLog(@"%@", [error localizedDescription]);
                     } else {
                         NSMutableString *writeString = [result objectForKey:@"data"];
-                        NSLog(@"result = %@", writeString);
+//                        NSLog(@"result = %@", writeString);
                         [self writeToDataFile:writeString];
                     }
                     

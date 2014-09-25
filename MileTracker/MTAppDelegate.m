@@ -12,7 +12,6 @@
 #import "MTUnsyncedTripValueTransformer.h"
 #import "MTSignUpViewController.h"
 #import "MTLoginViewController.h"
-#import <UbertestersSDK/Ubertesters.h>
 
 @interface MTAppDelegate ()
 
@@ -27,14 +26,18 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // ubertester suite
-//    [[Ubertesters shared] initialize];
+    [TestFlight takeOff:@"e890ad4f-7d98-4107-b332-52826a11b798"];
     
     [Parse setApplicationId:kMTAFParseAPIApplicationId clientKey:kMTAFParseAPIKey];
     
     // register transformer
     MTUnsyncedTripValueTransformer *transformer = [[MTUnsyncedTripValueTransformer alloc] init];
     [NSValueTransformer setValueTransformer:transformer forName:@"MTUnsyncedTripValueTransformer"];
+    
+    // check if default length unit
+    if ( ![[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsLengthUnit] ) {
+        [[NSUserDefaults standardUserDefaults] setValue:kUserDefaultsLengthUnitMile forKey:kUserDefaultsLengthUnit];
+    }
     
     // Notifications
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -67,12 +70,13 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    NSLog(@"applicationDidEnterBackground");
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-
+    NSLog(@"applicationWillEnterForeground");
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -85,6 +89,7 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    NSLog(@"applicationWillTerminate");
 }
 
 - (void) updateInterfaceWithReachability: (Reachability*) curReach
@@ -105,8 +110,8 @@ static NSString * const kMTAFParseAPIKey = @"YRQphUyGjtoTh9uowBnaezq3LAaWFhKx0gy
 // Called when user defaults are updated
 - (void)defaultsChanged:(NSNotification *)note
 {
-    NSUserDefaults *defaults = (NSUserDefaults *)[note object];
-    NSLog(@"Defaults updated: %@, %@, %@", [[defaults dictionaryRepresentation] objectForKey:kUserDefaultsSavingsKey], [[defaults dictionaryRepresentation] objectForKey:kUserDefaultsSavingsStringKey], [[defaults dictionaryRepresentation] objectForKey:kUserDefaultsTotalMilesKey]);
+//    NSUserDefaults *defaults = (NSUserDefaults *)[note object];
+//    NSLog(@"Defaults updated: %@", [defaults dictionaryRepresentation]);
 }
 
 // Called  whenever total mileage has been found.

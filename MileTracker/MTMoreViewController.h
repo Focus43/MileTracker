@@ -13,5 +13,7 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *savingsLabel;
 @property (strong, nonatomic) IBOutlet UILabel *loginLabel;
+@property (strong, nonatomic) IBOutlet UISwitch *kilometerSwitch;
+@property (strong, nonatomic) IBOutlet UISwitch *mileSwitch;
 
 @end

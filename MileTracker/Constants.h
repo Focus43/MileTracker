@@ -18,6 +18,9 @@
 #define kUserDefaultsSavingsKey @"savingsToDate"
 #define kUserDefaultsSavingsStringKey @"savingsToDateString"
 #define kUserDefaultsTotalMilesKey @"mileageToDate"
+#define kUserDefaultsLengthUnit @"lengthUnit"
+#define kUserDefaultsLengthUnitKilometer @"kilometers"
+#define kUserDefaultsLengthUnitMile @"miles"
 
 #define kDollarPerMileTaxDeduction 0.565
 

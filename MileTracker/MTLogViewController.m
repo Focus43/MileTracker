@@ -7,7 +7,6 @@
 //
 
 #import "MTLogViewController.h"
-#import "MTLogTableViewCell.h"
 #import "MTTripViewController.h"
 #import "Reachability.h"
 #import "UnsyncedTrip.h"
@@ -33,7 +32,6 @@ const int kNoTripsCellTag = 5678;
 - (PFQuery *)queryForTable;
 - (void)refreshTable;
 - (void)syncWithUnsavedData;
-- (void)displayTallyTripsOffer;
 - (UITableViewCell *)loadMoreTripsCell:(NSIndexPath *)indexPath;
 - (UITableViewCell *)noTripsCell;
 
@@ -77,7 +75,6 @@ const int kNoTripsCellTag = 5678;
     
     _loadMoreIdxPath = [NSIndexPath indexPathForRow:10 inSection:0];
     
-//    [self loadTrips];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -92,8 +89,8 @@ const int kNoTripsCellTag = 5678;
         MTTripViewController *tripDetailViewController = segue.destinationViewController;
         
         NSIndexPath *indexPath;
-        if ( [sender isKindOfClass:[MTLogTableViewCell class]] ) {
-            MTLogTableViewCell *cell = (MTLogTableViewCell *)sender;
+        if ( [sender isKindOfClass:[UITableViewCell class]] ) {
+            UITableViewCell *cell = (UITableViewCell *)sender;
             indexPath = [self.tableView indexPathForCell:cell];
         } else {
             indexPath = (NSIndexPath *)sender; 
@@ -142,12 +139,12 @@ const int kNoTripsCellTag = 5678;
             if (!error) {
                 [self.tableView reloadData];
                 
-                if (self.trips.count > 0 ) {
-                    [self displayTallyTripsOffer];
-                } else {
-                    NSNumber *tallyDone = [NSNumber numberWithBool:TRUE];
-                    [[NSUserDefaults standardUserDefaults] setObject:tallyDone forKey:kUserDefaultsInitialTallyDoneKey];
-                }
+//                if (self.trips.count > 0 ) {
+//                    [self displayTallyTripsOffer];
+//                } else {
+//                    NSNumber *tallyDone = [NSNumber numberWithBool:TRUE];
+//                    [[NSUserDefaults standardUserDefaults] setObject:tallyDone forKey:kUserDefaultsInitialTallyDoneKey];
+//                }
                 
                 NSIndexPath *idxPath = [NSIndexPath indexPathForRow:[objects count]-9 inSection:0];
                 [self.tableView scrollToRowAtIndexPath:idxPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
@@ -338,19 +335,19 @@ const int kNoTripsCellTag = 5678;
     return cell;
 }
 
-- (void)displayTallyTripsOffer
-{
-    if ( ![[[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsInitialTallyDoneKey] boolValue] ) {
-        [[[UIAlertView alloc] initWithTitle:@"New Feature!"
-                                    message:@"The app now tracks your total tax deduction for the year. To get you up to date, your trips need to be tallied up. That can be done now, or you can go to 'More', and take care of it later"
-                                   delegate: self
-                          cancelButtonTitle:@"I'll do it later"
-                          otherButtonTitles:@"Do it now!", nil] show];
-        
-        NSNumber *tallyDone = [NSNumber numberWithBool:TRUE];
-        [[NSUserDefaults standardUserDefaults] setObject:tallyDone forKey:kUserDefaultsInitialTallyDoneKey];
-    }
-}
+//- (void)displayTallyTripsOffer
+//{
+//    if ( ![[[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsInitialTallyDoneKey] boolValue] ) {
+//        [[[UIAlertView alloc] initWithTitle:@"New Feature!"
+//                                    message:@"The app now tracks your total tax deduction for the year. To get you up to date, your trips need to be tallied up. That can be done now, or you can go to 'More', and take care of it later"
+//                                   delegate: self
+//                          cancelButtonTitle:@"I'll do it later"
+//                          otherButtonTitles:@"Do it now!", nil] show];
+//        
+//        NSNumber *tallyDone = [NSNumber numberWithBool:TRUE];
+//        [[NSUserDefaults standardUserDefaults] setObject:tallyDone forKey:kUserDefaultsInitialTallyDoneKey];
+//    }
+//}
 
 #pragma mark - Table view data source
 
@@ -385,18 +382,17 @@ const int kNoTripsCellTag = 5678;
     
     if ( indexPath.row < [self.trips count] ) {
         
-        MTLogTableViewCell *cell = nil;
+        UITableViewCell *cell = nil;
         static NSString *CellIdentifier = kTripCellIdentifier;
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
         if (cell == nil) {
-            cell = [[MTLogTableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
         }
         
         PFObject *trip = [self.trips objectAtIndex:indexPath.row];
-        cell.titleLabel.text = [trip objectForKey:@"title"];
-        cell.dateLabel.text = [trip tr_dateToString];
-        cell.distanceLabel.text = [trip tr_totalDistanceString];
+        cell.textLabel.text = ( ![[trip objectForKey:@"title"] isEqualToString:@""] ) ? [trip objectForKey:@"title"] : @"< no description >";
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@   %@", [trip tr_dateToString], [trip tr_totalDistanceString]];
         return cell;
         
     } else {
@@ -469,13 +465,12 @@ const int kNoTripsCellTag = 5678;
 
 # pragma mark - Alert View Delegate methods
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    NSLog(@"buttonIndex = %d", buttonIndex);
-    if ( buttonIndex == 1 ) {
-        [MTTotalMileage initiateSavingsUntilNowCalc];
-    }
-}
+//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+//{
+//    if ( buttonIndex == 1 ) {
+//        [MTTotalMileage initiateSavingsUntilNowCalc];
+//    }
+//}
 
 
 

@@ -38,6 +38,22 @@
     if ( deviceVersion < 7.0 ) {
         self.exportBtn.titleLabel.textColor = [UIColor blackColor];
     }
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tap];
+    
+    UIDatePicker *startDatePicker = [[UIDatePicker alloc] init];
+    startDatePicker.datePickerMode = UIDatePickerModeDate;
+    self.startDateField.inputView = startDatePicker;
+    UIDatePicker *endDatePicker = [[UIDatePicker alloc] init];
+    endDatePicker.datePickerMode = UIDatePickerModeDate;
+    self.endDateField.inputView = endDatePicker;
+    [startDatePicker addTarget:self action:@selector(updateDate:) forControlEvents:UIControlEventValueChanged];
+    [endDatePicker addTarget:self action:@selector(updateDate:) forControlEvents:UIControlEventValueChanged];
 }
 
 - (void)didReceiveMemoryWarning
@@ -112,45 +128,47 @@
     }];
 }
 
-- (void)dateOrTimeFieldTouched:(UITextField *)touchedField
+- (IBAction)updateDate:(id)sender
 {
-    NSDate *pickerDate = [NSDate date];
+    UIDatePicker *dp = (UIDatePicker *)sender;
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+	df.dateStyle = NSDateFormatterMediumStyle;
+	self.activeTextField.text = [NSString stringWithFormat:@"%@", [df stringFromDate:dp.date]];
     
-    _actionSheetPicker = [[ActionSheetDatePicker alloc] initWithTitle:@""
-                                                       datePickerMode:UIDatePickerModeDate
-                                                         selectedDate:pickerDate
-                                                               target:self
-                                                               action:@selector(dateWasSelected:)
-                                                               origin:touchedField];
-
-    [self.actionSheetPicker addCustomButtonWithTitle:@"Today" value:[NSDate date]];
-    self.actionSheetPicker.hideCancel = NO;
-    [self.actionSheetPicker showActionSheetPicker];
+    if ( self.activeTextField == self.startDateField ) {
+        self.startDate = dp.date;
+    } else if ( self.activeTextField == self.endDateField ) {
+        self.endDate = dp.date;
+    }
 }
 
-
-- (void)dateWasSelected:(NSDictionary *)selectionObj
+- (IBAction)dateFieldTouched:(id)sender;
 {
-    UITextField *currentField = (UITextField *)[selectionObj objectForKey:@"origin"];
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+	df.dateStyle = NSDateFormatterMediumStyle;
     
-    if ( currentField == self.startDateField ) {
-        self.startDate = [selectionObj objectForKey:@"selectedDate"];
-        self.startDateField.text = [[[MTFormatting sharedUtility] dateFormatter] stringFromDate:self.startDate];
-    } else if ( currentField == self.endDateField ) {
-        self.endDate = [selectionObj objectForKey:@"selectedDate"];
-        self.endDateField.text = [[[MTFormatting sharedUtility] dateFormatter] stringFromDate:self.endDate];
+    if ( self.activeTextField == self.startDateField ) {
+        self.startDate = [NSDate date];
+        self.startDateField.text = [NSString stringWithFormat:@"%@", [df stringFromDate:self.startDate]];
+    } else if ( self.activeTextField == self.endDateField ) {
+        self.endDate = self.startDate ? [self.startDate dateByAddingTimeInterval:60*60*24] : [[NSDate date] dateByAddingTimeInterval:60*60*24];
+        self.endDateField.text = [NSString stringWithFormat:@"%@", [df stringFromDate:self.endDate]];
     }
+    
+    // hack to fix font bug
+    self.activeTextField.font = [UIFont fontWithName:@"Helvetica Neue" size:17];
+}
+
+- (void)dismissKeyboard
+{
+    [self.activeTextField resignFirstResponder];
 }
 
 # pragma mark - Text Field Delegate methods
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    if ( textField == self.startDateField || textField == self.endDateField ) {
-        [self dateOrTimeFieldTouched:textField];
-        
-        return false;
-    }
+    self.activeTextField = textField;
     
     return true;
 }
@@ -160,10 +178,10 @@
     self.activeTextField = textField;
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField
-{
-    self.activeTextField = nil;
-}
+//- (void)textFieldDidEndEditing:(UITextField *)textField
+//{
+//    self.activeTextField = nil;
+//}
 
 -(BOOL) textFieldShouldReturn: (UITextField *) textField
 {
