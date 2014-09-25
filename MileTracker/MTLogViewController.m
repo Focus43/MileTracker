@@ -32,7 +32,6 @@ const int kNoTripsCellTag = 5678;
 - (PFQuery *)queryForTable;
 - (void)refreshTable;
 - (void)syncWithUnsavedData;
-- (void)displayTallyTripsOffer;
 - (UITableViewCell *)loadMoreTripsCell:(NSIndexPath *)indexPath;
 - (UITableViewCell *)noTripsCell;
 
@@ -140,12 +139,12 @@ const int kNoTripsCellTag = 5678;
             if (!error) {
                 [self.tableView reloadData];
                 
-                if (self.trips.count > 0 ) {
-                    [self displayTallyTripsOffer];
-                } else {
-                    NSNumber *tallyDone = [NSNumber numberWithBool:TRUE];
-                    [[NSUserDefaults standardUserDefaults] setObject:tallyDone forKey:kUserDefaultsInitialTallyDoneKey];
-                }
+//                if (self.trips.count > 0 ) {
+//                    [self displayTallyTripsOffer];
+//                } else {
+//                    NSNumber *tallyDone = [NSNumber numberWithBool:TRUE];
+//                    [[NSUserDefaults standardUserDefaults] setObject:tallyDone forKey:kUserDefaultsInitialTallyDoneKey];
+//                }
                 
                 NSIndexPath *idxPath = [NSIndexPath indexPathForRow:[objects count]-9 inSection:0];
                 [self.tableView scrollToRowAtIndexPath:idxPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
@@ -336,19 +335,19 @@ const int kNoTripsCellTag = 5678;
     return cell;
 }
 
-- (void)displayTallyTripsOffer
-{
-    if ( ![[[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsInitialTallyDoneKey] boolValue] ) {
-        [[[UIAlertView alloc] initWithTitle:@"New Feature!"
-                                    message:@"The app now tracks your total tax deduction for the year. To get you up to date, your trips need to be tallied up. That can be done now, or you can go to 'More', and take care of it later"
-                                   delegate: self
-                          cancelButtonTitle:@"I'll do it later"
-                          otherButtonTitles:@"Do it now!", nil] show];
-        
-        NSNumber *tallyDone = [NSNumber numberWithBool:TRUE];
-        [[NSUserDefaults standardUserDefaults] setObject:tallyDone forKey:kUserDefaultsInitialTallyDoneKey];
-    }
-}
+//- (void)displayTallyTripsOffer
+//{
+//    if ( ![[[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsInitialTallyDoneKey] boolValue] ) {
+//        [[[UIAlertView alloc] initWithTitle:@"New Feature!"
+//                                    message:@"The app now tracks your total tax deduction for the year. To get you up to date, your trips need to be tallied up. That can be done now, or you can go to 'More', and take care of it later"
+//                                   delegate: self
+//                          cancelButtonTitle:@"I'll do it later"
+//                          otherButtonTitles:@"Do it now!", nil] show];
+//        
+//        NSNumber *tallyDone = [NSNumber numberWithBool:TRUE];
+//        [[NSUserDefaults standardUserDefaults] setObject:tallyDone forKey:kUserDefaultsInitialTallyDoneKey];
+//    }
+//}
 
 #pragma mark - Table view data source
 
@@ -466,13 +465,12 @@ const int kNoTripsCellTag = 5678;
 
 # pragma mark - Alert View Delegate methods
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    NSLog(@"buttonIndex = %d", buttonIndex);
-    if ( buttonIndex == 1 ) {
-        [MTTotalMileage initiateSavingsUntilNowCalc];
-    }
-}
+//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+//{
+//    if ( buttonIndex == 1 ) {
+//        [MTTotalMileage initiateSavingsUntilNowCalc];
+//    }
+//}
 
 
 

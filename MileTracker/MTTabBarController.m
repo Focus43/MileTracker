@@ -15,6 +15,9 @@
 
 @property (nonatomic, strong)ADBannerView *banner;
 @property (nonatomic,assign) BOOL bannerIsVisible;
+@property (nonatomic, strong) NSLayoutConstraint *stickToBottom;
+@property (nonatomic, assign) float constraintConstant;
+@property (nonatomic, assign) float bannerHeight;
 
 @end
 
@@ -33,19 +36,41 @@
 {
     [super viewDidLoad];
     
-    self.tabBar.barStyle = UIBarStyleBlack;
-    self.tabBar.translucent = NO;
-    self.tabBar.tintColor = [UIColor whiteColor];
+    if ( floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1 ) {
+        self.tabBar.barStyle = UIBarStyleBlack;
+        self.tabBar.translucent = NO;
+        self.tabBar.tintColor = [UIColor whiteColor];
+    }
     
 	// Add ad banner
     _banner = [[ADBannerView alloc] initWithAdType:ADAdTypeBanner];
-    _banner.frame = CGRectMake(0.0, [UIScreen mainScreen].bounds.size.height - 50, _banner.frame.size.width, _banner.frame.size.height);
+    [_banner setTranslatesAutoresizingMaskIntoConstraints:NO];
     _banner.delegate = self;
     
-    [_banner setBackgroundColor:[MTViewUtils backGroundColor]];
+    [_banner setBackgroundColor:[UIColor clearColor]];
     
     [self.view insertSubview:_banner belowSubview:self.tabBar];
-   
+    
+//    NSOperatingSystemVersion ios8_0_0 = (NSOperatingSystemVersion){8, 0, 0};
+//    if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:ios8_0_0]) {
+    if ( [[[UIDevice currentDevice] systemVersion] intValue] < 8 ) {
+        _constraintConstant = -1 * (self.tabBar.frame.size.height);
+    } else {
+        _constraintConstant = _banner.frame.size.height - self.tabBar.frame.size.height;
+    }
+    
+    // pin sides to superview
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[_banner]-0-|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_banner)]];
+    // pin to bottom
+    _stickToBottom = [NSLayoutConstraint constraintWithItem:_banner
+                                                  attribute:NSLayoutAttributeBottom
+                                                  relatedBy:NSLayoutRelationEqual
+                                                     toItem:self.tabBar
+                                                  attribute:NSLayoutAttributeBottom
+                                                 multiplier:1.0
+                                                   constant:_constraintConstant];
+    [self.view addConstraint:_stickToBottom];
+    [self.view layoutIfNeeded];
     self.bannerIsVisible = NO;
 }
 
@@ -55,50 +80,28 @@
     
 }
 
-
-- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    CGFloat dy;
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    
-    if (UIInterfaceOrientationIsLandscape(toInterfaceOrientation)) {
-        
-        _banner.currentContentSizeIdentifier = ADBannerContentSizeIdentifier480x32;
-        
-        int orientationDiff = orientation - toInterfaceOrientation;
-        
-        if ( (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) && (abs(orientationDiff) == 1) ) {
-                dy = 0;
-        } else {
-            
-            if ( [[UIDevice currentDevice].model isEqualToString:@"iPhone"] ) {
-                dy = -([UIScreen mainScreen].bounds.size.height - [UIScreen mainScreen].bounds.size.width-18);
-            } else {
-                dy = -([UIScreen mainScreen].bounds.size.height - [UIScreen mainScreen].bounds.size.width);
-            }
-
-        }
-        
-    } else {
-        
-        _banner.currentContentSizeIdentifier = ADBannerContentSizeIdentifier320x50;
-        
-        if ( [[UIDevice currentDevice].model isEqualToString:@"iPhone"] ) {
-            dy = [UIScreen mainScreen].bounds.size.height - [UIScreen mainScreen].bounds.size.width-18;
-        } else {
-            dy = [UIScreen mainScreen].bounds.size.height - [UIScreen mainScreen].bounds.size.width;
-        }
-        
-    }
-    
-    _banner.frame = CGRectOffset(_banner.frame, 0.0, dy);
-    
-}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+// Hack to deal w ad changing size in ios7 and not ios8
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    _bannerHeight = _banner.frame.size.height;
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    if ( _banner.frame.size.height != _bannerHeight ) {
+        
+        _stickToBottom.constant += _bannerHeight - _banner.frame.size.height;
+        
+        [UIView animateWithDuration:0.25 animations:^{
+            [self.view layoutIfNeeded];
+        }];
+    }
 }
 
 
@@ -107,12 +110,10 @@
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner
 {
     if (!self.bannerIsVisible) {
+        _stickToBottom.constant = _constraintConstant - _banner.frame.size.height;
+        
         [UIView animateWithDuration:1 animations:^{
-            if ( [[UIDevice currentDevice].model isEqualToString:@"iPhone"] ) {
-                banner.frame = CGRectOffset(banner.frame, 0, -49);
-            } else {
-                banner.frame = CGRectOffset(banner.frame, 0, -66);
-            }
+            [self.view layoutIfNeeded];
         }];
         self.bannerIsVisible = YES;
     }
@@ -121,12 +122,10 @@
 - (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
 {
     if (self.bannerIsVisible) {
+        _stickToBottom.constant = _constraintConstant;
+        
         [UIView animateWithDuration:1 animations:^{
-            if ( [[UIDevice currentDevice].model isEqualToString:@"iPhone"] ) {
-                banner.frame = CGRectOffset(banner.frame, 0, 50);
-            } else {
-                banner.frame = CGRectOffset(banner.frame, 0, 66);
-            }
+            [self.view layoutIfNeeded];
         }];
         self.bannerIsVisible = NO;
     }

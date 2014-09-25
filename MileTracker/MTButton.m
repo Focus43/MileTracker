@@ -49,7 +49,7 @@
         [pulseAnimation setRepeatCount:HUGE_VAL];
         [pulseAnimation setAutoreverses:YES];
         [pulseAnimation setFromValue:@(0.1)];
-        [pulseAnimation setToValue:@(1)];
+        [pulseAnimation setToValue:@(1.0)];
         [pulseAnimation setRemovedOnCompletion:YES];
     }
     

@@ -26,7 +26,7 @@
     
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithCapacity:0];
     
-    if ( [data isKindOfClass:[PFObject class]]) {
+    if ( [data isKindOfClass:[PFObject class]] ) {
         for (NSString * key in [data allKeys]) {
             [dataDict  setObject:data[key] forKey:key];
         }
@@ -115,12 +115,20 @@
 
 - (NSString *)tr_endOdometerToString
 {
-    return [self tr_decimalToString:[self objectForKey:@"endOdometer"]];
+    if ( [[self objectForKey:@"endOdometer"] integerValue] == 0 ) {
+        return @"";
+    } else {
+        return [self tr_decimalToString:[self objectForKey:@"endOdometer"]];
+    }
 }
 
 - (NSString *)tr_startOdometerToString
 {
-    return [self tr_decimalToString:[self objectForKey:@"startOdometer"]];
+    if ( [[self objectForKey:@"startOdometer"] integerValue] == 0 ) {
+        return @"";
+    } else {
+        return [self tr_decimalToString:[self objectForKey:@"startOdometer"]];
+    }
 }
 
 - (NSNumber *)tr_totalTripDistance
@@ -137,7 +145,7 @@
 {
     NSString *distString = @"";
     
-    if ( [self objectForKey:@"distance"] ) {
+    if ( [self objectForKey:@"distance"] && ![(NSNumber *)[self objectForKey:@"distance"] isEqualToNumber:[NSNumber numberWithInt:-1]] ) {
         
         float divisor = ( [[[NSUserDefaults standardUserDefaults] objectForKey:kUserDefaultsLengthUnit]  isEqual: kUserDefaultsLengthUnitMile] ) ? 1609.344 : 1000.00;
         

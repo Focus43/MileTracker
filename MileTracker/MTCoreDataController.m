@@ -14,6 +14,9 @@
 @property (strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+- (NSURL *)applicationIncompatibleStoresDirectory;
+- (NSString *)nameForIncompatibleStore;
+
 @end
 
 @implementation MTCoreDataController
@@ -85,38 +88,36 @@
     }
     
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:kUnsyncedTripEntityName];
-    
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption, [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
     NSError *error = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+    
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
         
-        // TODO: handle error correctly!
+        NSFileManager *fm = [NSFileManager defaultManager];
         
-        /*
-         Replace this implementation with code to handle the error appropriately.
-         
-         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-         
-         Typical reasons for an error here include:
-         * The persistent store is not accessible;
-         * The schema for the persistent store is incompatible with current managed object model.
-         Check the error message to determine what the actual problem was.
-         
-         
-         If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
-         
-         If you encounter schema incompatibility errors during development, you can reduce their frequency by:
-         * Simply deleting the existing store:
-         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
-         
-         * Performing automatic lightweight migration by passing the following dictionary as the options parameter:
-         [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption, [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
-         
-         Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
-         
-         */
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-        abort();
+        // Move Incompatible Store
+        if ([fm fileExistsAtPath:[storeURL path]]) {
+            NSURL *corruptURL = [[self applicationIncompatibleStoresDirectory] URLByAppendingPathComponent:[self nameForIncompatibleStore]];
+            
+            // Move Corrupt Store
+            NSError *errorMoveStore = nil;
+            [fm moveItemAtURL:storeURL toURL:corruptURL error:&errorMoveStore];
+            
+            if (errorMoveStore) {
+                NSLog(@"Unable to move corrupt store.");
+            }
+        }
+        
+        NSError *errorAddingStore = nil;
+        if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&errorAddingStore]) {
+            NSLog(@"Unable to create persistent store after recovery. %@, %@", errorAddingStore, errorAddingStore.localizedDescription);
+            
+            NSString *title = @"Warning";
+            NSString *message = @"A serious application error occurred while TripTrax tried to read your data. Please contact support for help.";
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alertView show];
+        }
     }
     
     return _persistentStoreCoordinator;
@@ -130,5 +131,35 @@
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
+- (NSURL *)applicationIncompatibleStoresDirectory
+{
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSURL *URL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Incompatible"];
+    
+    if (![fm fileExistsAtPath:[URL path]]) {
+        NSError *error = nil;
+        [fm createDirectoryAtURL:URL withIntermediateDirectories:YES attributes:nil error:&error];
+        
+        if (error) {
+            NSLog(@"Unable to create directory for corrupt data stores.");
+            
+            return nil;
+        }
+    }
+    
+    return URL;
+}
+
+- (NSString *)nameForIncompatibleStore
+{
+    // Initialize Date Formatter
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    
+    // Configure Date Formatter
+    [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd-HH-mm-ss"];
+    
+    return [NSString stringWithFormat:@"%@.sqlite", [dateFormatter stringFromDate:[NSDate date]]];
+}
 
 @end

@@ -7,17 +7,16 @@
 //
 
 #import "MTReportsViewController.h"
-#import "ActionSheetPicker.h"
 
 @interface MTDateRangeViewController : UIViewController <UITextFieldDelegate>
 
 @property (strong, nonatomic) IBOutlet UITextField *startDateField;
 @property (strong, nonatomic) IBOutlet UITextField *endDateField;
 @property (strong, nonatomic) IBOutlet MTButton *exportBtn;
-@property (nonatomic, retain) AbstractActionSheetPicker *actionSheetPicker;
 @property (nonatomic, strong) NSDate *startDate;
 @property (nonatomic, strong) NSDate *endDate;
 
 - (IBAction)exportButtonTouched:(id)sender;
+- (IBAction)dateFieldTouched:(id)sender;
 
 @end

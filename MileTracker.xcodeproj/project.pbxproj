@@ -14,8 +14,6 @@
 		E31BACDD1822D42900893F75 /* skip_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E31BACDB1822D42900893F75 /* skip_button@2x.png */; };
 		E31BACDE1822D42900893F75 /* skip_button.png in Resources */ = {isa = PBXBuildFile; fileRef = E31BACDC1822D42900893F75 /* skip_button.png */; };
 		E326B72D168B71CF0041B755 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E326B71F168B6FBC0041B755 /* CoreData.framework */; };
-		E326B743168CF00C0041B755 /* AbstractActionSheetPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = E326B73A168CF00C0041B755 /* AbstractActionSheetPicker.m */; };
-		E326B744168CF00C0041B755 /* ActionSheetDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = E326B73C168CF00C0041B755 /* ActionSheetDatePicker.m */; };
 		E32846841743EC03000A66A7 /* MTTotalMileage.m in Sources */ = {isa = PBXBuildFile; fileRef = E32846831743EC03000A66A7 /* MTTotalMileage.m */; };
 		E328914218D21C6800417232 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E328914118D21C6800417232 /* CoreImage.framework */; };
 		E328914418D21C7D00417232 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E328914318D21C7D00417232 /* CoreTelephony.framework */; };
@@ -38,7 +36,6 @@
 		E34E45A016A22DDA00C51E67 /* UnsyncedTrip.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E34E459E16A22DD900C51E67 /* UnsyncedTrip.xcdatamodeld */; };
 		E3546C0A19B7E2980038A0E5 /* background@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = E3546C0919B7E2980038A0E5 /* background@2X.png */; };
 		E359195B1981B65300A19A40 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E336B9AE167B6E76009A03EF /* Foundation.framework */; };
-		E35E124B168CF31B0085EBA2 /* NSDate+TCUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E35E124A168CF31B0085EBA2 /* NSDate+TCUtils.m */; };
 		E35E125B16921B290085EBA2 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E35E125A16921B290085EBA2 /* Social.framework */; };
 		E35E125D16921B820085EBA2 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E35E125C16921B810085EBA2 /* libz.dylib */; };
 		E35E125F16921BA60085EBA2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E35E125E16921BA60085EBA2 /* CFNetwork.framework */; };
@@ -103,6 +100,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E30171B419D33622003D7851 /* UnsyncedTrip 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "UnsyncedTrip 2.xcdatamodel"; sourceTree = "<group>"; };
 		E31222CF16A4EB7B00B3BE95 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		E31222D016A4EB7B00B3BE95 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		E31222D216A6099300B3BE95 /* MTUnsyncedTripValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTUnsyncedTripValueTransformer.h; sourceTree = "<group>"; };
@@ -112,11 +110,6 @@
 		E31BACDB1822D42900893F75 /* skip_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "skip_button@2x.png"; sourceTree = "<group>"; };
 		E31BACDC1822D42900893F75 /* skip_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = skip_button.png; sourceTree = "<group>"; };
 		E326B71F168B6FBC0041B755 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		E326B737168CF00C0041B755 /* ActionSheetPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionSheetPicker.h; sourceTree = "<group>"; };
-		E326B739168CF00C0041B755 /* AbstractActionSheetPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractActionSheetPicker.h; sourceTree = "<group>"; };
-		E326B73A168CF00C0041B755 /* AbstractActionSheetPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractActionSheetPicker.m; sourceTree = "<group>"; };
-		E326B73B168CF00C0041B755 /* ActionSheetDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActionSheetDatePicker.h; sourceTree = "<group>"; };
-		E326B73C168CF00C0041B755 /* ActionSheetDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActionSheetDatePicker.m; sourceTree = "<group>"; };
 		E32846821743EC02000A66A7 /* MTTotalMileage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTotalMileage.h; sourceTree = "<group>"; };
 		E32846831743EC03000A66A7 /* MTTotalMileage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTotalMileage.m; sourceTree = "<group>"; };
 		E328914118D21C6800417232 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
@@ -150,8 +143,6 @@
 		E34E459316A225E000C51E67 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		E34E459F16A22DDA00C51E67 /* UnsyncedTrip.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UnsyncedTrip.xcdatamodel; sourceTree = "<group>"; };
 		E3546C0919B7E2980038A0E5 /* background@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2X.png"; sourceTree = "<group>"; };
-		E35E1249168CF31B0085EBA2 /* NSDate+TCUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+TCUtils.h"; sourceTree = "<group>"; };
-		E35E124A168CF31B0085EBA2 /* NSDate+TCUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+TCUtils.m"; sourceTree = "<group>"; };
 		E35E125A16921B290085EBA2 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		E35E125C16921B810085EBA2 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		E35E125E16921BA60085EBA2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -273,27 +264,6 @@
 				E3B10CEE16B1E24900FA6EF4 /* PFObject+Trip.m */,
 			);
 			name = "Models - Categories";
-			sourceTree = "<group>";
-		};
-		E326B738168CF00C0041B755 /* Pickers */ = {
-			isa = PBXGroup;
-			children = (
-				E326B739168CF00C0041B755 /* AbstractActionSheetPicker.h */,
-				E326B73A168CF00C0041B755 /* AbstractActionSheetPicker.m */,
-				E326B73B168CF00C0041B755 /* ActionSheetDatePicker.h */,
-				E326B73C168CF00C0041B755 /* ActionSheetDatePicker.m */,
-			);
-			path = Pickers;
-			sourceTree = "<group>";
-		};
-		E326B749168CF0280041B755 /* ActionPicker */ = {
-			isa = PBXGroup;
-			children = (
-				E326B737168CF00C0041B755 /* ActionSheetPicker.h */,
-				E35E124D168CF3210085EBA2 /* Utilities */,
-				E326B738168CF00C0041B755 /* Pickers */,
-			);
-			name = ActionPicker;
 			sourceTree = "<group>";
 		};
 		E336B99D167B6E76009A03EF = {
@@ -440,19 +410,9 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		E35E124D168CF3210085EBA2 /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				E35E1249168CF31B0085EBA2 /* NSDate+TCUtils.h */,
-				E35E124A168CF31B0085EBA2 /* NSDate+TCUtils.m */,
-			);
-			name = Utilities;
-			sourceTree = "<group>";
-		};
 		E35E129C169E0AAC0085EBA2 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				E326B749168CF0280041B755 /* ActionPicker */,
 				E31222CF16A4EB7B00B3BE95 /* MBProgressHUD.h */,
 				E31222D016A4EB7B00B3BE95 /* MBProgressHUD.m */,
 				E35E1299169E0A990085EBA2 /* MTFormatting.h */,
@@ -597,9 +557,6 @@
 				E336B9BD167B6E76009A03EF /* MTAppDelegate.m in Sources */,
 				E336B9CC167B6E76009A03EF /* MTTripViewController.m in Sources */,
 				E336B9D3167B6E76009A03EF /* MTLogViewController.m in Sources */,
-				E326B743168CF00C0041B755 /* AbstractActionSheetPicker.m in Sources */,
-				E326B744168CF00C0041B755 /* ActionSheetDatePicker.m in Sources */,
-				E35E124B168CF31B0085EBA2 /* NSDate+TCUtils.m in Sources */,
 				E328914B18D7A14B00417232 /* MTDateRangeViewController.m in Sources */,
 				E3DF861319AE4B4D0098524C /* MTButton.m in Sources */,
 				E35E127C169544EB0085EBA2 /* MTReportsViewController.m in Sources */,
@@ -704,7 +661,7 @@
 		E336B9DB167B6E76009A03EF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Stine Richvoldsen (FB5K6BR4SB)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Stine Richvoldsen (FB5K6BR4SB)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -715,14 +672,14 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MileTracker/MileTracker-Prefix.pch";
 				INFOPLIST_FILE = "MileTracker/MileTracker-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TestFlightSDK3.0.2",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "3B03E076-B9CE-4875-8D0F-D354C05743E3";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3B03E076-B9CE-4875-8D0F-D354C05743E3";
+				PROVISIONING_PROFILE = "e38bdd6b-1005-49c9-858d-dc7ec489b593";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "e38bdd6b-1005-49c9-858d-dc7ec489b593";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -731,7 +688,7 @@
 		E336B9DC167B6E76009A03EF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Focus43, LLC (X7L58PS46V)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Focus43, LLC (X7L58PS46V)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -742,14 +699,14 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MileTracker/MileTracker-Prefix.pch";
 				INFOPLIST_FILE = "MileTracker/MileTracker-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TestFlightSDK3.0.2",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c694d7a5-25d0-47b2-bdcc-ab753e76282f";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "c694d7a5-25d0-47b2-bdcc-ab753e76282f";
+				PROVISIONING_PROFILE = "7c4abb75-a15b-4df8-80c7-42eb41498b17";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7c4abb75-a15b-4df8-80c7-42eb41498b17";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -782,9 +739,10 @@
 		E34E459E16A22DD900C51E67 /* UnsyncedTrip.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				E30171B419D33622003D7851 /* UnsyncedTrip 2.xcdatamodel */,
 				E34E459F16A22DDA00C51E67 /* UnsyncedTrip.xcdatamodel */,
 			);
-			currentVersion = E34E459F16A22DDA00C51E67 /* UnsyncedTrip.xcdatamodel */;
+			currentVersion = E30171B419D33622003D7851 /* UnsyncedTrip 2.xcdatamodel */;
 			path = UnsyncedTrip.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

@@ -48,12 +48,11 @@
 {
     [super viewDidLoad];
     
-    [self.view setBackgroundColor:[MTViewUtils backGroundColor]];
+    [self.tableView setBackgroundColor:[MTViewUtils backGroundColor]];
     
     // set defaults for unit settings and register actions for the switch events
     _kilometerSwitch.on = NO;
     _mileSwitch.on = YES;
-    [[NSUserDefaults standardUserDefaults] setValue:kUserDefaultsLengthUnitMile forKey:kUserDefaultsLengthUnit];
     [_kilometerSwitch addTarget:self action:@selector(unitsChanged:) forControlEvents:UIControlEventValueChanged];
     [_mileSwitch addTarget:self action:@selector(unitsChanged:) forControlEvents:UIControlEventValueChanged];
     
@@ -288,7 +287,7 @@
         if ( [indexPath row] == 0 ) {
             [self updateSavings];
         }
-    } else if ( [indexPath section] == 2 ) {
+    } else if ( [indexPath section] == 3 ) {
         if ( [indexPath row] == 0 ) {
             [self sendFeedback];
         }
