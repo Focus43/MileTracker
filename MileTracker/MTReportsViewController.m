@@ -155,6 +155,12 @@
                     UIActivityViewController *actViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
                     actViewController.excludedActivityTypes=[NSArray arrayWithObject:@"UIActivityTypeAirDrop"];
                     [actViewController setValue:[NSString stringWithFormat:@"TripTrax mileage export for %@", subject] forKey:@"subject"];
+                    if ( NSClassFromString(@"UIPopoverPresentationController") ) {
+                        CGRect thisCellFrame = [[tableView cellForRowAtIndexPath:indexPath] frame];
+                        actViewController.popoverPresentationController.sourceView = tableView;
+                        actViewController.popoverPresentationController.sourceRect = thisCellFrame;
+                    }
+                    
                     [self presentViewController:actViewController animated:YES completion:nil];
                     
                 } else {
