@@ -15,9 +15,6 @@
 
 @property (assign,nonatomic) BOOL isPulsing;
 
-- (void)pulseOn;
-- (void)pulseOff;
-
 @end
 
 @implementation MTButton
@@ -32,7 +29,8 @@
         CGRect buttonFrame = self.frame;
         buttonFrame.size.height = 40;
         self.frame = buttonFrame;
-        [self setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.8]];
+        if ( [self.titleLabel.text rangeOfString:@"Tracking"].location == NSNotFound )
+            [self setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.8]];
         self.imageView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin;
          _isPulsing = NO;
     }

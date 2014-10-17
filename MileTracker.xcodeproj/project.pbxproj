@@ -29,6 +29,12 @@
 		E336B9C9167B6E76009A03EF /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E336B9C7167B6E76009A03EF /* MainStoryboard_iPad.storyboard */; };
 		E336B9CC167B6E76009A03EF /* MTTripViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E336B9CB167B6E76009A03EF /* MTTripViewController.m */; };
 		E336B9D3167B6E76009A03EF /* MTLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E336B9D2167B6E76009A03EF /* MTLogViewController.m */; };
+		E341384E19F0BB6E00AE2C7D /* briefcase.png in Resources */ = {isa = PBXBuildFile; fileRef = E341384D19F0BB6E00AE2C7D /* briefcase.png */; };
+		E341385119F0BBAC00AE2C7D /* heart.png in Resources */ = {isa = PBXBuildFile; fileRef = E341384F19F0BBAC00AE2C7D /* heart.png */; };
+		E341385219F0BBAC00AE2C7D /* user.png in Resources */ = {isa = PBXBuildFile; fileRef = E341385019F0BBAC00AE2C7D /* user.png */; };
+		E341385619F0BCB800AE2C7D /* briefcase@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E341385319F0BCB800AE2C7D /* briefcase@2x.png */; };
+		E341385719F0BCB800AE2C7D /* heart@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E341385419F0BCB800AE2C7D /* heart@2x.png */; };
+		E341385819F0BCB800AE2C7D /* user@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E341385519F0BCB800AE2C7D /* user@2x.png */; };
 		E34E458716A0C10100C51E67 /* UnsyncedTrip.m in Sources */ = {isa = PBXBuildFile; fileRef = E34E458616A0C10100C51E67 /* UnsyncedTrip.m */; };
 		E34E458A16A0C79F00C51E67 /* MTCoreDataController.m in Sources */ = {isa = PBXBuildFile; fileRef = E34E458816A0C79F00C51E67 /* MTCoreDataController.m */; };
 		E34E459416A225E000C51E67 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E34E459316A225E000C51E67 /* CoreFoundation.framework */; };
@@ -134,6 +140,12 @@
 		E336B9CB167B6E76009A03EF /* MTTripViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTTripViewController.m; sourceTree = "<group>"; };
 		E336B9D1167B6E76009A03EF /* MTLogViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MTLogViewController.h; sourceTree = "<group>"; };
 		E336B9D2167B6E76009A03EF /* MTLogViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MTLogViewController.m; sourceTree = "<group>"; };
+		E341384D19F0BB6E00AE2C7D /* briefcase.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = briefcase.png; sourceTree = "<group>"; };
+		E341384F19F0BBAC00AE2C7D /* heart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart.png; sourceTree = "<group>"; };
+		E341385019F0BBAC00AE2C7D /* user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user.png; sourceTree = "<group>"; };
+		E341385319F0BCB800AE2C7D /* briefcase@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "briefcase@2x.png"; sourceTree = "<group>"; };
+		E341385419F0BCB800AE2C7D /* heart@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heart@2x.png"; sourceTree = "<group>"; };
+		E341385519F0BCB800AE2C7D /* user@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user@2x.png"; sourceTree = "<group>"; };
 		E34E458516A0C10100C51E67 /* UnsyncedTrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnsyncedTrip.h; sourceTree = "<group>"; };
 		E34E458616A0C10100C51E67 /* UnsyncedTrip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnsyncedTrip.m; sourceTree = "<group>"; };
 		E34E458816A0C79F00C51E67 /* MTCoreDataController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCoreDataController.m; sourceTree = "<group>"; };
@@ -169,6 +181,7 @@
 		E35E129716978CAB0085EBA2 /* addressbook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = addressbook.png; sourceTree = "<group>"; };
 		E35E1299169E0A990085EBA2 /* MTFormatting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTFormatting.h; sourceTree = "<group>"; };
 		E35E129A169E0A9A0085EBA2 /* MTFormatting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTFormatting.m; sourceTree = "<group>"; };
+		E362A36819E5E45900905290 /* UnsyncedTrip 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "UnsyncedTrip 3.xcdatamodel"; sourceTree = "<group>"; };
 		E3713E001823049900F4DA29 /* icon_152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_152.png; sourceTree = "<group>"; };
 		E3713E011823049900F4DA29 /* icon_76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_76.png; sourceTree = "<group>"; };
 		E3713E021823049900F4DA29 /* icon_120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_120.png; sourceTree = "<group>"; };
@@ -367,6 +380,12 @@
 		E336B9DD167B6EF9009A03EF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E341385319F0BCB800AE2C7D /* briefcase@2x.png */,
+				E341385419F0BCB800AE2C7D /* heart@2x.png */,
+				E341385519F0BCB800AE2C7D /* user@2x.png */,
+				E341384F19F0BBAC00AE2C7D /* heart.png */,
+				E341385019F0BBAC00AE2C7D /* user.png */,
+				E341384D19F0BB6E00AE2C7D /* briefcase.png */,
 				E3546C0919B7E2980038A0E5 /* background@2X.png */,
 				E3DF860D19AE44F60098524C /* gps_white.png */,
 				E3DF860E19AE44F60098524C /* gps_white@2x.png */,
@@ -511,6 +530,7 @@
 				E3713E051823049900F4DA29 /* icon_76.png in Resources */,
 				E31BACDD1822D42900893F75 /* skip_button@2x.png in Resources */,
 				E3713E0D1823052400F4DA29 /* icon_58.png in Resources */,
+				E341385219F0BBAC00AE2C7D /* user.png in Resources */,
 				E3B10CFF16B76B4C00FA6EF4 /* background.png in Resources */,
 				E3546C0A19B7E2980038A0E5 /* background@2X.png in Resources */,
 				E31BACD91822D3C500893F75 /* skip_button_on.png in Resources */,
@@ -522,12 +542,16 @@
 				E3B10D1516B86C4600FA6EF4 /* Icon-Small-50.png in Resources */,
 				E3B10D1616B86C4600FA6EF4 /* Icon-Small-50@2x.png in Resources */,
 				E3B10D1716B86C4600FA6EF4 /* Icon-Small.png in Resources */,
+				E341385119F0BBAC00AE2C7D /* heart.png in Resources */,
 				E3B10D1816B86C4600FA6EF4 /* Icon-Small@2x.png in Resources */,
+				E341385819F0BCB800AE2C7D /* user@2x.png in Resources */,
 				E3F61D7819B0E4D000B37FC9 /* README.md in Resources */,
 				E3B10D1A16B8739A00FA6EF4 /* Default-Landscape@2x~ipad.png in Resources */,
 				E3713E071823049900F4DA29 /* icon_144.png in Resources */,
 				E3B10D1C16B8739F00FA6EF4 /* Default-Portrait@2x~ipad.png in Resources */,
+				E341384E19F0BB6E00AE2C7D /* briefcase.png in Resources */,
 				E3713E061823049900F4DA29 /* icon_120.png in Resources */,
+				E341385619F0BCB800AE2C7D /* briefcase@2x.png in Resources */,
 				E3B10D1E16B874D100FA6EF4 /* Default-Portrait~ipad.png in Resources */,
 				E3713E0C1823052400F4DA29 /* icon_29.png in Resources */,
 				E3B10D2016B8750500FA6EF4 /* Default-Landscape~ipad.png in Resources */,
@@ -540,6 +564,7 @@
 				E31BACDE1822D42900893F75 /* skip_button.png in Resources */,
 				E37732D216B88BAC00FA71E5 /* logo@2x.png in Resources */,
 				E37732D416B891AF00FA71E5 /* sign_up_bg.png in Resources */,
+				E341385719F0BCB800AE2C7D /* heart@2x.png in Resources */,
 				E3713E0F1823052400F4DA29 /* icon_80.png in Resources */,
 				E3713E041823049900F4DA29 /* icon_152.png in Resources */,
 			);
@@ -739,10 +764,11 @@
 		E34E459E16A22DD900C51E67 /* UnsyncedTrip.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				E362A36819E5E45900905290 /* UnsyncedTrip 3.xcdatamodel */,
 				E30171B419D33622003D7851 /* UnsyncedTrip 2.xcdatamodel */,
 				E34E459F16A22DDA00C51E67 /* UnsyncedTrip.xcdatamodel */,
 			);
-			currentVersion = E30171B419D33622003D7851 /* UnsyncedTrip 2.xcdatamodel */;
+			currentVersion = E362A36819E5E45900905290 /* UnsyncedTrip 3.xcdatamodel */;
 			path = UnsyncedTrip.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

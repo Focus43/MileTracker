@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 
-@interface MTTripViewController : UIViewController <UITextFieldDelegate, CLLocationManagerDelegate, UIPickerViewDelegate>
+@interface MTTripViewController : UITableViewController <UITextFieldDelegate, CLLocationManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 
 @property (nonatomic, strong) PFObject *trip;
 
@@ -19,13 +19,17 @@
 @property (strong, nonatomic) IBOutlet UITextField *endOdometerField;
 @property (strong, nonatomic) IBOutlet UILabel *distanceLabel;
 @property (strong, nonatomic) IBOutlet MTButton *trackButton;
-@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet UIButton* typeButton;
+@property (strong, nonatomic) UIScrollView *scrollView;
+@property (strong, nonatomic) UIPickerView *tripTypePicker;
 
 @property (nonatomic, strong) NSDate *selectedDate;
-
 @property (nonatomic, strong) NSNumberFormatter *numberFormatter;
+@property (nonatomic, strong) UIView *typeSnapShot;
+@property (nonatomic, strong) UIPickerView *typePicker;
 
 - (IBAction)dateFieldTouched:(id)sender;
+- (IBAction)typeButtonTouched:(id)sender;
 - (IBAction)saveButtonTouched:(id)sender;
 - (IBAction)trackButtonTouched:(id)sender;
 

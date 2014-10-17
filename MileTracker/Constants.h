@@ -22,6 +22,11 @@
 #define kUserDefaultsLengthUnitKilometer @"kilometers"
 #define kUserDefaultsLengthUnitMile @"miles"
 
+#define kTripTypeBusiness @"Business"
+#define kTripTypeCharitable @"Charitable"
+#define kTripTypePersonal @"Personal"
+#define kTripTypeOptions @[kTripTypeCharitable, kTripTypeBusiness, kTripTypePersonal]
+
 #define kDollarPerMileTaxDeduction 0.565
 
 #define kDateRangeSegueIdentifier @"DateRangeSegueIdentifier"
