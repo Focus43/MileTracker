@@ -18,6 +18,7 @@
     float totalDistance;
     float totalDistanceDisplay;
     BOOL shouldResetScroll;
+    BOOL typePickerIsOpen;
 }
 
 - (void)showCannotSaveAlert;
@@ -30,6 +31,7 @@
 @property CGPoint originalCenter;
 @property (nonatomic, strong) Reachability *networkReachability;
 @property (nonatomic, strong) MBProgressHUD *hud;
+@property (nonatomic, strong) NSArray *typeOptions;
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) CLLocation *startLocation;
@@ -46,7 +48,7 @@
 // Can't help myself. Still doing this...
 @synthesize dateField, titleField, startOdometerField, endOdometerField;
 @synthesize selectedDate;
-@synthesize originalCenter, activeTextField, scrollView;
+@synthesize originalCenter, activeTextField;
 @synthesize trip, numberFormatter, networkReachability;
 @synthesize hud=_hud;
 
@@ -55,9 +57,13 @@
     [super viewDidLoad];
     
     [self.view setBackgroundColor:[MTViewUtils backGroundColor]];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    _typeOptions = kTripTypeOptions;
+    self.tripTypePicker.dataSource = self;
+    self.tripTypePicker.delegate = self;
     
     [_trackButton setImage:[UIImage imageNamed:@"gps_white.png"] forState:UIControlStateNormal];
-//    [_trackButton setImageEdgeInsets:UIEdgeInsetsMake(5, 5, 5, 5)];
     
     if ( !self.numberFormatter ) {
         self.numberFormatter = [[NSNumberFormatter alloc] init];
@@ -72,6 +78,10 @@
     [self.scrollView setMinimumZoomScale:0.1];
     shouldResetScroll = NO;
     
+    self.titleField.delegate = self;
+    self.dateField.delegate = self;
+    
+    
     UIDatePicker *datePicker = [[UIDatePicker alloc] init];
     datePicker.datePickerMode = UIDatePickerModeDate;
     self.dateField.inputView = datePicker;
@@ -83,14 +93,26 @@
         _locationManager = [[CLLocationManager alloc] init];
     _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     _locationManager.delegate = self;
-//    self.locationManager.activityType = CLActivityTypeAutomotiveNavigation;
     self.locationManager.distanceFilter = 10; // meters
 
-    
-//    _distanceTraveled = 0;
-    
     if ([_locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
         [_locationManager requestWhenInUseAuthorization];
+    }
+    
+    // if editing
+    if (self.trip) {
+        self.titleField.text = [self.trip objectForKey:@"title"];
+        self.dateField.text = [self.trip tr_dateToString];
+        self.startOdometerField.text = [self.trip tr_startOdometerToString];
+        self.endOdometerField.text = [self.trip tr_endOdometerToString];
+        self.distanceLabel.text = (![(NSNumber *)[self.trip objectForKey:@"distance"] isEqualToNumber:[NSNumber numberWithInt:-1]]) ? [NSString stringWithFormat:@"Distance: %@", [self.trip tr_totalDistanceString]] : @"";
+        
+        NSString *typeStr = [self.trip objectForKey:@"type"] ? [self.trip objectForKey:@"type"] : kTripTypeBusiness;
+        [_typeButton setTitle:[NSString stringWithFormat:@"  %@", typeStr] forState:UIControlStateNormal];
+        [_typeButton setImage:[self cellImageByType:typeStr] forState:UIControlStateNormal];
+    } else {
+        [_typeButton setTitle:[NSString stringWithFormat:@"  %@", kTripTypeBusiness] forState:UIControlStateNormal];
+        [_typeButton setImage:[self cellImageByType:kTripTypeBusiness] forState:UIControlStateNormal];
     }
 }
 
@@ -101,16 +123,6 @@
     [self registerForKeyboardNotifications];
     
     self.originalCenter = self.view.center;
-    
-    // if editing
-    if (self.trip) {
-        self.titleField.text = [self.trip objectForKey:@"title"];
-        self.dateField.text = [self.trip tr_dateToString];
-        self.startOdometerField.text = [self.trip tr_startOdometerToString];
-        self.endOdometerField.text = [self.trip tr_endOdometerToString];
-        self.distanceLabel.text = (![(NSNumber *)[self.trip objectForKey:@"distance"] isEqualToNumber:[NSNumber numberWithInt:-1]]) ? [NSString stringWithFormat:@"Distance: %@", [self.trip tr_totalDistanceString]] : @"";
-    }
-
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -125,6 +137,22 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (UIImage *)cellImageByType:(NSString *)type
+{
+    NSString *imageName;
+    if ( !type || [type isEqualToString:kTripTypeBusiness] ) {
+        imageName = @"briefcase.png";
+    } else if ( [type isEqualToString:kTripTypeCharitable] ) {
+        imageName = @"heart.png";
+    } else if ( [type isEqualToString:kTripTypePersonal] ) {
+        imageName = @"user.png";
+    } else {
+        return NULL;
+    }
+    
+    return [UIImage imageNamed:imageName];
 }
 
 - (void)showCannotSaveAlert
@@ -148,6 +176,41 @@
 	df.dateStyle = NSDateFormatterMediumStyle;
 	self.dateField.text = [NSString stringWithFormat:@"%@", [df stringFromDate:dp.date]];
     self.selectedDate = dp.date;
+}
+
+- (IBAction)typeButtonTouched:(id)sender
+{
+    // add inline type picker
+    if ( !_typeSnapShot || !_typePicker ) {
+        UITableView *tableView = (UITableView *) self.view;
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
+        
+        CGRect frame = CGRectMake(CGRectGetMinX(cell.frame), CGRectGetMaxY(cell.frame), CGRectGetWidth(cell.frame), CGRectGetHeight(self.view.frame) - tableView.contentOffset.y);
+        
+        _typeSnapShot = [self.view resizableSnapshotViewFromRect:frame afterScreenUpdates:NO withCapInsets:UIEdgeInsetsZero];
+        _typePicker = [[UIPickerView alloc]initWithFrame:frame];
+        _typePicker.dataSource = self;
+        _typePicker.delegate = self;
+        _typeSnapShot.frame = frame;
+        [self.view addSubview:_typeSnapShot];
+        _typePicker.backgroundColor = [UIColor whiteColor];
+        [self.view addSubview:_typePicker];
+        [self.view insertSubview:_typeSnapShot aboveSubview:_typePicker];
+    }
+    
+    if ( typePickerIsOpen ) {
+        [UIView animateWithDuration:1 animations:^{
+            _typeSnapShot.frame = CGRectOffset(_typeSnapShot.frame, 0, CGRectGetHeight(_typePicker.frame) * -1);
+        }];
+        typePickerIsOpen = NO;
+    } else {
+        [self dismissKeyboard];
+        [UIView animateWithDuration:1 animations:^{
+            _typeSnapShot.frame = CGRectOffset(_typeSnapShot.frame, 0, CGRectGetHeight(_typePicker.frame));
+        }];
+        typePickerIsOpen = YES;
+        [_typePicker selectRow:[_typeOptions indexOfObject:[_typeButton.titleLabel.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]] inComponent:0 animated:YES];
+    }
 }
 
 - (IBAction)trackButtonTouched:(id)sender
@@ -184,7 +247,6 @@
         
     } else {
         [_locationManager stopUpdatingLocation];
-        TFLog(@"stop updating. total dist = %f", totalDistance);
         [_trackButton setTitle:@"  Start Tracking" forState:UIControlStateNormal];
         [_trackButton stopFlashing];
     }
@@ -240,8 +302,8 @@
         
         totalDistance = (totalDistance == 0) ? -1 : totalDistance;
         
-        NSArray *data = [NSArray arrayWithObjects:self.titleField.text, tripDate, start, end, currentUser, [NSNumber numberWithFloat:totalDistance], nil];
-        NSArray *keys = [NSArray arrayWithObjects:@"title", @"date", @"startOdometer", @"endOdometer", @"user", @"distance", nil];
+        NSArray *data = [NSArray arrayWithObjects:self.titleField.text, tripDate, self.typeButton.titleLabel.text, start, end, currentUser, [NSNumber numberWithFloat:totalDistance], nil];
+        NSArray *keys = [NSArray arrayWithObjects:@"title", @"date", @"type", @"startOdometer", @"endOdometer", @"user", @"distance", nil];
         NSMutableDictionary *tripData = [NSDictionary dictionaryWithObjects:data forKeys:keys];
         
         // reset distance traveled back to 0
@@ -453,6 +515,44 @@
     return YES;
 }
 
+#pragma mark - picker view delegate
+
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    NSString *typeStr = [_typeOptions objectAtIndex:row];
+    [_typeButton setTitle:[NSString stringWithFormat:@"  %@", typeStr] forState:UIControlStateNormal];
+    [_typeButton setImage:[self cellImageByType:typeStr] forState:UIControlStateNormal];
+}
+
+# pragma mark - picker view data source
+
+- (int)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+- (int)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return _typeOptions.count;
+}
+
+- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    return _typeOptions[row];
+}
+
+# pragma mark - table view
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    header.textLabel.textColor = [UIColor whiteColor];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 35;
+}
+
 # pragma mark - keyboard notification handlers 
 
 - (void)dismissKeyboard
@@ -492,7 +592,7 @@
 
     if ( !CGRectContainsPoint(visibleRect, self.activeTextField.frame.origin) ){
         CGPoint scrollPoint = CGPointMake(0.0, self.activeTextField.frame.origin.y - self.activeTextField.frame.size.height);
-        [scrollView setContentOffset:scrollPoint animated:YES];
+        [_scrollView setContentOffset:scrollPoint animated:YES];
         shouldResetScroll = YES;
     }
 }

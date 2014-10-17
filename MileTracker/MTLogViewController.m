@@ -351,6 +351,22 @@ const int kNoTripsCellTag = 5678;
 
 #pragma mark - Table view data source
 
+- (UIImage *)cellImageByType:(NSString *)type
+{
+    NSString *imageName;
+    if ( !type || [type isEqualToString:kTripTypeBusiness] ) {
+        imageName = @"briefcase.png";
+    } else if ( [type isEqualToString:kTripTypeCharitable] ) {
+        imageName = @"heart.png";
+    } else if ( [type isEqualToString:kTripTypePersonal] ) {
+        imageName = @"user.png";
+    } else {
+        return NULL;
+    }
+    
+    return [UIImage imageNamed:imageName];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -393,6 +409,7 @@ const int kNoTripsCellTag = 5678;
         PFObject *trip = [self.trips objectAtIndex:indexPath.row];
         cell.textLabel.text = ( ![[trip objectForKey:@"title"] isEqualToString:@""] ) ? [trip objectForKey:@"title"] : @"< no description >";
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%@   %@", [trip tr_dateToString], [trip tr_totalDistanceString]];
+        cell.imageView.image = [self cellImageByType:[trip objectForKey:@"type"]];
         return cell;
         
     } else {
