@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="4">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -14,6 +14,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <sections>
                             <tableViewSection headerTitle="trip details" id="KXW-re-eyT">
                                 <cells>
@@ -38,6 +39,7 @@
                                                 <constraint firstItem="1Ou-AW-3XE" firstAttribute="centerX" secondItem="Xgv-ZD-CI8" secondAttribute="centerX" id="ChR-CM-qL9"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="nsh-7r-m6R">
                                         <autoresizingMask key="autoresizingMask"/>
@@ -91,6 +93,17 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="haZ-Bo-E4a">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="haZ-Bo-E4a" id="Gv4-su-s31">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <pickerView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dt0-9O-082">
+                                                    <rect key="frame" x="0.0" y="-36" width="320" height="162"/>
+                                                </pickerView>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="distance" id="bdO-0G-xKJ">
@@ -106,7 +119,7 @@
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="252" id="KC6-HM-eTl"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Start:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wdp-Lr-lmv">
                                                     <rect key="frame" x="8" y="7" width="42" height="30"/>
@@ -132,10 +145,10 @@
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="End Odometer" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2Va-ed-ezz">
                                                     <rect key="frame" x="60" y="7" width="252" height="30"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="252" id="P5O-9e-gtl"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="252" id="P5O-9e-gtl"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="End:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E0v-ic-qt2">
                                                     <rect key="frame" x="8" y="7" width="35" height="30"/>
@@ -147,6 +160,7 @@
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="2Va-ed-ezz" secondAttribute="trailing" constant="8" id="3s2-64-cBz"/>
                                                 <constraint firstAttribute="centerY" secondItem="E0v-ic-qt2" secondAttribute="centerY" id="a9K-Bh-VxN"/>
+                                                <constraint firstItem="2Va-ed-ezz" firstAttribute="leading" secondItem="Z6X-oh-QeV" secondAttribute="leading" constant="60" id="fo0-L9-aSf"/>
                                                 <constraint firstAttribute="centerY" secondItem="2Va-ed-ezz" secondAttribute="centerY" id="gXc-FS-8bI"/>
                                                 <constraint firstItem="E0v-ic-qt2" firstAttribute="leading" secondItem="Z6X-oh-QeV" secondAttribute="leading" constant="8" id="hgL-Od-mGy"/>
                                             </constraints>
@@ -244,6 +258,7 @@
                         <outlet property="startOdometerField" destination="1EP-t0-vaB" id="m0A-8E-yN1"/>
                         <outlet property="titleField" destination="6v2-Mv-uxU" id="aOA-U0-FJ2"/>
                         <outlet property="trackButton" destination="JZT-nx-3cG" id="otA-IP-9A0"/>
+                        <outlet property="tripTypePicker" destination="Dt0-9O-082" id="x9v-19-bz7"/>
                         <outlet property="typeButton" destination="JJF-PW-haS" id="dvk-NN-ISN"/>
                         <outlet property="view" destination="lAv-Y5-WUC" id="bXn-eV-9DC"/>
                     </connections>

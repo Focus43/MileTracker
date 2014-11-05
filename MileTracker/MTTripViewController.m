@@ -18,7 +18,7 @@
     float totalDistance;
     float totalDistanceDisplay;
     BOOL shouldResetScroll;
-    BOOL typePickerIsOpen;
+    BOOL typePickerShouldOpen;
 }
 
 - (void)showCannotSaveAlert;
@@ -80,7 +80,8 @@
     
     self.titleField.delegate = self;
     self.dateField.delegate = self;
-    
+    self.startOdometerField.delegate = self;
+    self.endOdometerField.delegate = self;
     
     UIDatePicker *datePicker = [[UIDatePicker alloc] init];
     datePicker.datePickerMode = UIDatePickerModeDate;
@@ -178,39 +179,28 @@
     self.selectedDate = dp.date;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0 && indexPath.row == 3) { // this is my picker cell
+        if (typePickerShouldOpen) {
+            return 219;
+        } else {
+            return 0;
+        }
+    } else {
+        return self.tableView.rowHeight;
+    }
+}
+
 - (IBAction)typeButtonTouched:(id)sender
 {
-    // add inline type picker
-    if ( !_typeSnapShot || !_typePicker ) {
-        UITableView *tableView = (UITableView *) self.view;
-        UITableViewCell *cell = [tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
-        
-        CGRect frame = CGRectMake(CGRectGetMinX(cell.frame), CGRectGetMaxY(cell.frame), CGRectGetWidth(cell.frame), CGRectGetHeight(self.view.frame) - tableView.contentOffset.y);
-        
-        _typeSnapShot = [self.view resizableSnapshotViewFromRect:frame afterScreenUpdates:NO withCapInsets:UIEdgeInsetsZero];
-        _typePicker = [[UIPickerView alloc]initWithFrame:frame];
-        _typePicker.dataSource = self;
-        _typePicker.delegate = self;
-        _typeSnapShot.frame = frame;
-        [self.view addSubview:_typeSnapShot];
-        _typePicker.backgroundColor = [UIColor whiteColor];
-        [self.view addSubview:_typePicker];
-        [self.view insertSubview:_typeSnapShot aboveSubview:_typePicker];
-    }
-    
-    if ( typePickerIsOpen ) {
-        [UIView animateWithDuration:1 animations:^{
-            _typeSnapShot.frame = CGRectOffset(_typeSnapShot.frame, 0, CGRectGetHeight(_typePicker.frame) * -1);
-        }];
-        typePickerIsOpen = NO;
-    } else {
-        [self dismissKeyboard];
-        [UIView animateWithDuration:1 animations:^{
-            _typeSnapShot.frame = CGRectOffset(_typeSnapShot.frame, 0, CGRectGetHeight(_typePicker.frame));
-        }];
-        typePickerIsOpen = YES;
-        [_typePicker selectRow:[_typeOptions indexOfObject:[_typeButton.titleLabel.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]] inComponent:0 animated:YES];
-    }
+    [self dismissKeyboard];
+    typePickerShouldOpen = !typePickerShouldOpen;
+
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadData];
+    self.tripTypePicker.hidden = NO;
+
+    [self.tripTypePicker selectRow:[_typeOptions indexOfObject:[_typeButton.titleLabel.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]] inComponent:0 animated:YES];
 }
 
 - (IBAction)trackButtonTouched:(id)sender
@@ -302,7 +292,7 @@
         
         totalDistance = (totalDistance == 0) ? -1 : totalDistance;
         
-        NSArray *data = [NSArray arrayWithObjects:self.titleField.text, tripDate, self.typeButton.titleLabel.text, start, end, currentUser, [NSNumber numberWithFloat:totalDistance], nil];
+        NSArray *data = [NSArray arrayWithObjects:self.titleField.text, tripDate, [_typeButton.titleLabel.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]], start, end, currentUser, [NSNumber numberWithFloat:totalDistance], nil];
         NSArray *keys = [NSArray arrayWithObjects:@"title", @"date", @"type", @"startOdometer", @"endOdometer", @"user", @"distance", nil];
         NSMutableDictionary *tripData = [NSDictionary dictionaryWithObjects:data forKeys:keys];
         

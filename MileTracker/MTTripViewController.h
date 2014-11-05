@@ -21,7 +21,7 @@
 @property (strong, nonatomic) IBOutlet MTButton *trackButton;
 @property (strong, nonatomic) IBOutlet UIButton* typeButton;
 @property (strong, nonatomic) UIScrollView *scrollView;
-@property (strong, nonatomic) UIPickerView *tripTypePicker;
+@property (strong, nonatomic) IBOutlet UIPickerView *tripTypePicker;
 
 @property (nonatomic, strong) NSDate *selectedDate;
 @property (nonatomic, strong) NSNumberFormatter *numberFormatter;
