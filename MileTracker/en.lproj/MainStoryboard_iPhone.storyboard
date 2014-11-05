@@ -98,10 +98,14 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="haZ-Bo-E4a" id="Gv4-su-s31">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <pickerView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dt0-9O-082">
+                                                <pickerView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dt0-9O-082">
                                                     <rect key="frame" x="0.0" y="-36" width="320" height="162"/>
                                                 </pickerView>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Dt0-9O-082" firstAttribute="leading" secondItem="Gv4-su-s31" secondAttribute="leading" id="eeV-zD-6pv"/>
+                                                <constraint firstAttribute="trailing" secondItem="Dt0-9O-082" secondAttribute="trailing" id="v0b-9C-q0m"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
