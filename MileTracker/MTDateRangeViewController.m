@@ -113,7 +113,16 @@
                 // Open choice of action
                 UIActivityViewController *actViewController = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
                 actViewController.excludedActivityTypes=[NSArray arrayWithObject:@"UIActivityTypeAirDrop"];
-                [actViewController setValue:[NSString stringWithFormat:@"TripTrax mileage export for %@", subject] forKey:@"subject"];                [self presentViewController:actViewController animated:YES completion:nil];
+                [actViewController setValue:[NSString stringWithFormat:@"TripTrax mileage export for %@", subject] forKey:@"subject"];
+                
+                if ( NSClassFromString(@"UIPopoverPresentationController") ) {
+                    MTButton *exportBtn = (MTButton *)sender;
+                    actViewController.popoverPresentationController.sourceView = self.view;
+                    actViewController.popoverPresentationController.sourceRect = exportBtn.frame;
+                }
+                
+                [self presentViewController:actViewController animated:YES completion:nil];
+
                 
             } else {
                 

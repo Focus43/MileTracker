@@ -195,11 +195,19 @@
 {
     [self dismissKeyboard];
     typePickerShouldOpen = !typePickerShouldOpen;
-
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self.tableView reloadData];
-    self.tripTypePicker.hidden = NO;
-
+    
+//    self.tripTypePicker.hidden = NO;
+//    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+//    [self.tableView reloadData];
+    
+    [self.tableView beginUpdates];
+    if (typePickerShouldOpen) {
+        self.tripTypePicker.hidden = NO;
+    } else {
+        self.tripTypePicker.hidden = YES;
+    }
+    [self.tableView endUpdates];
+    
     [self.tripTypePicker selectRow:[_typeOptions indexOfObject:[_typeButton.titleLabel.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]] inComponent:0 animated:YES];
 }
 
